@@ -3,6 +3,7 @@ import fs from "fs";
 import { getColor } from "lib/colors";
 import cs from "classnames";
 import { useMemo } from "react";
+import path from "path"
 
 export default function Girone({ data, nomi }) {
   return (
@@ -125,7 +126,7 @@ export async function getServerSideProps({ query }) {
     ).data.valueRanges;
     fs.writeFileSync("data.json", JSON.stringify(values));
   } else {
-    values = JSON.parse(fs.readFileSync("public/data.json"));
+    values = JSON.parse(fs.readFileSync(path.join(process.cwd(), "public/data.json")));
   }
   return {
     props: { data: values[0].values, nomi: values[1].values },
