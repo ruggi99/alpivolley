@@ -125,7 +125,7 @@ export async function getServerSideProps({ query }) {
     ).data.valueRanges;
     fs.writeFileSync("data.json", JSON.stringify(values));
   } else {
-    values = JSON.parse(fs.readFileSync("data.json"));
+    values = JSON.parse(fs.readFileSync("public/data.json"));
   }
   return {
     props: { data: values[0].values, nomi: values[1].values },
