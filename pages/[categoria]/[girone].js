@@ -1,4 +1,4 @@
-import { getClient, getRanges } from "lib/google";
+import { getClient } from "lib/google";
 import fs from "fs";
 import { getColor } from "lib/colors";
 import cs from "classnames";
@@ -9,7 +9,7 @@ export default function Girone({ data, nomi }) {
   return (
     <div>
       <div>
-        <table className="border mx-auto">
+        <table className="mx-auto border-separate border-spacing-x-0 border-spacing-y-2">
           <thead>
             <tr>
               <th>Orario</th>
@@ -25,14 +25,14 @@ export default function Girone({ data, nomi }) {
             {data.map((v, ir) => (
               <tr key={ir}>
                 {v.map((v, i) => (
-                  <td className={cs(getColor(v, nomi, ir))} key={i}>
+                  <td className={cs(getColor(v, nomi))} key={i}>
                     {v}
                   </td>
                 ))}
                 {v.length == 5 && (
                   <>
-                    <td className={cs(getColor(v, nomi, ir))}>0</td>
-                    <td className={cs(getColor(v, nomi, ir))}>0</td>
+                    <td className={cs(getColor(v, nomi))}>0</td>
+                    <td className={cs(getColor(v, nomi))}>0</td>
                   </>
                 )}
               </tr>
@@ -48,7 +48,7 @@ export default function Girone({ data, nomi }) {
 function Classifica({ data, nomi }) {
   const classifica = useClassifica(data, nomi);
   return (
-    <table className="border mt-4 mx-auto">
+    <table className="mt-4 mx-auto border-separate border-spacing-x-0 border-spacing-y-2">
       <thead>
         <tr>
           <th>Squadra</th>
@@ -131,4 +131,8 @@ export async function getServerSideProps({ query }) {
   return {
     props: { data: values[0].values, nomi: values[1].values },
   };
+}
+
+function getRanges(query) {
+  return ["Partite_A", "Nomi_A"]
 }

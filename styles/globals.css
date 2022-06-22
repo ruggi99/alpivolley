@@ -20,5 +20,13 @@ a {
 }
 
 td, th {
-  @apply px-4 py-2 text-center border;
+  @apply px-4 py-2 text-center border-t-[1px] border-b-[1px] border-gray-400;
+}
+
+td:first-child, th:first-child {
+  @apply border-l-[1px] rounded-l-xl
+}
+
+td:last-child, th:last-child {
+  @apply border-r-[1px] rounded-r-xl
 }
