@@ -1,37 +1,18 @@
 import { getClient } from "lib/google";
 import fs from "fs";
-import { getColor } from "lib/colors";
+import { getSqColor, getPuntiColor } from "lib/colors";
 import cs from "classnames";
 import { useMemo } from "react";
 import path from "path";
 import { useRouter } from "next/router";
 import Title from "components/Title";
-
-const EnumData = [
-  "Orario",
-  "Campo",
-  "Squadra1",
-  "Squadra2",
-  "Arbitro",
-  "Punteggio1",
-  "Punteggio2",
-];
-const EnumNomi = ["ID", "Nome"];
-const EnumClassifica = ["Nome", "Punti", "Vittorie"];
-
-const EnumDataRev = {};
-EnumData.forEach((v, i) => (EnumDataRev[v] = i));
-
-const EnumNomiRev = {};
-EnumNomi.forEach((v, i) => (EnumNomiRev[v] = i));
-
-const EnumClassificaRev = {};
-EnumClassifica.forEach((v, i) => (EnumClassificaRev[v] = i));
+import { EnumData, EnumNomiRev, EnumDataRev, EnumClassificaRev } from "lib/enums";
 
 export default function Girone({ data, nomi }) {
   // data: array di array delle partite
   // nomi: array di array dei nomi delle squadre
   const router = useRouter();
+  typeof window !== "undefined" && console.log(router);
   return (
     <div className="space-y-2">
       <Title>{`AlpiVolley | ${router.query.categoria} - Girone ${router.query.girone}`}</Title>
@@ -50,34 +31,40 @@ function Partite({ data, nomi }) {
         <thead>
           <tr>
             {EnumData.map((v) => (
-              <th key={v}>{v}</th>
+              <th key={v}>{v.replaceAll("_", " ")}</th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {data.map((v, i) => (
-            <tr key={i} className={cs(howManyPoints(v) && "opacity-50")}>
-              {v.map((v, i) => (
-                <td
-                  className={cs(
-                    getColor(v, nomi),
-                    (i == EnumDataRev.Punteggio1 ||
-                      i == EnumDataRev.Punteggio2) &&
-                      "font-bold"
-                  )}
-                  key={EnumData[i]}
-                >
-                  {v}
-                </td>
-              ))}
-              {v.length == 5 && (
-                <>
-                  <td className={cs(getColor(v, nomi), "font-bold")}>0</td>
-                  <td className={cs(getColor(v, nomi), "font-bold")}>0</td>
-                </>
-              )}
-            </tr>
-          ))}
+          {data.map((v, i) => {
+            const rowPoints = howManyPoints(v);
+            return (
+              <tr key={i} className={cs(rowPoints && "opacity-50")}>
+                {v.map((v, i) => (
+                  <td
+                    className={cs(
+                      getSqColor(i, v, nomi),
+                      getPuntiColor(i, rowPoints),
+                      (i == EnumDataRev.Punteggio_1 ||
+                        i == EnumDataRev.Punteggio_2) &&
+                        "font-bold"
+                    )}
+                    key={EnumData[i]}
+                  >
+                    {v}
+                  </td>
+                ))}
+                {v.length == 5 && (
+                  <>
+                    <td className="font-bold">0</td>
+                    <td className="font-bold">0</td>
+                  </>
+                )}
+                {<td className={cs(getPuntiColor(EnumDataRev.Punti_1, rowPoints), "font-bold")}>{rowPoints && rowPoints[0] || 0}</td>}
+                {<td className={cs(getPuntiColor(EnumDataRev.Punti_2, rowPoints), "font-bold")}>{rowPoints && rowPoints[1] || 0}</td>}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
@@ -88,7 +75,7 @@ function Classifica({ data, nomi }) {
   // return: array di array. Non la migliore struttura da usare
   const classifica = useClassifica(data, nomi);
   return (
-    <table className="mx-auto border-separate border-spacing-x-0 border-spacing-y-2">
+    <table className="mx-auto border-separate border-spacing-x-0 border-spacing-y-2 no-bordo">
       <thead>
         <tr>
           <th>Squadra</th>
@@ -98,7 +85,7 @@ function Classifica({ data, nomi }) {
       </thead>
       <tbody>
         {classifica.map((v, i) => (
-          <tr key={i} className={getColor(v[EnumClassificaRev.Nome], nomi)}>
+          <tr key={i} className={getSqColor(EnumDataRev.Squadra_1, v[EnumClassificaRev.Nome], nomi)}>
             {v.map((v, i) => (
               <td className="" key={i}>
                 {v}
@@ -118,10 +105,10 @@ function useClassifica(data, nomi) {
     // Per ogni partita calcolo i punti da assegnare e chi ha vinto
     for (const row of data) {
       const index1 = nomi.findIndex(
-        (_, i) => nomi[i][EnumNomiRev.Nome] == row[EnumDataRev.Squadra1]
+        (_, i) => nomi[i][EnumNomiRev.Nome] == row[EnumDataRev.Squadra_1]
       );
       const index2 = nomi.findIndex(
-        (_, i) => nomi[i][EnumNomiRev.Nome] == row[EnumDataRev.Squadra2]
+        (_, i) => nomi[i][EnumNomiRev.Nome] == row[EnumDataRev.Squadra_2]
       );
       const points = howManyPoints(row) || [0, 0];
       if (index1 > -1) {
@@ -153,8 +140,8 @@ function useClassifica(data, nomi) {
 
 // Calcolo quanti punti assegnare alle squadre in base al punteggio della partita
 function howManyPoints(row) {
-  const points1 = parseInt(row[EnumDataRev.Punteggio1]);
-  const points2 = parseInt(row[EnumDataRev.Punteggio2]);
+  const points1 = parseInt(row[EnumDataRev.Punteggio_1]);
+  const points2 = parseInt(row[EnumDataRev.Punteggio_2]);
   if (isNaN(points1) || isNaN(points2)) return null;
   if (points2 < 19) return [3, 0];
   if (points1 < 19) return [0, 3];
@@ -164,17 +151,17 @@ function howManyPoints(row) {
 
 const queryGoogle = false;
 
-export async function getStaticProps({ query }) {
+export async function getStaticProps({ params }) {
   var values;
   if (queryGoogle && process.env.FETCH_GOOGLE) {
     const client = await getClient();
     values = (
       await client.spreadsheets.values.batchGet({
         spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID,
-        ranges: getRanges(query),
+        ranges: getRanges(params),
       })
     ).data.valueRanges;
-    fs.writeFileSync("data.json", JSON.stringify(values));
+    fs.writeFileSync("public/data.json", JSON.stringify(values));
   } else {
     values = JSON.parse(
       fs.readFileSync(path.join(process.cwd(), "public/data.json"))

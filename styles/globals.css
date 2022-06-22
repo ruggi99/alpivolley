@@ -20,7 +20,7 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-    /* @apply text-gray-700 */
+  /* @apply text-gray-700 */
 }
 
 a {
@@ -32,18 +32,25 @@ a {
   box-sizing: border-box;
 }
 
-td, th {
+td,
+th {
   @apply px-4 py-2 text-center border-t-[1px] border-b-[1px] border-gray-400;
 }
 
-td:first-child, th:first-child {
-  @apply border-l-[1px] rounded-l-xl
+td:first-child,
+th:first-child {
+  @apply border-l-[1px] rounded-l-xl;
 }
 
-td:last-child, th:last-child {
-  @apply border-r-[1px] rounded-r-xl
+td:last-child,
+th:last-child {
+  @apply border-r-[1px] rounded-r-xl;
+}
+
+.no-bordo td {
+  border: none;
 }
 
 a {
-  @apply text-blue-400
+  @apply text-blue-400;
 }
