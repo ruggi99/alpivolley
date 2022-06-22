@@ -1,9 +1,12 @@
+import Head from "next/head";
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
   return (
     <>
+      <MetaTags />
       <Header />
+      <CookieConsent />
       <div className="content p-4">
         <Component {...pageProps} />
       </div>
@@ -11,18 +14,59 @@ function MyApp({ Component, pageProps }) {
     </>
   );
 }
-
 export default MyApp;
 
+function MetaTags() {
+  return (
+    <Head>
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=0"
+      ></meta>
+    </Head>
+  );
+}
+
 function Header() {
-  return <div className="header p-4 text-center bg-green-500 text-white text-3xl">Torneo ALPIVOLLEY</div>
+  return (
+    <div className="header p-4 text-center bg-primary-green text-white text-3xl">
+      <div>Torneo ALPIVOLLEY</div>
+      <div></div>
+    </div>
+  );
+}
+
+function CookieConsent() {
+  return null;
 }
 
 function Footer() {
   return (
-    <div className="footer bg-gray-300 px-8 py-4">
-      <div className="text-center">Developed by Ruggero Tomaselli</div>
-      <div className="text-center">Hosted on Vercel. Source Code on GitHub</div>
+    <div className="footer bg-primary-yellow px-8 py-4">
+      <div className="text-center">
+        Developed by{" "}
+        <a href="https://github.com/ruggi99" target="_blank" rel="noreferrer">
+          Ruggero Tomaselli
+        </a>
+      </div>
+      <div className="text-center">
+        Hosted on{" "}
+        <a href="https://vercel.com" target="_blank" rel="noreferrer">
+          Vercel
+        </a>
+        .{" "}
+        <a
+          href="https://github.com/ruggi99/alpivolley"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Source Code
+        </a>{" "}
+        on{" "}
+        <a href="https://github.com" target="_blank" rel="noreferrer">
+          GitHub
+        </a>
+      </div>
       <div className="text-center">
         Per problemi riguardanti il funzionamento del sito, rivolgersi al tavolo
         gare durante il torneo
