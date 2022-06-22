@@ -6,7 +6,12 @@ import { useMemo } from "react";
 import path from "path";
 import { useRouter } from "next/router";
 import Title from "components/Title";
-import { EnumData, EnumNomiRev, EnumDataRev, EnumClassificaRev } from "lib/enums";
+import {
+  EnumData,
+  EnumNomiRev,
+  EnumDataRev,
+  EnumClassificaRev,
+} from "lib/enums";
 
 export default function Girone({ data, nomi }) {
   // data: array di array delle partite
@@ -43,15 +48,16 @@ function Partite({ data, nomi }) {
                 {v.map((v, i) => (
                   <td
                     className={cs(
-                      getSqColor(i, v, nomi),
+                      // getSqColor(i, v, nomi),
                       getPuntiColor(i, rowPoints),
                       (i == EnumDataRev.Punteggio_1 ||
                         i == EnumDataRev.Punteggio_2) &&
                         "font-bold"
                     )}
+                    data-color={getSqColor(i, v, nomi)}
                     key={EnumData[i]}
                   >
-                    {v}
+                    <span className={cs("px-2 py-1 rounded-xl", getSqColor(i, v, nomi))}>{v}</span>
                   </td>
                 ))}
                 {v.length == 5 && (
@@ -60,8 +66,26 @@ function Partite({ data, nomi }) {
                     <td className="font-bold">0</td>
                   </>
                 )}
-                {<td className={cs(getPuntiColor(EnumDataRev.Punti_1, rowPoints), "font-bold")}>{rowPoints && rowPoints[0] || 0}</td>}
-                {<td className={cs(getPuntiColor(EnumDataRev.Punti_2, rowPoints), "font-bold")}>{rowPoints && rowPoints[1] || 0}</td>}
+                {
+                  <td
+                    className={cs(
+                      getPuntiColor(EnumDataRev.Punti_1, rowPoints),
+                      "font-bold"
+                    )}
+                  >
+                    {(rowPoints && rowPoints[0]) || 0}
+                  </td>
+                }
+                {
+                  <td
+                    className={cs(
+                      getPuntiColor(EnumDataRev.Punti_2, rowPoints),
+                      "font-bold"
+                    )}
+                  >
+                    {(rowPoints && rowPoints[1]) || 0}
+                  </td>
+                }
               </tr>
             );
           })}
@@ -85,7 +109,14 @@ function Classifica({ data, nomi }) {
       </thead>
       <tbody>
         {classifica.map((v, i) => (
-          <tr key={i} className={getSqColor(EnumDataRev.Squadra_1, v[EnumClassificaRev.Nome], nomi)}>
+          <tr
+            key={i}
+            className={getSqColor(
+              EnumDataRev.Squadra_1,
+              v[EnumClassificaRev.Nome],
+              nomi
+            )}
+          >
             {v.map((v, i) => (
               <td className="" key={i}>
                 {v}
