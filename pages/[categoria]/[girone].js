@@ -52,12 +52,12 @@ function Partite({ data, nomi }) {
                       getPuntiColor(i, rowPoints),
                       (i == EnumDataRev.Punteggio_1 ||
                         i == EnumDataRev.Punteggio_2) &&
-                        "font-bold"
+                        "font-bold", "whitespace-nowrap"
                     )}
                     data-color={getSqColor(i, v, nomi)}
                     key={EnumData[i]}
                   >
-                    <span className={cs("px-2 py-1 rounded-xl", getSqColor(i, v, nomi))}>{v}</span>
+                    <span className={cs("px-4 py-1 rounded-xl", getSqColor(i, v, nomi))}>{v}</span>
                   </td>
                 ))}
                 {v.length == 5 && (
