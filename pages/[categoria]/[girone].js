@@ -106,11 +106,7 @@ function Partite2({ data, nomi }) {
                   <div className="flex basis-2/3 items-center justify-evenly gap-2">
                     <div className="w-full min-w-0 flex-1">
                       <SqRounded
-                        color={getSqColor(
-                          EnumDataRev.Squadra_1,
-                          v[EnumDataRev.Squadra_1],
-                          nomi
-                        )}
+                        color={getSqColor(v[EnumDataRev.Squadra_1], nomi)}
                       >
                         {/* {v[EnumDataRev.Squadra_1].repeat(5)} */}
                         Lorem ipsum dolor sit amet
@@ -119,11 +115,7 @@ function Partite2({ data, nomi }) {
                     <span>VS</span>
                     <div className="w-full min-w-0 flex-1">
                       <SqRounded
-                        color={getSqColor(
-                          EnumDataRev.Squadra_2,
-                          v[EnumDataRev.Squadra_2],
-                          nomi
-                        )}
+                        color={getSqColor(v[EnumDataRev.Squadra_2], nomi)}
                       >
                         {/* {v[EnumDataRev.Squadra_2]} */}
                         Lorem ipsum dolor sit amet
@@ -132,13 +124,7 @@ function Partite2({ data, nomi }) {
                   </div>
                   <div className="all-center mt-2 basis-1/3 gap-2 sm:mt-0 sm:flex">
                     <h3 className="font-bold sm:hidden">Arbitro: </h3>
-                    <SqRounded
-                      color={getSqColor(
-                        EnumDataRev.Squadra_1,
-                        v[EnumDataRev.Arbitro],
-                        nomi
-                      )}
-                    >
+                    <SqRounded color={getSqColor(v[EnumDataRev.Arbitro], nomi)}>
                       {/* {v[EnumDataRev.Arbitro].repeat(10)} */}
                       {"Lorem ipsum dolor sit amet".repeat(2)}
                     </SqRounded>
@@ -164,7 +150,7 @@ function Partite2({ data, nomi }) {
                       <span
                         className={cs(
                           "text-2xl font-semibold",
-                          getPuntiColor(EnumDataRev.Punti_1, rowPoints)
+                          getPuntiColor(rowPoints[0])
                         )}
                       >
                         {rowPoints[0]}
@@ -172,7 +158,7 @@ function Partite2({ data, nomi }) {
                       <div
                         className={cs(
                           "text-4xl font-bold",
-                          getPuntiColor(EnumDataRev.Punteggio_1, rowPoints)
+                          getPuntiColor(rowPoints[0])
                         )}
                       >
                         {v[EnumDataRev.Punteggio_1]}
@@ -180,7 +166,7 @@ function Partite2({ data, nomi }) {
                       <div
                         className={cs(
                           "text-4xl font-bold",
-                          getPuntiColor(EnumDataRev.Punteggio_2, rowPoints)
+                          getPuntiColor(rowPoints[1])
                         )}
                       >
                         {v[EnumDataRev.Punteggio_2]}
@@ -188,7 +174,7 @@ function Partite2({ data, nomi }) {
                       <div
                         className={cs(
                           "text-2xl font-semibold",
-                          getPuntiColor(EnumDataRev.Punti_2, rowPoints)
+                          getPuntiColor(rowPoints[1])
                         )}
                       >
                         {rowPoints[1]}
@@ -225,14 +211,7 @@ function Classifica({ data, nomi }) {
       </thead>
       <tbody>
         {classifica.map((v, i) => (
-          <tr
-            key={i}
-            className={getSqColor(
-              EnumDataRev.Squadra_1,
-              v[EnumClassificaRev.Nome],
-              nomi
-            )}
-          >
+          <tr key={i} className={getSqColor(v[EnumClassificaRev.Nome], nomi)}>
             {v.map((v, i) => (
               <td className="" key={i}>
                 {v}
