@@ -12,6 +12,9 @@
   h3 {
     @apply text-lg;
   }
+  :focus-visible {
+    @apply outline-0;
+  }
 }
 
 @layer components {
@@ -28,12 +31,14 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
-html, body, #__next {
-  @apply min-h-screen
+html,
+body,
+#__next {
+  @apply min-h-screen;
 }
 
 #__next {
-  @apply flex flex-col
+  @apply flex flex-col;
 }
 
 a {

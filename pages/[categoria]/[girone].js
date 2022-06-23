@@ -12,7 +12,7 @@ import {
   EnumDataRev,
   EnumClassificaRev,
 } from "lib/enums";
-import { Disclosure, Tab } from "@headlessui/react";
+import { Disclosure, Tab, Switch } from "@headlessui/react";
 
 export default function Girone({ data, nomi }) {
   // data: array di array delle partite
@@ -23,8 +23,26 @@ export default function Girone({ data, nomi }) {
       <Title>{`AlpiVolley | ${router.query.categoria} - Girone ${router.query.girone}`}</Title>
       <Tab.Group>
         <Tab.List className="flex justify-center border-b gap-2 w-min mx-auto">
-          <Tab className={({selected}) => cs("px-4 py-2 font-bold", selected && "text-primary-green border-b-2 border-primary-green")}>Partite</Tab>
-          <Tab className={({selected}) => cs("px-4 py-2 font-bold", selected && "text-primary-green border-b-2 border-primary-green")}>Classifica</Tab>
+          <Tab
+            className={({ selected }) =>
+              cs(
+                "px-4 py-2 font-bold",
+                selected && "text-primary-green border-b-2 border-primary-green"
+              )
+            }
+          >
+            Partite
+          </Tab>
+          <Tab
+            className={({ selected }) =>
+              cs(
+                "px-4 py-2 font-bold",
+                selected && "text-primary-green border-b-2 border-primary-green"
+              )
+            }
+          >
+            Classifica
+          </Tab>
         </Tab.List>
         <Tab.Panels>
           <Tab.Panel>
@@ -131,13 +149,23 @@ function Partite2({ data, nomi }) {
   const [showFinished, setShowFinished] = useState(false);
   return (
     <div className="space-y-2 max-w-lg mx-auto">
-      <button
-        className="text-center border py-2 px-4 rounded"
-        onClick={() => setShowFinished((v) => !v)}
-      >
-        {showFinished ? "Nascondi" : "Mostra"}
-      </button>
-      <div className="flex px-4 gap-2">
+      <div className="flex justify-center gap-2">
+        <Switch
+          checked={showFinished}
+          onChange={setShowFinished}
+          className={`${showFinished ? "bg-primary-green" : "bg-gray-500"}
+          relative inline-flex h-[25px] w-[49px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+        >
+          <span className="sr-only">Mostra le partite finite</span>
+          <span
+            aria-hidden="true"
+            className={`${showFinished ? "translate-x-6" : "translate-x-0"}
+            pointer-events-none inline-block h-[21px] w-[21px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+          />
+        </Switch>
+        <span>Mostra le partite finite</span>
+      </div>
+      <div className="flex px-4 gap-4">
         <div className="flex w-2/3 gap-2 justify-evenly">
           <h3 className="font-bold">Squadra 1</h3>
           <span className="text-white">VS</span>
@@ -158,7 +186,7 @@ function Partite2({ data, nomi }) {
               <>
                 <Disclosure.Button
                   className={cs(
-                    "flex w-full py-2 px-4 gap-2 items-center",
+                    "flex w-full py-2 px-4 gap-4 items-center",
                     rowPoints && !open && "opacity-50"
                   )}
                 >
