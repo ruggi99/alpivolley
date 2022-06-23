@@ -12,6 +12,7 @@ import {
   EnumDataRev,
   EnumClassificaRev,
 } from "lib/enums";
+import { Disclosure } from "@headlessui/react";
 
 export default function Girone({ data, nomi }) {
   // data: array di array delle partite
@@ -22,7 +23,7 @@ export default function Girone({ data, nomi }) {
     <div className="space-y-2">
       <Title>{`AlpiVolley | ${router.query.categoria} - Girone ${router.query.girone}`}</Title>
       <h2 className="text-center font-bold">Partite</h2>
-      <Partite data={data} nomi={nomi} />
+      <Partite2 data={data} nomi={nomi} />
       <h2 className="font-bold text-center">Classifica Girone</h2>
       <Classifica data={data} nomi={nomi} />
     </div>
@@ -45,21 +46,39 @@ function Partite({ data, nomi }) {
             const rowPoints = howManyPoints(v);
             return (
               <tr key={i} className={cs(rowPoints && "opacity-50")}>
-                {v.map((v, i) => (
-                  <td
-                    className={cs(
-                      // getSqColor(i, v, nomi),
-                      getPuntiColor(i, rowPoints),
-                      (i == EnumDataRev.Punteggio_1 ||
-                        i == EnumDataRev.Punteggio_2) &&
-                        "font-bold", "whitespace-nowrap"
-                    )}
-                    data-color={getSqColor(i, v, nomi)}
-                    key={EnumData[i]}
-                  >
-                    <span className={cs("px-4 py-1 rounded-xl", getSqColor(i, v, nomi))}>{v}</span>
-                  </td>
-                ))}
+                {v.map((v, i) => {
+                  const sqColor = getSqColor(i, v, nomi);
+                  const puntiColor = getPuntiColor(i, rowPoints);
+                  return (
+                    <td
+                      className={cs(
+                        (i == EnumDataRev.Punteggio_1 ||
+                          i == EnumDataRev.Punteggio_2) &&
+                          "font-bold",
+                        "whitespace-nowrap"
+                      )}
+                      key={EnumData[i]}
+                    >
+                      {!sqColor && !puntiColor && i != EnumDataRev.Campo && v}
+                      {(sqColor || puntiColor) && (
+                        <span
+                          className={cs(
+                            "px-4 py-1 rounded-xl",
+                            sqColor,
+                            puntiColor
+                          )}
+                        >
+                          {v}
+                        </span>
+                      )}
+                      {i == EnumDataRev.Campo && (
+                        <span className="grid h-8 w-8 place-items-center rounded-md bg-green-600 font-semibold text-white mx-auto">
+                          {v}
+                        </span>
+                      )}
+                    </td>
+                  );
+                })}
                 {v.length == 5 && (
                   <>
                     <td className="font-bold">0</td>
@@ -67,23 +86,27 @@ function Partite({ data, nomi }) {
                   </>
                 )}
                 {
-                  <td
-                    className={cs(
-                      getPuntiColor(EnumDataRev.Punti_1, rowPoints),
-                      "font-bold"
-                    )}
-                  >
-                    {(rowPoints && rowPoints[0]) || 0}
+                  <td className="font-bold">
+                    <span
+                      className={cs(
+                        "px-4 py-1 rounded-xl",
+                        getPuntiColor(EnumDataRev.Punti_1, rowPoints)
+                      )}
+                    >
+                      {(rowPoints && rowPoints[0]) || 0}
+                    </span>
                   </td>
                 }
                 {
-                  <td
-                    className={cs(
-                      getPuntiColor(EnumDataRev.Punti_2, rowPoints),
-                      "font-bold"
-                    )}
-                  >
-                    {(rowPoints && rowPoints[1]) || 0}
+                  <td className="font-bold">
+                    <span
+                      className={cs(
+                        "px-4 py-1 rounded-xl",
+                        getPuntiColor(EnumDataRev.Punti_2, rowPoints)
+                      )}
+                    >
+                      {(rowPoints && rowPoints[1]) || 0}
+                    </span>
                   </td>
                 }
               </tr>
@@ -92,6 +115,125 @@ function Partite({ data, nomi }) {
         </tbody>
       </table>
     </div>
+  );
+}
+
+function Partite2({ data, nomi }) {
+  return (
+    <div className="space-y-2 max-w-lg mx-auto">
+      <div className="flex px-4">
+        <div className="flex w-2/3 justify-evenly">
+          <h3 className="font-bold">Squadra 1</h3>
+          <span className="text-white">vs.</span>
+          <h3 className="font-bold">Squadra 2</h3>
+        </div>
+        <div className="flex w-1/3 justify-center">
+          <h3 className="font-bold">Arbitro</h3>
+        </div>
+      </div>
+      {data.map((v, i) => {
+        const rowPoints = howManyPoints(v);
+        return (
+          <Disclosure key={i} as="div" className="border rounded-lg">
+            {({ open }) => (
+              <>
+                <Disclosure.Button
+                  className={cs(
+                    "flex w-full py-2 px-4",
+                    rowPoints && !open && "opacity-50"
+                  )}
+                >
+                  <div className="flex w-2/3 justify-evenly">
+                    <SqRounded
+                      color={getSqColor(
+                        EnumDataRev.Squadra_1,
+                        v[EnumDataRev.Squadra_1],
+                        nomi
+                      )}
+                    >
+                      {v[EnumDataRev.Squadra_1]}
+                    </SqRounded>
+                    <span>vs.</span>
+                    <SqRounded
+                      color={getSqColor(
+                        EnumDataRev.Squadra_2,
+                        v[EnumDataRev.Squadra_2],
+                        nomi
+                      )}
+                    >
+                      {v[EnumDataRev.Squadra_2]}
+                    </SqRounded>
+                  </div>
+                  <div className="flex w-1/3 justify-center">
+                    <SqRounded
+                      color={getSqColor(
+                        EnumDataRev.Squadra_1,
+                        v[EnumDataRev.Arbitro],
+                        nomi
+                      )}
+                    >
+                      {v[EnumDataRev.Arbitro]}
+                    </SqRounded>
+                  </div>
+                </Disclosure.Button>
+                <Disclosure.Panel className="px-4 py-2 space-y-2">
+                  <div className="flex justify-center">
+                    <div className="w-full text-center">
+                      &#x1F551; {v[EnumDataRev.Orario]}
+                    </div>
+                    <div className="w-full text-center">
+                      Campo {v[EnumDataRev.Campo]}
+                    </div>
+                  </div>
+                  {rowPoints && (
+                    <div className="flex justify-evenly content-center">
+                      <span
+                        className={cs(
+                          "text-2xl font-semibold",
+                          getPuntiColor(EnumDataRev.Punti_1, rowPoints)
+                        )}
+                      >
+                        {rowPoints[0]}
+                      </span>
+                      <div
+                        className={cs(
+                          "text-4xl font-bold",
+                          getPuntiColor(EnumDataRev.Punteggio_1, rowPoints)
+                        )}
+                      >
+                        {v[EnumDataRev.Punteggio_1]}
+                      </div>
+                      <div
+                        className={cs(
+                          "text-4xl font-bold",
+                          getPuntiColor(EnumDataRev.Punteggio_2, rowPoints)
+                        )}
+                      >
+                        {v[EnumDataRev.Punteggio_2]}
+                      </div>
+                      <div
+                        className={cs(
+                          "text-2xl font-semibold",
+                          getPuntiColor(EnumDataRev.Punti_2, rowPoints)
+                        )}
+                      >
+                        {rowPoints[1]}
+                      </div>
+                    </div>
+                  )}
+                </Disclosure.Panel>
+              </>
+            )}
+          </Disclosure>
+        );
+      })}
+    </div>
+  );
+}
+
+function SqRounded({ children, color }) {
+  return (
+    <div className={cs("px-4 py-1 rounded-xl p-2", color)}>{children}</div>
   );
 }
 
