@@ -13,7 +13,6 @@ import {
   EnumClassificaRev,
 } from "lib/enums";
 import { Disclosure } from "@headlessui/react";
-import LiveTag from "components/LiveTag";
 
 export default function Girone({ data, nomi }) {
   // data: array di array delle partite
