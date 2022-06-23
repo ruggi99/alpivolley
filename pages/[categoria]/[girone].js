@@ -181,8 +181,8 @@ function Partite2({ data, nomi }) {
                     <div className="w-full text-center">
                       &#x1F551; {v[EnumDataRev.Orario]}
                     </div>
-                    <div className="w-full text-center">
-                      Campo {v[EnumDataRev.Campo]}
+                    <div className="w-full text-center flex justify-evenly">
+                      Campo <span className="grid h-8 w-8 place-items-center rounded-md bg-green-600 font-semibold text-white">{v[EnumDataRev.Campo]}</span>
                     </div>
                   </div>
                   {rowPoints && (
