@@ -8,7 +8,7 @@ function MyApp({ Component, pageProps }) {
       <MetaTags />
       <Header />
       <CookieConsent />
-      <div className="content p-4">
+      <div className="flex-1 content p-4">
         <Component {...pageProps} />
       </div>
       <Footer></Footer>
@@ -34,10 +34,10 @@ function MetaTags() {
 
 function Header() {
   return (
-    <div className="header p-4 text-center bg-primary-green text-white text-3xl">
+    <header className="flex-none p-4 text-center bg-primary-green text-white text-3xl">
       <div>Torneo ALPIVOLLEY</div>
       <div></div>
-    </div>
+    </header>
   );
 }
 
@@ -47,7 +47,7 @@ function CookieConsent() {
 
 function Footer() {
   return (
-    <div className="footer bg-primary-yellow px-8 py-4">
+    <footer className="flex-none bg-primary-yellow px-8 py-4">
       <div className="text-center">
         Developed by{" "}
         <a href="https://github.com/ruggi99" target="_blank" rel="noreferrer">
@@ -76,6 +76,6 @@ function Footer() {
         Per problemi riguardanti il funzionamento del sito, rivolgersi al tavolo
         gare durante il torneo
       </div>
-    </div>
+    </footer>
   );
 }

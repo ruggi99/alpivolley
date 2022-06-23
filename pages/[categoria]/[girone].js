@@ -12,7 +12,7 @@ import {
   EnumDataRev,
   EnumClassificaRev,
 } from "lib/enums";
-import { Disclosure } from "@headlessui/react";
+import { Disclosure, Tab } from "@headlessui/react";
 
 export default function Girone({ data, nomi }) {
   // data: array di array delle partite
@@ -21,10 +21,20 @@ export default function Girone({ data, nomi }) {
   return (
     <div className="space-y-2">
       <Title>{`AlpiVolley | ${router.query.categoria} - Girone ${router.query.girone}`}</Title>
-      <h2 className="text-center font-bold">Partite</h2>
-      <Partite2 data={data} nomi={nomi} />
-      <h2 className="font-bold text-center">Classifica Girone</h2>
-      <Classifica data={data} nomi={nomi} />
+      <Tab.Group>
+        <Tab.List className="flex justify-center border-b gap-2 w-min mx-auto">
+          <Tab className={({selected}) => cs("px-4 py-2 font-bold", selected && "text-primary-green border-b-2 border-primary-green")}>Partite</Tab>
+          <Tab className={({selected}) => cs("px-4 py-2 font-bold", selected && "text-primary-green border-b-2 border-primary-green")}>Classifica</Tab>
+        </Tab.List>
+        <Tab.Panels>
+          <Tab.Panel>
+            <Partite2 data={data} nomi={nomi} />
+          </Tab.Panel>
+          <Tab.Panel>
+            <Classifica data={data} nomi={nomi} />
+          </Tab.Panel>
+        </Tab.Panels>
+      </Tab.Group>
     </div>
   );
 }
@@ -121,7 +131,10 @@ function Partite2({ data, nomi }) {
   const [showFinished, setShowFinished] = useState(false);
   return (
     <div className="space-y-2 max-w-lg mx-auto">
-      <button className="text-center border py-2 px-4 rounded" onClick={() => setShowFinished((v) => !v)}>
+      <button
+        className="text-center border py-2 px-4 rounded"
+        onClick={() => setShowFinished((v) => !v)}
+      >
         {showFinished ? "Nascondi" : "Mostra"}
       </button>
       <div className="flex px-4 gap-2">
