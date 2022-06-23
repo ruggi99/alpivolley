@@ -148,7 +148,7 @@ function Partite({ data, nomi }) {
 function Partite2({ data, nomi }) {
   const [showFinished, setShowFinished] = useState(false);
   return (
-    <div className="space-y-2 max-w-lg mx-auto">
+    <div className="space-y-2 max-w-xl mx-auto">
       <div className="flex all-center gap-2">
         <Switch
           checked={showFinished}
@@ -169,13 +169,13 @@ function Partite2({ data, nomi }) {
         </Switch>
         <span>Mostra le partite finite</span>
       </div>
-      <div className="flex px-4 gap-4">
-        <div className="flex w-2/3 gap-2 justify-evenly">
+      <div className="sm:flex px-4 gap-4">
+        <div className="flex basis-2/3 gap-2 justify-evenly">
           <h3 className="font-bold">Squadra 1</h3>
           <span className="text-white">VS</span>
           <h3 className="font-bold">Squadra 2</h3>
         </div>
-        <div className="flex w-1/3 justify-center">
+        <div className="sm:flex basis-1/3 justify-center hidden">
           <h3 className="font-bold">Arbitro</h3>
         </div>
       </div>
@@ -190,11 +190,11 @@ function Partite2({ data, nomi }) {
               <>
                 <Disclosure.Button
                   className={cs(
-                    "flex w-full py-2 px-4 gap-4 items-center",
+                    "sm:flex w-full py-2 px-4 gap-4 items-center",
                     rowPoints && !open && "opacity-50"
                   )}
                 >
-                  <div className="flex w-2/3 justify-evenly gap-2 items-center">
+                  <div className="flex basis-2/3 justify-evenly gap-2 items-center">
                     <div className="w-full flex-1 min-w-0">
                       <SqRounded
                         color={getSqColor(
@@ -221,7 +221,8 @@ function Partite2({ data, nomi }) {
                       </SqRounded>
                     </div>
                   </div>
-                  <div className="flex w-1/3 justify-center">
+                  <div className="sm:flex basis-1/3 gap-2 all-center mt-2 sm:mt-0">
+                    <h3 className="sm:hidden font-bold">Arbitro: </h3>
                     <SqRounded
                       color={getSqColor(
                         EnumDataRev.Squadra_1,
@@ -230,7 +231,7 @@ function Partite2({ data, nomi }) {
                       )}
                     >
                       {/* {v[EnumDataRev.Arbitro].repeat(10)} */}
-                      Lorem ipsum dolor sit amet
+                      {"Lorem ipsum dolor sit amet".repeat(2)}
                     </SqRounded>
                   </div>
                 </Disclosure.Button>
