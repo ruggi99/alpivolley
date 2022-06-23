@@ -47,19 +47,27 @@ a {
 
 td,
 th {
-  @apply px-4 py-2 text-center border-t-[1px] border-b-[1px] border-gray-400;
+  @apply px-2 py-2 text-center;
+}
+
+th {
+  @apply border-t border-b border-gray-400;
 }
 
 td:first-child,
 th:first-child {
-  @apply border-l-[1px] rounded-l-xl;
+  @apply rounded-l-xl;
+}
+
+th:first-child {
+  @apply border-l;
 }
 
 td:last-child,
 th:last-child {
-  @apply border-r-[1px] rounded-r-xl;
+  @apply rounded-r-xl;
 }
 
-.no-bordo td {
-  border: none;
+th:last-child {
+  @apply border-r;
 }

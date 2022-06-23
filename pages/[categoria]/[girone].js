@@ -149,18 +149,22 @@ function Partite2({ data, nomi }) {
   const [showFinished, setShowFinished] = useState(false);
   return (
     <div className="space-y-2 max-w-lg mx-auto">
-      <div className="flex justify-center gap-2">
+      <div className="flex all-center gap-2">
         <Switch
           checked={showFinished}
           onChange={setShowFinished}
-          className={`${showFinished ? "bg-primary-green" : "bg-gray-500"}
-          relative inline-flex h-[25px] w-[49px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+          className={cs(
+            showFinished ? "bg-primary-green" : "bg-gray-500",
+            "relative inline-flex h-[25px] w-[49px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out"
+          )}
         >
           <span className="sr-only">Mostra le partite finite</span>
           <span
             aria-hidden="true"
-            className={`${showFinished ? "translate-x-6" : "translate-x-0"}
-            pointer-events-none inline-block h-[21px] w-[21px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+            className={cs(
+              showFinished ? "translate-x-6" : "translate-x-0",
+              "pointer-events-none inline-block h-[21px] w-[21px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out"
+            )}
           />
         </Switch>
         <span>Mostra le partite finite</span>
@@ -301,7 +305,7 @@ function Classifica({ data, nomi }) {
   // return: array di array. Non la migliore struttura da usare
   const classifica = useClassifica(data, nomi);
   return (
-    <table className="mx-auto border-separate border-spacing-x-0 border-spacing-y-2 no-bordo">
+    <table className="mx-auto border-separate border-spacing-x-0 border-spacing-y-2">
       <thead>
         <tr>
           <th>Squadra</th>
