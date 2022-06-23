@@ -2,7 +2,7 @@ import { getClient } from "lib/google";
 import fs from "fs";
 import { getSqColor, getPuntiColor } from "lib/colors";
 import cs from "classnames";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import path from "path";
 import { useRouter } from "next/router";
 import Title from "components/Title";
@@ -18,7 +18,6 @@ export default function Girone({ data, nomi }) {
   // data: array di array delle partite
   // nomi: array di array dei nomi delle squadre
   const router = useRouter();
-  typeof window !== "undefined" && console.log(router);
   return (
     <div className="space-y-2">
       <Title>{`AlpiVolley | ${router.query.categoria} - Girone ${router.query.girone}`}</Title>
@@ -119,12 +118,16 @@ function Partite({ data, nomi }) {
 }
 
 function Partite2({ data, nomi }) {
+  const [showFinished, setShowFinished] = useState(false);
   return (
     <div className="space-y-2 max-w-lg mx-auto">
+      <button className="text-center border py-2 px-4 rounded" onClick={() => setShowFinished((v) => !v)}>
+        {showFinished ? "Nascondi" : "Mostra"}
+      </button>
       <div className="flex px-4 gap-2">
-        <div className="flex w-2/3 justify-evenly">
+        <div className="flex w-2/3 gap-2 justify-evenly">
           <h3 className="font-bold">Squadra 1</h3>
-          <span className="text-white">vs.</span>
+          <span className="text-white">VS</span>
           <h3 className="font-bold">Squadra 2</h3>
         </div>
         <div className="flex w-1/3 justify-center">
@@ -133,6 +136,9 @@ function Partite2({ data, nomi }) {
       </div>
       {data.map((v, i) => {
         const rowPoints = howManyPoints(v);
+        if (rowPoints && !showFinished) {
+          return null;
+        }
         return (
           <Disclosure key={i} as="div" className="border rounded-lg">
             {({ open }) => (
@@ -184,14 +190,14 @@ function Partite2({ data, nomi }) {
                   </div>
                 </Disclosure.Button>
                 <Disclosure.Panel className="px-4 py-2 space-y-2">
-                  <div className="flex justify-center">
+                  <div className="flex all-center">
                     <div className="w-full text-center font-roboto">
                       &#x1F551;{" "}
                       {v[EnumDataRev.Orario]
                         .substring(0, 4)
                         .replaceAll(".", ":")}
                     </div>
-                    <div className="w-full text-center flex justify-evenly">
+                    <div className="w-full text-center flex gap-2 all-center">
                       Campo{" "}
                       <span className="grid h-8 w-8 place-items-center rounded-md bg-green-600 font-semibold text-white">
                         {v[EnumDataRev.Campo]}
@@ -199,7 +205,7 @@ function Partite2({ data, nomi }) {
                     </div>
                   </div>
                   {rowPoints && (
-                    <div className="flex justify-evenly content-center">
+                    <div className="flex justify-evenly border-t">
                       <span
                         className={cs(
                           "text-2xl font-semibold",

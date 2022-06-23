@@ -14,6 +14,12 @@
   }
 }
 
+@layer components {
+  .all-center {
+    @apply justify-center items-center;
+  }
+}
+
 html,
 body {
   padding: 0;
