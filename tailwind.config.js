@@ -4,14 +4,14 @@ module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
-    "./lib/colors.js"
+    "./lib/colors.js",
   ],
   theme: {
     extend: {
       colors: {
         primary: {
           yellow: "#EBC15A",
-          green: "#429446"
+          green: "#429446",
         },
         squadre: {
           1: "#92AAD0",
@@ -22,9 +22,12 @@ module.exports = {
           6: "#FF8175",
           7: "#A3F6FF",
           8: "#FFCE86",
-        }
-      }
+        },
+      },
+      fontFamily: {
+        roboto: ['"Roboto Mono"'],
+      },
     },
   },
   plugins: [],
-}
+};

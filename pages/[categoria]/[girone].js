@@ -13,6 +13,7 @@ import {
   EnumClassificaRev,
 } from "lib/enums";
 import { Disclosure } from "@headlessui/react";
+import LiveTag from "components/LiveTag";
 
 export default function Girone({ data, nomi }) {
   // data: array di array delle partite
@@ -121,7 +122,7 @@ function Partite({ data, nomi }) {
 function Partite2({ data, nomi }) {
   return (
     <div className="space-y-2 max-w-lg mx-auto">
-      <div className="flex px-4">
+      <div className="flex px-4 gap-2">
         <div className="flex w-2/3 justify-evenly">
           <h3 className="font-bold">Squadra 1</h3>
           <span className="text-white">vs.</span>
@@ -139,30 +140,36 @@ function Partite2({ data, nomi }) {
               <>
                 <Disclosure.Button
                   className={cs(
-                    "flex w-full py-2 px-4",
+                    "flex w-full py-2 px-4 gap-2 items-center",
                     rowPoints && !open && "opacity-50"
                   )}
                 >
-                  <div className="flex w-2/3 justify-evenly">
-                    <SqRounded
-                      color={getSqColor(
-                        EnumDataRev.Squadra_1,
-                        v[EnumDataRev.Squadra_1],
-                        nomi
-                      )}
-                    >
-                      {v[EnumDataRev.Squadra_1]}
-                    </SqRounded>
-                    <span>vs.</span>
-                    <SqRounded
-                      color={getSqColor(
-                        EnumDataRev.Squadra_2,
-                        v[EnumDataRev.Squadra_2],
-                        nomi
-                      )}
-                    >
-                      {v[EnumDataRev.Squadra_2]}
-                    </SqRounded>
+                  <div className="flex w-2/3 justify-evenly gap-2 items-center">
+                    <div className="w-full flex-1 min-w-0">
+                      <SqRounded
+                        color={getSqColor(
+                          EnumDataRev.Squadra_1,
+                          v[EnumDataRev.Squadra_1],
+                          nomi
+                        )}
+                      >
+                        {/* {v[EnumDataRev.Squadra_1].repeat(5)} */}
+                        Lorem ipsum dolor sit amet
+                      </SqRounded>
+                    </div>
+                    <span>VS</span>
+                    <div className="w-full flex-1 min-w-0">
+                      <SqRounded
+                        color={getSqColor(
+                          EnumDataRev.Squadra_2,
+                          v[EnumDataRev.Squadra_2],
+                          nomi
+                        )}
+                      >
+                        {/* {v[EnumDataRev.Squadra_2]} */}
+                        Lorem ipsum dolor sit amet
+                      </SqRounded>
+                    </div>
                   </div>
                   <div className="flex w-1/3 justify-center">
                     <SqRounded
@@ -172,17 +179,24 @@ function Partite2({ data, nomi }) {
                         nomi
                       )}
                     >
-                      {v[EnumDataRev.Arbitro]}
+                      {/* {v[EnumDataRev.Arbitro].repeat(10)} */}
+                      Lorem ipsum dolor sit amet
                     </SqRounded>
                   </div>
                 </Disclosure.Button>
                 <Disclosure.Panel className="px-4 py-2 space-y-2">
                   <div className="flex justify-center">
-                    <div className="w-full text-center">
-                      &#x1F551; {v[EnumDataRev.Orario]}
+                    <div className="w-full text-center font-roboto">
+                      &#x1F551;{" "}
+                      {v[EnumDataRev.Orario]
+                        .substring(0, 4)
+                        .replaceAll(".", ":")}
                     </div>
                     <div className="w-full text-center flex justify-evenly">
-                      Campo <span className="grid h-8 w-8 place-items-center rounded-md bg-green-600 font-semibold text-white">{v[EnumDataRev.Campo]}</span>
+                      Campo{" "}
+                      <span className="grid h-8 w-8 place-items-center rounded-md bg-green-600 font-semibold text-white">
+                        {v[EnumDataRev.Campo]}
+                      </span>
                     </div>
                   </div>
                   {rowPoints && (
