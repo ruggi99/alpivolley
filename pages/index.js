@@ -6,7 +6,7 @@ import Button from "components/Button";
 export default function Home() {
   return (
     <div className="grid h-screen place-content-center">
-      <div className="grid max-h-96 max-w-sm space-y-4 justify-items-stretch">
+      <div className="grid max-h-96 max-w-sm justify-items-stretch space-y-4">
         <Head>
           <title>AlpiVolley | Categorie</title>
         </Head>

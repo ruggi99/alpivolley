@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-page-custom-font */
 import Head from "next/head";
+
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
@@ -8,10 +9,10 @@ function MyApp({ Component, pageProps }) {
       <MetaTags />
       <Header />
       <CookieConsent />
-      <div className="flex-1 content p-4">
+      <div className="content flex-1 p-4">
         <Component {...pageProps} />
       </div>
-      <Footer></Footer>
+      <Footer />
     </>
   );
 }
@@ -23,7 +24,7 @@ function MetaTags() {
       <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=0"
-      ></meta>
+      />
       <link
         href="https://fonts.googleapis.com/css2?family=Roboto%20Mono:wght@400&display=swap"
         rel="stylesheet"
@@ -34,9 +35,8 @@ function MetaTags() {
 
 function Header() {
   return (
-    <header className="flex-none p-4 text-center bg-primary-green text-white text-3xl">
+    <header className="flex-none bg-primary-green p-4 text-center text-3xl text-white">
       <div>Torneo ALPIVOLLEY</div>
-      <div></div>
     </header>
   );
 }

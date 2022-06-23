@@ -1,7 +1,9 @@
-import Button from "components/Button";
+import { useEffect } from "react";
+
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+
+import Button from "components/Button";
 import Title from "components/Title";
 
 export default function Gironi() {

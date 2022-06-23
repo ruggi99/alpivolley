@@ -19,7 +19,7 @@
 
 @layer components {
   .all-center {
-    @apply justify-center items-center;
+    @apply items-center justify-center;
   }
 }
 

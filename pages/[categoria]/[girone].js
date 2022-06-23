@@ -1,18 +1,15 @@
-import { getClient } from "lib/google";
-import fs from "fs";
-import { getSqColor, getPuntiColor } from "lib/colors";
-import cs from "classnames";
 import { useMemo, useState } from "react";
-import path from "path";
+
+import { Disclosure, Switch, Tab } from "@headlessui/react";
+import cs from "classnames";
+import fs from "fs";
 import { useRouter } from "next/router";
+import path from "path";
+
 import Title from "components/Title";
-import {
-  EnumData,
-  EnumNomiRev,
-  EnumDataRev,
-  EnumClassificaRev,
-} from "lib/enums";
-import { Disclosure, Tab, Switch } from "@headlessui/react";
+import { getPuntiColor, getSqColor } from "lib/colors";
+import { EnumClassificaRev, EnumDataRev, EnumNomiRev } from "lib/enums";
+import { getClient } from "lib/google";
 
 export default function Girone({ data, nomi }) {
   // data: array di array delle partite
@@ -22,12 +19,12 @@ export default function Girone({ data, nomi }) {
     <div className="space-y-2">
       <Title>{`AlpiVolley | ${router.query.categoria} - Girone ${router.query.girone}`}</Title>
       <Tab.Group>
-        <Tab.List className="flex justify-center border-b gap-2 w-min mx-auto">
+        <Tab.List className="mx-auto flex w-min justify-center gap-2 border-b">
           <Tab
             className={({ selected }) =>
               cs(
                 "px-4 py-2 font-bold",
-                selected && "text-primary-green border-b-2 border-primary-green"
+                selected && "border-b-2 border-primary-green text-primary-green"
               )
             }
           >
@@ -37,7 +34,7 @@ export default function Girone({ data, nomi }) {
             className={({ selected }) =>
               cs(
                 "px-4 py-2 font-bold",
-                selected && "text-primary-green border-b-2 border-primary-green"
+                selected && "border-b-2 border-primary-green text-primary-green"
               )
             }
           >
@@ -57,99 +54,11 @@ export default function Girone({ data, nomi }) {
   );
 }
 
-function Partite({ data, nomi }) {
-  return (
-    <div className="overflow-auto">
-      <table className="mx-auto border-separate border-spacing-x-0 border-spacing-y-2">
-        <thead>
-          <tr>
-            {EnumData.map((v) => (
-              <th key={v}>{v.replaceAll("_", " ")}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((v, i) => {
-            const rowPoints = howManyPoints(v);
-            return (
-              <tr key={i} className={cs(rowPoints && "opacity-50")}>
-                {v.map((v, i) => {
-                  const sqColor = getSqColor(i, v, nomi);
-                  const puntiColor = getPuntiColor(i, rowPoints);
-                  return (
-                    <td
-                      className={cs(
-                        (i == EnumDataRev.Punteggio_1 ||
-                          i == EnumDataRev.Punteggio_2) &&
-                          "font-bold",
-                        "whitespace-nowrap"
-                      )}
-                      key={EnumData[i]}
-                    >
-                      {!sqColor && !puntiColor && i != EnumDataRev.Campo && v}
-                      {(sqColor || puntiColor) && (
-                        <span
-                          className={cs(
-                            "px-4 py-1 rounded-xl",
-                            sqColor,
-                            puntiColor
-                          )}
-                        >
-                          {v}
-                        </span>
-                      )}
-                      {i == EnumDataRev.Campo && (
-                        <span className="grid h-8 w-8 place-items-center rounded-md bg-green-600 font-semibold text-white mx-auto">
-                          {v}
-                        </span>
-                      )}
-                    </td>
-                  );
-                })}
-                {v.length == 5 && (
-                  <>
-                    <td className="font-bold">0</td>
-                    <td className="font-bold">0</td>
-                  </>
-                )}
-                {
-                  <td className="font-bold">
-                    <span
-                      className={cs(
-                        "px-4 py-1 rounded-xl",
-                        getPuntiColor(EnumDataRev.Punti_1, rowPoints)
-                      )}
-                    >
-                      {(rowPoints && rowPoints[0]) || 0}
-                    </span>
-                  </td>
-                }
-                {
-                  <td className="font-bold">
-                    <span
-                      className={cs(
-                        "px-4 py-1 rounded-xl",
-                        getPuntiColor(EnumDataRev.Punti_2, rowPoints)
-                      )}
-                    >
-                      {(rowPoints && rowPoints[1]) || 0}
-                    </span>
-                  </td>
-                }
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
-  );
-}
-
 function Partite2({ data, nomi }) {
   const [showFinished, setShowFinished] = useState(false);
   return (
-    <div className="space-y-2 max-w-xl mx-auto">
-      <div className="flex all-center gap-2">
+    <div className="mx-auto max-w-xl space-y-2">
+      <div className="all-center flex gap-2">
         <Switch
           checked={showFinished}
           onChange={setShowFinished}
@@ -169,13 +78,13 @@ function Partite2({ data, nomi }) {
         </Switch>
         <span>Mostra le partite finite</span>
       </div>
-      <div className="sm:flex px-4 gap-4">
-        <div className="flex basis-2/3 gap-2 justify-evenly">
+      <div className="gap-4 px-4 sm:flex">
+        <div className="flex basis-2/3 justify-evenly gap-2">
           <h3 className="font-bold">Squadra 1</h3>
           <span className="text-white">VS</span>
           <h3 className="font-bold">Squadra 2</h3>
         </div>
-        <div className="sm:flex basis-1/3 justify-center hidden">
+        <div className="hidden basis-1/3 justify-center sm:flex">
           <h3 className="font-bold">Arbitro</h3>
         </div>
       </div>
@@ -185,17 +94,17 @@ function Partite2({ data, nomi }) {
           return null;
         }
         return (
-          <Disclosure key={i} as="div" className="border rounded-lg">
+          <Disclosure key={i} as="div" className="rounded-lg border">
             {({ open }) => (
               <>
                 <Disclosure.Button
                   className={cs(
-                    "sm:flex w-full py-2 px-4 gap-4 items-center",
+                    "w-full items-center gap-4 py-2 px-4 sm:flex",
                     rowPoints && !open && "opacity-50"
                   )}
                 >
-                  <div className="flex basis-2/3 justify-evenly gap-2 items-center">
-                    <div className="w-full flex-1 min-w-0">
+                  <div className="flex basis-2/3 items-center justify-evenly gap-2">
+                    <div className="w-full min-w-0 flex-1">
                       <SqRounded
                         color={getSqColor(
                           EnumDataRev.Squadra_1,
@@ -208,7 +117,7 @@ function Partite2({ data, nomi }) {
                       </SqRounded>
                     </div>
                     <span>VS</span>
-                    <div className="w-full flex-1 min-w-0">
+                    <div className="w-full min-w-0 flex-1">
                       <SqRounded
                         color={getSqColor(
                           EnumDataRev.Squadra_2,
@@ -221,8 +130,8 @@ function Partite2({ data, nomi }) {
                       </SqRounded>
                     </div>
                   </div>
-                  <div className="sm:flex basis-1/3 gap-2 all-center mt-2 sm:mt-0">
-                    <h3 className="sm:hidden font-bold">Arbitro: </h3>
+                  <div className="all-center mt-2 basis-1/3 gap-2 sm:mt-0 sm:flex">
+                    <h3 className="font-bold sm:hidden">Arbitro: </h3>
                     <SqRounded
                       color={getSqColor(
                         EnumDataRev.Squadra_1,
@@ -235,15 +144,15 @@ function Partite2({ data, nomi }) {
                     </SqRounded>
                   </div>
                 </Disclosure.Button>
-                <Disclosure.Panel className="px-4 py-2 space-y-2">
-                  <div className="flex all-center">
+                <Disclosure.Panel className="space-y-2 px-4 py-2">
+                  <div className="all-center flex">
                     <div className="w-full text-center font-roboto">
                       &#x1F551;{" "}
                       {v[EnumDataRev.Orario]
                         .substring(0, 4)
                         .replaceAll(".", ":")}
                     </div>
-                    <div className="w-full text-center flex gap-2 all-center">
+                    <div className="all-center flex w-full gap-2 text-center">
                       Campo{" "}
                       <span className="grid h-8 w-8 place-items-center rounded-md bg-green-600 font-semibold text-white">
                         {v[EnumDataRev.Campo]}
@@ -298,7 +207,7 @@ function Partite2({ data, nomi }) {
 
 function SqRounded({ children, color }) {
   return (
-    <div className={cs("px-4 py-1 rounded-xl p-2", color)}>{children}</div>
+    <div className={cs("rounded-xl p-2 px-4 py-1", color)}>{children}</div>
   );
 }
 
@@ -418,6 +327,6 @@ export function getStaticPaths() {
   };
 }
 
-function getRanges(query) {
+function getRanges(/* query */) {
   return ["Partite_A", "Nomi_A"];
 }
