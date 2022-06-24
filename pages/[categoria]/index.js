@@ -10,11 +10,14 @@ import Title from "components/Title";
 function Gironi() {
   const router = useRouter();
   useEffect(() => {
-    // TODO: Limitare categorie del router
+    if (!router.isReady) return;
+    if (["men", "mixed", "women"].indexOf(router.query.categoria) == -1) {
+      router.replace("/");
+    }
   }, [router]);
   return (
     <div className="mx-auto grid place-content-center gap-4">
-      <Title>AlpiVolley | Categorie</Title>
+      <Title>Gironi</Title>
       <div className="space-y-4 rounded-md border p-4">
         <h2>Sabato</h2>
         <div className="grid grid-cols-2 gap-4">
@@ -46,7 +49,7 @@ export default withNavigation(Gironi);
 function ButtonWithLink({ children, href, ...props }) {
   const router = useRouter();
   return (
-    <Link href={`/${router.query.categoria}/${href}`}>
+    <Link href={router.asPath + `/${href}`}>
       <a {...props}>
         <Button {...props}>{children}</Button>
       </a>

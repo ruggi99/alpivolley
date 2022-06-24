@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
 
 import "../styles/globals.css";
@@ -111,6 +112,9 @@ function Footer() {
       <div className="text-center">
         Per problemi riguardanti il funzionamento del sito, rivolgersi al tavolo
         gare durante il torneo
+      </div>
+      <div className="text-center">
+        <Link href="feedback">Feedback</Link>
       </div>
     </footer>
   );

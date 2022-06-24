@@ -8,6 +8,7 @@ export default function Home() {
     <div className="m-auto grid place-content-center">
       <div className="grid justify-items-stretch space-y-4">
         <Title>Categorie</Title>
+        <h3>Seleziona una categoria</h3>
         <Link href="/men">
           <a>
             <Button>MEN</Button>
