@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 import { Disclosure, Switch, Tab } from "@headlessui/react";
 import cs from "classnames";
@@ -8,16 +8,17 @@ import path from "path";
 
 import Title from "components/Title";
 import { getPuntiColor, getSqColor } from "lib/colors";
-import { EnumClassificaRev, EnumDataRev, EnumNomiRev } from "lib/enums";
+import { EnumClassifica, EnumClassificaRev, EnumDataRev } from "lib/enums";
 import { getClient } from "lib/google";
+import { howManyPoints, useClassifica } from "lib/useClassifica";
 
 export default function Girone({ data, nomi }) {
   // data: array di array delle partite
   // nomi: array di array dei nomi delle squadre
   const router = useRouter();
   return (
-    <div className="space-y-2">
-      <Title>{`AlpiVolley | ${router.query.categoria} - Girone ${router.query.girone}`}</Title>
+    <div className="mx-auto space-y-2">
+      <Title>{`${router.query.categoria} - Girone ${router.query.girone}`}</Title>
       <Tab.Group>
         <Tab.List className="mx-auto flex w-min justify-center gap-2 border-b">
           <Tab
@@ -43,7 +44,7 @@ export default function Girone({ data, nomi }) {
         </Tab.List>
         <Tab.Panels>
           <Tab.Panel>
-            <Partite2 data={data} nomi={nomi} />
+            <Partite data={data} nomi={nomi} />
           </Tab.Panel>
           <Tab.Panel>
             <Classifica data={data} nomi={nomi} />
@@ -54,10 +55,10 @@ export default function Girone({ data, nomi }) {
   );
 }
 
-function Partite2({ data, nomi }) {
+function Partite({ data, nomi }) {
   const [showFinished, setShowFinished] = useState(false);
   return (
-    <div className="mx-auto max-w-xl space-y-2">
+    <div className="max-w-xl space-y-2">
       <div className="all-center flex gap-2">
         <Switch
           checked={showFinished}
@@ -201,12 +202,12 @@ function Classifica({ data, nomi }) {
   // return: array di array. Non la migliore struttura da usare
   const classifica = useClassifica(data, nomi);
   return (
-    <table className="mx-auto border-separate border-spacing-x-0 border-spacing-y-2">
+    <table className="no-second-child border-separate border-spacing-x-0 border-spacing-y-2">
       <thead>
         <tr>
-          <th>Squadra</th>
-          <th>Punti</th>
-          <th>Vittorie</th>
+          {EnumClassifica.map((v) => (
+            <th key={v}>{v.replaceAll("_", " ")}</th>
+          ))}
         </tr>
       </thead>
       <tbody>
@@ -222,57 +223,6 @@ function Classifica({ data, nomi }) {
       </tbody>
     </table>
   );
-}
-
-function useClassifica(data, nomi) {
-  return useMemo(() => {
-    const punti = Array(8).fill(0);
-    const vittorie = Array(8).fill(0);
-    // Per ogni partita calcolo i punti da assegnare e chi ha vinto
-    for (const row of data) {
-      const index1 = nomi.findIndex(
-        (_, i) => nomi[i][EnumNomiRev.Nome] == row[EnumDataRev.Squadra_1]
-      );
-      const index2 = nomi.findIndex(
-        (_, i) => nomi[i][EnumNomiRev.Nome] == row[EnumDataRev.Squadra_2]
-      );
-      const points = howManyPoints(row) || [0, 0];
-      if (index1 > -1) {
-        punti[index1] += points[0];
-        vittorie[index1] += points[0] > 1 ? 1 : 0;
-      }
-      if (index2 > -1) {
-        punti[index2] += points[1];
-        vittorie[index2] += points[1] > 1 ? 1 : 0;
-      }
-    }
-    const toBeSorted = [];
-    // punti è usato solo come iteratore di 8 elementi
-    punti.forEach((v, i) => {
-      toBeSorted.push([nomi[i][EnumNomiRev.Nome], v, vittorie[i]]);
-    });
-    return toBeSorted.sort((a, b) => {
-      // ordino per punti fatti
-      if (a[EnumClassificaRev.Punti] != b[EnumClassificaRev.Punti])
-        return b[EnumClassificaRev.Punti] - a[EnumClassificaRev.Punti];
-      // ordino per vittorie
-      if (a[EnumClassificaRev.Vittorie] != b[EnumClassificaRev.Vittorie])
-        return b[EnumClassificaRev.Vittorie] - a[EnumClassificaRev.Vittorie];
-      // TODO: aggiornare metodo calcolo classifica
-      return 0;
-    });
-  }, [data, nomi]);
-}
-
-// Calcolo quanti punti assegnare alle squadre in base al punteggio della partita
-function howManyPoints(row) {
-  const points1 = parseInt(row[EnumDataRev.Punteggio_1]);
-  const points2 = parseInt(row[EnumDataRev.Punteggio_2]);
-  if (isNaN(points1) || isNaN(points2)) return null;
-  if (points2 < 19) return [3, 0];
-  if (points1 < 19) return [0, 3];
-  if (points1 > points2) return [2, 1];
-  return [1, 2];
 }
 
 const queryGoogle = false;

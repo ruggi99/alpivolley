@@ -71,3 +71,8 @@ th:last-child {
 th:last-child {
   @apply border-r;
 }
+
+table.no-second-child th:nth-child(2),
+table.no-second-child td:nth-child(2) {
+  display: none;
+}

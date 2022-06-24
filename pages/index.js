@@ -5,14 +5,14 @@ import Button from "components/Button";
 
 export default function Home() {
   return (
-    <div className="grid h-screen place-content-center">
-      <div className="grid max-h-96 max-w-sm justify-items-stretch space-y-4">
+    <div className="mx-auto grid place-content-center">
+      <div className="grid justify-items-stretch space-y-4">
         <Head>
           <title>AlpiVolley | Categorie</title>
         </Head>
-        <Link href="/man">
+        <Link href="/men">
           <a>
-            <Button>MAN</Button>
+            <Button>MEN</Button>
           </a>
         </Link>
         <Link href="/mixed">
@@ -20,9 +20,9 @@ export default function Home() {
             <Button>MIXED</Button>
           </a>
         </Link>
-        <Link href="/woman">
+        <Link href="/women">
           <a>
-            <Button>WOMAN</Button>
+            <Button>WOMEN</Button>
           </a>
         </Link>
       </div>

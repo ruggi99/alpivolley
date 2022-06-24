@@ -6,25 +6,28 @@ import path from "path";
 import Title from "components/Title";
 import { EnumClassifica } from "lib/enums";
 import { getClient } from "lib/google";
-import useClassificaAvulsa from "lib/useClassificaAvulsa";
+import { useClassificaAvulsa } from "lib/useClassifica";
 
 export default function Avulsa({ data }) {
   const router = useRouter();
   const classifica = useClassificaAvulsa(data);
   return (
-    <div className="mx-auto max-w-xl space-y-2">
+    <div className="mx-auto w-full max-w-xl space-y-2">
       <Title>{`${router.query.categoria} - Classifica Avulsa`}</Title>
       <h2 className="text-center font-bold">Classifica Avulsa</h2>
-      {classifica.map((v, i) => (
-        <Disclosure key={i} as="div" className="rounded-md border">
-          <Disclosure.Button className="block w-full px-4 py-2">
-            Classifica {i * v.length + 1}° - {(i + 1) * v.length}°
-          </Disclosure.Button>
-          <Disclosure.Panel className="px-2">
-            <Classifica classifica={v} />
-          </Disclosure.Panel>
-        </Disclosure>
-      ))}
+      {classifica.map((v, i) => {
+        const ultimaPos = calcPosPrec(classifica, i);
+        return (
+          <Disclosure key={i} as="div" className="rounded-md border">
+            <Disclosure.Button className="block w-full px-4 py-2">
+              Classifica {ultimaPos + 1}° - {ultimaPos + v.length}°
+            </Disclosure.Button>
+            <Disclosure.Panel className="px-2">
+              <Classifica classifica={v} />
+            </Disclosure.Panel>
+          </Disclosure>
+        );
+      })}
     </div>
   );
 }
@@ -50,6 +53,11 @@ function Classifica({ classifica }) {
       </tbody>
     </table>
   );
+}
+
+// Somma le lunghezze delle righe fino all'indice i
+function calcPosPrec(cl, i) {
+  return cl.reduce((acc, val, ind) => acc + (ind < i ? val.length : 0), 0);
 }
 
 const queryGoogle = false;

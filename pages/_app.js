@@ -1,5 +1,8 @@
 /* eslint-disable @next/next/no-page-custom-font */
+import { useEffect, useState } from "react";
+
 import Head from "next/head";
+import { useRouter } from "next/router";
 
 import "../styles/globals.css";
 
@@ -9,9 +12,10 @@ function MyApp({ Component, pageProps }) {
       <MetaTags />
       <Header />
       <CookieConsent />
-      <div className="content flex-1 p-4">
+      <div className="content relative flex flex-auto flex-shrink-0 p-4">
         <Component {...pageProps} />
       </div>
+      <RoutesLoading />
       <Footer />
     </>
   );
@@ -29,6 +33,10 @@ function MetaTags() {
         href="https://fonts.googleapis.com/css2?family=Roboto%20Mono:wght@400&display=swap"
         rel="stylesheet"
       />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500&display=swap"
+        rel="stylesheet"
+      />
     </Head>
   );
 }
@@ -42,7 +50,43 @@ function Header() {
 }
 
 function CookieConsent() {
+  // TODO: Inserire modale per la prima visita del sito
   return null;
+}
+
+function RoutesLoading() {
+  const router = useRouter();
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    function handleStart(url) {
+      console.log("start", url);
+      // if (/^\/.*\/[A-Z]{1}$/.test(url)) setShow(true);
+    }
+    function handleStop() {
+      console.log("stop", arguments);
+      setShow(false);
+    }
+    function handleError() {
+      console.log("error", arguments);
+      setShow(false);
+    }
+    router.events.on("routeChangeStart", handleStart);
+    router.events.on("routeChangeComplete", handleStop);
+    router.events.on("routeChangeError", handleError);
+    return () => {
+      router.events.off("routeChangeStart", handleStart);
+      router.events.off("routeChangeComplete", handleStop);
+      router.events.off("routeChangeError", handleError);
+    };
+  }, [router]);
+
+  if (!show) return null;
+  return (
+    <div className="absolute inset-0 grid place-content-center bg-black/50">
+      <style>{"html { overflow: hidden }"}</style>
+      <div className="text-red-500">Loading</div>
+    </div>
+  );
 }
 
 function Footer() {
