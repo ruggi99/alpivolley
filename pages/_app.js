@@ -29,14 +29,6 @@ function MetaTags() {
         name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=0"
       />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Roboto%20Mono:wght@400&display=swap"
-        rel="stylesheet"
-      />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500&display=swap"
-        rel="stylesheet"
-      />
     </Head>
   );
 }

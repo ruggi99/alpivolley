@@ -63,7 +63,7 @@ function Partite({ data, nomi }) {
   const [showFinished, setShowFinished] = useState(false);
   return (
     <div className="max-w-xl space-y-2">
-      <div className="all-center flex gap-2">
+      <div className="all-center my-6 flex gap-2">
         <Switch
           checked={showFinished}
           onChange={setShowFinished}
