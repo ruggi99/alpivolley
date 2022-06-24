@@ -13,7 +13,7 @@ function MyApp({ Component, pageProps }) {
       <MetaTags />
       <Header />
       <CookieConsent />
-      <div className="content relative flex flex-auto flex-shrink-0 flex-col gap-4 p-4">
+      <div className="content relative h-0 flex-auto flex-shrink-0 space-y-4 p-4">
         <Component {...pageProps} />
       </div>
       <RoutesLoading />
