@@ -114,7 +114,7 @@ function Footer() {
         gare durante il torneo
       </div>
       <div className="text-center">
-        <Link href="feedback">Feedback</Link>
+        <Link href="/feedback">Feedback</Link>
       </div>
     </footer>
   );
