@@ -19,7 +19,7 @@ function Girone({ data, nomi, update }) {
   // update: ultimo aggiornamento dati
   const router = useRouter();
   return (
-    <div className="mx-auto space-y-2">
+    <div className="mx-auto flex flex-1 flex-col gap-2">
       <Title>{`${router.query.categoria} - Girone ${router.query.girone}`}</Title>
       <Tab.Group>
         <Tab.List className="mx-auto flex w-min justify-center gap-2 border-b">
@@ -53,7 +53,7 @@ function Girone({ data, nomi, update }) {
           </Tab.Panel>
         </Tab.Panels>
       </Tab.Group>
-      <div className="text-center">
+      <div className="mt-auto text-center">
         Ultimo aggiornamento dati: {new Date(update).toLocaleTimeString()}
       </div>
     </div>
@@ -66,7 +66,7 @@ function Partite({ data, nomi }) {
   const [showFinished, setShowFinished] = useState(false);
   return (
     <div className="max-w-xl space-y-2">
-      <div className="all-center my-6 flex gap-2">
+      <div className="all-center my-4 flex gap-2">
         <Switch
           checked={showFinished}
           onChange={setShowFinished}

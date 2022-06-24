@@ -15,7 +15,7 @@ export function Navigation() {
 }
 
 export function withNavigation(Comp) {
-  function withNavigationWrapper(props) {
+  function WithNavigationWrapper(props) {
     return (
       <>
         <Navigation />
@@ -23,6 +23,6 @@ export function withNavigation(Comp) {
       </>
     );
   }
-  withNavigationWrapper.displayName = "withNavigation";
-  return withNavigationWrapper;
+  WithNavigationWrapper.displayName = "WithNavigation";
+  return WithNavigationWrapper;
 }
