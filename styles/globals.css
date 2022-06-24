@@ -76,3 +76,7 @@ table.no-second-child th:nth-child(2),
 table.no-second-child td:nth-child(2) {
   display: none;
 }
+
+time {
+  @apply select-all;
+}
