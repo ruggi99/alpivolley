@@ -12,7 +12,7 @@ export default function Avulsa({ data, update }) {
   const router = useRouter();
   const classifica = useClassificaAvulsa(data);
   return (
-    <div className="mx-auto w-full max-w-xl space-y-2">
+    <div className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-2">
       <Title>{`${router.query.categoria} - Classifica Avulsa`}</Title>
       <h2 className="text-center font-bold">Classifica Avulsa</h2>
       {classifica.map((v, i) => {
@@ -28,7 +28,7 @@ export default function Avulsa({ data, update }) {
           </Disclosure>
         );
       })}
-      <div className="text-center">
+      <div className="mt-auto text-center">
         Ultimo aggiornamento dati: {new Date(update).toLocaleTimeString()}
       </div>
     </div>

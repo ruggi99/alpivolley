@@ -37,7 +37,11 @@ function MetaTags() {
 function Header() {
   return (
     <header className="flex-none bg-primary-green p-4 text-center text-3xl text-white">
-      <div>Torneo ALPIVOLLEY</div>
+      <div>
+        <Link href="/">
+          <a className="text-inherit">Torneo ALPIVOLLEY</a>
+        </Link>
+      </div>
     </header>
   );
 }
