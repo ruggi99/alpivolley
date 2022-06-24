@@ -1,15 +1,13 @@
-import Head from "next/head";
 import Link from "next/link";
 
 import Button from "components/Button";
+import Title from "components/Title";
 
 export default function Home() {
   return (
-    <div className="mx-auto grid place-content-center">
+    <div className="m-auto grid place-content-center">
       <div className="grid justify-items-stretch space-y-4">
-        <Head>
-          <title>AlpiVolley | Categorie</title>
-        </Head>
+        <Title>Categorie</Title>
         <Link href="/men">
           <a>
             <Button>MEN</Button>

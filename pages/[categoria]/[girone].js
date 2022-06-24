@@ -6,13 +6,14 @@ import fs from "fs";
 import { useRouter } from "next/router";
 import path from "path";
 
+import { withNavigation } from "components/Navigation";
 import Title from "components/Title";
 import { getPuntiColor, getSqColor } from "lib/colors";
 import { EnumClassifica, EnumClassificaRev, EnumDataRev } from "lib/enums";
 import { getClient } from "lib/google";
 import { howManyPoints, useClassifica } from "lib/useClassifica";
 
-export default function Girone({ data, nomi, update }) {
+function Girone({ data, nomi, update }) {
   // data: array di array delle partite
   // nomi: array di array dei nomi delle squadre
   // update: ultimo aggiornamento dati
@@ -58,6 +59,8 @@ export default function Girone({ data, nomi, update }) {
     </div>
   );
 }
+
+export default withNavigation(Girone);
 
 function Partite({ data, nomi }) {
   const [showFinished, setShowFinished] = useState(false);
@@ -131,7 +134,7 @@ function Partite({ data, nomi }) {
                     <h3 className="font-bold sm:hidden">Arbitro: </h3>
                     <SqRounded color={getSqColor(v[EnumDataRev.Arbitro], nomi)}>
                       {/* {v[EnumDataRev.Arbitro].repeat(10)} */}
-                      {"Lorem ipsum dolor sit amet".repeat(2)}
+                      Lorem ipsum dolor sit amet
                     </SqRounded>
                   </div>
                 </Disclosure.Button>

@@ -4,9 +4,10 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 import Button from "components/Button";
+import { withNavigation } from "components/Navigation";
 import Title from "components/Title";
 
-export default function Gironi() {
+function Gironi() {
   const router = useRouter();
   useEffect(() => {
     // TODO: Limitare categorie del router
@@ -39,6 +40,8 @@ export default function Gironi() {
     </div>
   );
 }
+
+export default withNavigation(Gironi);
 
 function ButtonWithLink({ children, href, ...props }) {
   const router = useRouter();
