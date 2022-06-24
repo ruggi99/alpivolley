@@ -8,7 +8,7 @@ import { EnumClassifica } from "lib/enums";
 import { getClient } from "lib/google";
 import { useClassificaAvulsa } from "lib/useClassifica";
 
-export default function Avulsa({ data }) {
+export default function Avulsa({ data, update }) {
   const router = useRouter();
   const classifica = useClassificaAvulsa(data);
   return (
@@ -28,6 +28,9 @@ export default function Avulsa({ data }) {
           </Disclosure>
         );
       })}
+      <div className="text-center">
+        Ultimo aggiornamento dati: {new Date(update).toLocaleTimeString()}
+      </div>
     </div>
   );
 }
@@ -79,7 +82,7 @@ export async function getStaticProps({ params }) {
     );
   }
   return {
-    props: { data: values.map((v) => v.values) },
+    props: { data: values.map((v) => v.values), update: new Date().toJSON() },
     revalidate: 30,
   };
 }

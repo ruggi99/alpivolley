@@ -12,9 +12,10 @@ import { EnumClassifica, EnumClassificaRev, EnumDataRev } from "lib/enums";
 import { getClient } from "lib/google";
 import { howManyPoints, useClassifica } from "lib/useClassifica";
 
-export default function Girone({ data, nomi }) {
+export default function Girone({ data, nomi, update }) {
   // data: array di array delle partite
   // nomi: array di array dei nomi delle squadre
+  // update: ultimo aggiornamento dati
   const router = useRouter();
   return (
     <div className="mx-auto space-y-2">
@@ -51,6 +52,9 @@ export default function Girone({ data, nomi }) {
           </Tab.Panel>
         </Tab.Panels>
       </Tab.Group>
+      <div className="text-center">
+        Ultimo aggiornamento dati: {new Date(update).toLocaleTimeString()}
+      </div>
     </div>
   );
 }
@@ -135,9 +139,15 @@ function Partite({ data, nomi }) {
                   <div className="all-center flex">
                     <div className="w-full text-center font-roboto">
                       &#x1F551;{" "}
-                      {v[EnumDataRev.Orario]
-                        .substring(0, 4)
-                        .replaceAll(".", ":")}
+                      <time
+                        dateTime={v[EnumDataRev.Orario]
+                          .substring(0, 4)
+                          .replaceAll(".", ":")}
+                      >
+                        {v[EnumDataRev.Orario]
+                          .substring(0, 4)
+                          .replaceAll(".", ":")}
+                      </time>
                     </div>
                     <div className="all-center flex w-full gap-2 text-center">
                       Campo{" "}
@@ -244,7 +254,11 @@ export async function getStaticProps({ params }) {
     );
   }
   return {
-    props: { data: values[0].values, nomi: values[1].values },
+    props: {
+      data: values[0].values,
+      nomi: values[1].values,
+      update: new Date().toJSON(),
+    },
     revalidate: 30,
   };
 }
