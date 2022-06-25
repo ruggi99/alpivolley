@@ -17,10 +17,10 @@ function Girone({ data, nomi, update }) {
   // data: array di array delle partite
   // nomi: array di array dei nomi delle squadre
   // update: ultimo aggiornamento dati
-  const router = useRouter();
+  const { query } = useRouter();
   return (
-    <div className="mx-auto flex flex-1 flex-col gap-2">
-      <Title>{`${router.query.categoria} - Girone ${router.query.girone}`}</Title>
+    <div className="mx-auto flex w-fit flex-1 flex-col gap-2">
+      <Title>{`${query.categoria} - Girone ${query.girone}`}</Title>
       <Tab.Group>
         <Tab.List className="mx-auto flex w-min justify-center gap-2 border-b">
           <Tab
