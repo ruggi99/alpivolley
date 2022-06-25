@@ -3,7 +3,6 @@ import fs from "fs";
 import { useRouter } from "next/router";
 import path from "path";
 
-import { withNavigation } from "components/Navigation";
 import Title from "components/Title";
 import { EnumClassifica } from "lib/enums";
 import { getClient } from "lib/google";
@@ -36,7 +35,7 @@ function Avulsa({ data, update }) {
   );
 }
 
-export default withNavigation(Avulsa);
+export default Avulsa;
 
 function Classifica({ classifica }) {
   return (

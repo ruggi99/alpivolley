@@ -2,7 +2,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 import Button from "components/Button";
-import { withNavigation } from "components/Navigation";
 import Title from "components/Title";
 import { categorie, gironi } from "lib/const";
 
@@ -37,7 +36,7 @@ function Gironi({ gironi }) {
   );
 }
 
-export default withNavigation(Gironi);
+export default Gironi;
 
 function ButtonWithLink({ children, href, ...props }) {
   const router = useRouter();
