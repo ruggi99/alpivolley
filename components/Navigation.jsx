@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 
 export function Navigation({ className }) {
   const router = useRouter();
+  if (router.asPath == "/") return null;
   return (
     <div className={cs("w-min", className)}>
       <Link href={router.pathname == "/404" ? "/" : router.asPath + "/../"}>
