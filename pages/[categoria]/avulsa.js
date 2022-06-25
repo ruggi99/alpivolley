@@ -3,12 +3,13 @@ import fs from "fs";
 import { useRouter } from "next/router";
 import path from "path";
 
+import { withNavigation } from "components/navigation";
 import Title from "components/Title";
 import { EnumClassifica } from "lib/enums";
 import { getClient } from "lib/google";
 import { useClassificaAvulsa } from "lib/useClassifica";
 
-export default function Avulsa({ data, update }) {
+function Avulsa({ data, update }) {
   const router = useRouter();
   const classifica = useClassificaAvulsa(data);
   return (
@@ -34,6 +35,8 @@ export default function Avulsa({ data, update }) {
     </div>
   );
 }
+
+export default withNavigation(Avulsa);
 
 function Classifica({ classifica }) {
   return (
