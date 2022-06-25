@@ -240,7 +240,24 @@ function Classifica({ data, nomi }) {
 
 const queryGoogle = false;
 
+// Path validi a questo livello
+const paths = categorie
+  .map((c) =>
+    Array(gironi[c])
+      .fill(0)
+      .map((_, i) => `/${c}/${String.fromCharCode(65 + i)}`)
+  )
+  .flat(2);
+
 export async function getStaticProps({ params }) {
+  if (paths.indexOf(`/${params.categoria}/${params.girone}`) == -1) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
   var values;
   if (queryGoogle && process.env.FETCH_GOOGLE) {
     const client = await getClient();
@@ -266,23 +283,10 @@ export async function getStaticProps({ params }) {
   };
 }
 
-const noBuild = true;
-
 export function getStaticPaths() {
-  if (noBuild)
-    return {
-      paths: [],
-      fallback: "blocking",
-    };
   return {
-    paths: categorie
-      .map((c) =>
-        Array(gironi[c])
-          .fill(0)
-          .map((g) => `/${c}/${String.fromCharCode(65 + g)}`)
-      )
-      .flat(2),
-    fallback: false,
+    paths: [],
+    fallback: "blocking",
   };
 }
 

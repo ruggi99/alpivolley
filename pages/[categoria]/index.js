@@ -8,7 +8,7 @@ import { categorie, gironi } from "lib/const";
 function Gironi({ gironi }) {
   const { query } = useRouter();
   return (
-    <div className="mx-auto grid place-content-center gap-4">
+    <div className="mx-auto grid h-full place-content-center gap-4">
       <Title>{query.categoria + " - Gironi"}</Title>
       <div className="space-y-4 rounded-md border p-4">
         <h2>Sabato</h2>
