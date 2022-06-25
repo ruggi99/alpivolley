@@ -6,9 +6,9 @@ import fs from "fs";
 import { useRouter } from "next/router";
 import path from "path";
 
-import { withNavigation } from "components/Navigation";
 import Title from "components/Title";
 import { getPuntiColor, getSqColor } from "lib/colors";
+import { categorie, gironi } from "lib/const";
 import { EnumClassifica, EnumClassificaRev, EnumDataRev } from "lib/enums";
 import { getClient } from "lib/google";
 import { howManyPoints, useClassifica } from "lib/useClassifica";
@@ -19,7 +19,7 @@ function Girone({ data, nomi, update }) {
   // update: ultimo aggiornamento dati
   const { query } = useRouter();
   return (
-    <div className="mx-auto flex w-fit flex-1 flex-col gap-2">
+    <div className="mx-auto flex h-full w-fit flex-1 flex-col gap-2">
       <Title>{`${query.categoria} - Girone ${query.girone}`}</Title>
       <Tab.Group>
         <Tab.List className="mx-auto flex w-min justify-center gap-2 border-b">
@@ -60,7 +60,7 @@ function Girone({ data, nomi, update }) {
   );
 }
 
-export default withNavigation(Girone);
+export default Girone;
 
 function Partite({ data, nomi }) {
   const [showFinished, setShowFinished] = useState(false);
@@ -266,10 +266,23 @@ export async function getStaticProps({ params }) {
   };
 }
 
+const noBuild = true;
+
 export function getStaticPaths() {
+  if (noBuild)
+    return {
+      paths: [],
+      fallback: "blocking",
+    };
   return {
-    paths: [],
-    fallback: "blocking",
+    paths: categorie
+      .map((c) =>
+        Array(gironi[c])
+          .fill(0)
+          .map((g) => `/${c}/${String.fromCharCode(65 + g)}`)
+      )
+      .flat(2),
+    fallback: false,
   };
 }
 

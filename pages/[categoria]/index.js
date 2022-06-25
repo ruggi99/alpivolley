@@ -1,36 +1,29 @@
-import { useEffect } from "react";
-
 import Link from "next/link";
 import { useRouter } from "next/router";
 
 import Button from "components/Button";
 import { withNavigation } from "components/Navigation";
 import Title from "components/Title";
+import { categorie, gironi } from "lib/const";
 
-function Gironi() {
-  const router = useRouter();
-  useEffect(() => {
-    if (!router.isReady) return;
-    if (["men", "mixed", "women"].indexOf(router.query.categoria) == -1) {
-      router.replace("/");
-    }
-  }, [router]);
+function Gironi({ gironi }) {
+  const { query } = useRouter();
   return (
     <div className="mx-auto grid place-content-center gap-4">
-      <Title>Gironi</Title>
+      <Title>{query.categoria + " - Gironi"}</Title>
       <div className="space-y-4 rounded-md border p-4">
         <h2>Sabato</h2>
         <div className="grid grid-cols-2 gap-4">
-          {Array(8)
+          {Array(gironi)
             .fill(0)
             .map((_, i) => (
               <ButtonWithLink key={i} href={String.fromCharCode(65 + i)}>
                 Girone {String.fromCharCode(65 + i)}
               </ButtonWithLink>
             ))}
-          <ButtonWithLink href="avulsa" className="col-span-2">
-            Classifica Avulsa
-          </ButtonWithLink>
+        </div>
+        <div>
+          <ButtonWithLink href="avulsa">Classifica Avulsa</ButtonWithLink>
         </div>
       </div>
       <div className="space-y-4 rounded-md border p-4">
@@ -55,4 +48,20 @@ function ButtonWithLink({ children, href, ...props }) {
       </a>
     </Link>
   );
+}
+
+export function getStaticProps({ params }) {
+  // TODO: fare il fetch da Google
+  return {
+    props: {
+      gironi: gironi[params.categoria],
+    },
+  };
+}
+
+export function getStaticPaths() {
+  return {
+    paths: categorie.map((v) => "/" + v),
+    fallback: false,
+  };
 }

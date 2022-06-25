@@ -5,7 +5,7 @@ export default function Feedback() {
     <>
       <Title>Feedback</Title>
       <iframe
-        src="https://tally.so/r/3xXQ2v"
+        src="https://tally.so/embed/3xXQ2v"
         className="flex-1"
         width="100%"
         height="100%"

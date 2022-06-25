@@ -5,6 +5,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
+import { Navigation } from "components/Navigation";
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
@@ -13,6 +14,7 @@ function MyApp({ Component, pageProps }) {
       <MetaTags />
       <Header />
       <CookieConsent />
+      <Navigation className="mt-2 ml-2" />
       <div className="content relative flex-auto flex-shrink-0 space-y-4 p-4">
         <Component {...pageProps} />
       </div>
