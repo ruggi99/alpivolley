@@ -116,11 +116,7 @@ function Footer() {
         </a>
       </div>
       <div className="text-center">
-        Per problemi riguardanti il funzionamento del sito, rivolgersi al tavolo
-        gare durante il torneo
-      </div>
-      <div className="text-center">
-        <Link href="/feedback">Feedback</Link>
+        <Link href="/feedback">Lascia un Feedback</Link>
       </div>
     </footer>
   );
