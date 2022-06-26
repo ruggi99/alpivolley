@@ -20,7 +20,10 @@ function Girone({ data, nomi, update }) {
   const { query } = useRouter();
   return (
     <div className="mx-auto flex h-full w-fit flex-1 flex-col gap-2">
-      <Title>{`${query.categoria} - Girone ${query.girone}`}</Title>
+      <Title>{`${query.categoria} - Girone ${query.girone}`}</Title>{" "}
+      <h3 className="text-center">
+        Categoria {query.categoria} - Girone {query.girone}
+      </h3>
       <Tab.Group>
         <Tab.List className="mx-auto flex w-min justify-center gap-2 border-b">
           <Tab
@@ -140,6 +143,7 @@ function Partite({ data, nomi }) {
                 </Disclosure.Button>
                 <Disclosure.Panel className="space-y-2 px-4 py-2">
                   <div className="all-center flex">
+                    <div className="w-full text-center">n° {i + 1}</div>
                     <div className="w-full text-center font-roboto">
                       &#x1F551;{" "}
                       <time

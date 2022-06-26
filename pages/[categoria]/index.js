@@ -10,6 +10,7 @@ function Gironi({ gironi }) {
   return (
     <div className="mx-auto grid h-full place-content-center gap-4">
       <Title>{query.categoria + " - Gironi"}</Title>
+      <h3 className="text-center">Categoria {query.categoria}</h3>
       <div className="space-y-4 rounded-md border p-4">
         <h2>Sabato</h2>
         <div className="grid grid-cols-2 gap-4">
