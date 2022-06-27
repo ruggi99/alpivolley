@@ -1,7 +1,6 @@
-import Link from "next/link";
 import { useRouter } from "next/router";
 
-import Button from "components/Button";
+import { ButtonWithLink } from "components/Button";
 import Title from "components/Title";
 import { categorie, gironi } from "lib/const";
 
@@ -38,17 +37,6 @@ function Gironi({ gironi }) {
 }
 
 export default Gironi;
-
-function ButtonWithLink({ children, href, ...props }) {
-  const router = useRouter();
-  return (
-    <Link href={router.asPath + `/${href}`}>
-      <a {...props}>
-        <Button {...props}>{children}</Button>
-      </a>
-    </Link>
-  );
-}
 
 export function getStaticProps({ params }) {
   // TODO: fare il fetch da Google

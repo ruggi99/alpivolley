@@ -1,6 +1,4 @@
-import Link from "next/link";
-
-import Button from "components/Button";
+import { ButtonWithLink } from "components/Button";
 import Title from "components/Title";
 
 export default function Home() {
@@ -9,21 +7,9 @@ export default function Home() {
       <Title>Categorie</Title>
       <div className="grid justify-items-stretch space-y-4">
         <h3>Seleziona una categoria</h3>
-        <Link href="/men">
-          <a>
-            <Button>MEN</Button>
-          </a>
-        </Link>
-        <Link href="/mixed">
-          <a>
-            <Button>MIXED</Button>
-          </a>
-        </Link>
-        <Link href="/women">
-          <a>
-            <Button>WOMEN</Button>
-          </a>
-        </Link>
+        <ButtonWithLink href="/men">MEN</ButtonWithLink>
+        <ButtonWithLink href="/mixed">MIXED</ButtonWithLink>
+        <ButtonWithLink href="/women">WOMEN</ButtonWithLink>
       </div>
     </div>
   );
