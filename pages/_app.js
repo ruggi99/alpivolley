@@ -116,7 +116,14 @@ function Footer() {
         </a>
       </div>
       <div className="text-center">
-        <Link href="/feedback">Lascia un Feedback</Link>
+        <Link href="/feedback">Lascia un Feedback</Link> -{" "}
+        <a
+          href="https://buymeacoffee.com/ruggio"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Buy me a coffee
+        </a>
       </div>
     </footer>
   );
