@@ -9,7 +9,12 @@ import path from "path";
 import Title from "components/Title";
 import { getPuntiColor, getSqColor } from "lib/colors";
 import { categorie, gironi } from "lib/const";
-import { EnumClassifica, EnumClassificaRev, EnumDataRev } from "lib/enums";
+import {
+  EnumClassifica,
+  EnumClassificaRev,
+  EnumDataRev,
+  transformEnum,
+} from "lib/enums";
 import { getClient } from "lib/google";
 import { howManyPoints, useClassifica } from "lib/useClassifica";
 
@@ -179,7 +184,7 @@ function Partite({ data, nomi }) {
                           getPuntiColor(rowPoints[0])
                         )}
                       >
-                        {v[EnumDataRev.Punteggio_1]}
+                        {v[EnumDataRev.Punteggio$1]}
                       </div>
                       <div
                         className={cs(
@@ -187,7 +192,7 @@ function Partite({ data, nomi }) {
                           getPuntiColor(rowPoints[1])
                         )}
                       >
-                        {v[EnumDataRev.Punteggio_2]}
+                        {v[EnumDataRev.Punteggio$2]}
                       </div>
                       <div
                         className={cs(
@@ -223,7 +228,7 @@ function Classifica({ data, nomi }) {
       <thead>
         <tr>
           {EnumClassifica.map((v) => (
-            <th key={v}>{v.replaceAll("_", " ")}</th>
+            <th key={v}>{transformEnum(v)}</th>
           ))}
         </tr>
       </thead>

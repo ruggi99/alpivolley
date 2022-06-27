@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import path from "path";
 
 import Title from "components/Title";
-import { EnumClassifica } from "lib/enums";
+import { EnumClassifica, transformEnum } from "lib/enums";
 import { getClient } from "lib/google";
 import { useClassificaAvulsa } from "lib/useClassifica";
 
@@ -43,7 +43,7 @@ function Classifica({ classifica }) {
       <thead>
         <tr>
           {EnumClassifica.map((v) => (
-            <th key={v}>{v.replaceAll("_", " ")}</th>
+            <th key={v}>{transformEnum(v)}</th>
           ))}
         </tr>
       </thead>
