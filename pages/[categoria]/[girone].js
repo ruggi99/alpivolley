@@ -6,9 +6,10 @@ import fs from "fs";
 import { useRouter } from "next/router";
 import path from "path";
 
+import DataUpdate from "components/DataUpdate";
 import Title from "components/Title";
 import { getPuntiColor, getSqColor } from "lib/colors";
-import { categorie, gironi } from "lib/const";
+import { categorie, gironi, revalidate } from "lib/const";
 import {
   EnumClassifica,
   EnumClassificaRev,
@@ -26,6 +27,7 @@ function Girone({ data, nomi, update }) {
   return (
     <div className="mx-auto flex h-full w-fit flex-1 flex-col gap-2">
       <Title>{`${query.categoria} - Girone ${query.girone}`}</Title>{" "}
+      <DataUpdate update={update} />
       <h3 className="text-center">
         Categoria {query.categoria} - Girone {query.girone}
       </h3>
@@ -61,9 +63,6 @@ function Girone({ data, nomi, update }) {
           </Tab.Panel>
         </Tab.Panels>
       </Tab.Group>
-      <div className="mt-auto text-center">
-        Ultimo aggiornamento dati: {new Date(update).toLocaleTimeString()}
-      </div>
     </div>
   );
 }
@@ -288,7 +287,7 @@ export async function getStaticProps({ params }) {
       nomi: values[1].values,
       update: new Date().toJSON(),
     },
-    revalidate: 30,
+    revalidate,
   };
 }
 

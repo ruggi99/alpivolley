@@ -3,6 +3,7 @@ import fs from "fs";
 import { useRouter } from "next/router";
 import path from "path";
 
+import DataUpdate from "components/DataUpdate";
 import Title from "components/Title";
 import { EnumClassifica, transformEnum } from "lib/enums";
 import { getClient } from "lib/google";
@@ -14,6 +15,7 @@ function Avulsa({ data, update }) {
   return (
     <div className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-2">
       <Title>{`${router.query.categoria} - Classifica Avulsa`}</Title>
+      <DataUpdate update={update} />
       <h2 className="text-center font-bold">Classifica Avulsa</h2>
       {classifica.map((v, i) => {
         const ultimaPos = calcPosPrec(classifica, i);
@@ -28,9 +30,6 @@ function Avulsa({ data, update }) {
           </Disclosure>
         );
       })}
-      <div className="mt-auto text-center">
-        Ultimo aggiornamento dati: {new Date(update).toLocaleTimeString()}
-      </div>
     </div>
   );
 }
