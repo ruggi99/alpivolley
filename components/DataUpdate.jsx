@@ -1,8 +1,12 @@
+import { useEffect, useState } from "react";
+
 import cs from "classnames";
 
 import { revalidate } from "lib/const";
 
 export default function DataUpdate({ update }) {
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => setIsMounted(true), []);
   return (
     <div
       className={cs(
@@ -12,7 +16,8 @@ export default function DataUpdate({ update }) {
           : "text-green-500"
       )}
     >
-      Ultimo aggiornamento dati: {new Date(update).toLocaleTimeString()}
+      Ultimo aggiornamento dati:{" "}
+      {isMounted && new Date(update).toLocaleTimeString()}
     </div>
   );
 }
