@@ -7,6 +7,7 @@ import { revalidate } from "lib/const";
 export default function DataUpdate({ update }) {
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => setIsMounted(true), []);
+  if (!isMounted) return <div>&nbsp;</div>;
   return (
     <div
       className={cs(
@@ -16,8 +17,7 @@ export default function DataUpdate({ update }) {
           : "text-green-500"
       )}
     >
-      Ultimo aggiornamento dati:{" "}
-      {isMounted && new Date(update).toLocaleTimeString()}
+      Ultimo aggiornamento dati: {new Date(update).toLocaleTimeString()}
     </div>
   );
 }
