@@ -43,6 +43,7 @@
       {
         "groups": [
           ["^react$"],
+          ["^next/"],
           ["^\\u0000"],
           ["^@?\\w"],
           ["components", "hooks", "lib", "pages", "public", "styles"],

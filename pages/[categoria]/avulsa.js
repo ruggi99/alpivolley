@@ -1,6 +1,7 @@
+import { useRouter } from "next/router";
+
 import { Disclosure } from "@headlessui/react";
 import fs from "fs";
-import { useRouter } from "next/router";
 import path from "path";
 
 import DataUpdate from "components/DataUpdate";
