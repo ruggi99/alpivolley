@@ -10,7 +10,7 @@ export default function DataUpdate({ update }) {
   return (
     <div
       className={cs(
-        "mt-auto text-center",
+        "text-center",
         new Date() - new Date(update) > revalidate * 1000
           ? "text-red-500"
           : "text-green-500"
