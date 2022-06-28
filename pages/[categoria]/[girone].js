@@ -34,27 +34,9 @@ function Girone(pageProps) {
         Categoria {query.categoria} - Girone {query.girone}
       </h3>
       <Tab.Group>
-        <Tab.List className="mx-auto flex w-min justify-center gap-2 border-b">
-          <Tab
-            className={({ selected }) =>
-              cs(
-                "px-4 py-2 font-bold",
-                selected && "border-b-2 border-primary-green text-primary-green"
-              )
-            }
-          >
-            Partite
-          </Tab>
-          <Tab
-            className={({ selected }) =>
-              cs(
-                "px-4 py-2 font-bold",
-                selected && "border-b-2 border-primary-green text-primary-green"
-              )
-            }
-          >
-            Classifica
-          </Tab>
+        <Tab.List className="mx-auto flex w-full justify-center gap-2 border-b">
+          <Tab className={tabClassname}>Partite</Tab>
+          <Tab className={tabClassname}>Classifica</Tab>
         </Tab.List>
         <Tab.Panels>
           <Tab.Panel>
@@ -70,6 +52,12 @@ function Girone(pageProps) {
 }
 
 export default Girone;
+
+const tabClassname = ({ selected }) =>
+  cs(
+    "px-4 py-2 font-bold",
+    selected && "border-b-2 border-primary-green text-primary-green"
+  );
 
 function Partite({ data, nomi }) {
   const [showFinished, setShowFinished] = useState(false);
