@@ -18,11 +18,13 @@ import {
 } from "lib/enums";
 import { getClient } from "lib/google";
 import { howManyPoints, useClassifica } from "lib/useClassifica";
+import useUpdatedData from "lib/useUpdatedData";
 
-function Girone({ data, nomi, update }) {
+function Girone(pageProps) {
   // data: array di array delle partite
   // nomi: array di array dei nomi delle squadre
   // update: ultimo aggiornamento dati
+  const { data, nomi, update } = useUpdatedData(pageProps);
   const { query } = useRouter();
   return (
     <div className="mx-auto flex h-full w-fit flex-1 flex-col gap-2">
