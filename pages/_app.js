@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import Head from "next/head";
 import Link from "next/link";
@@ -7,7 +7,10 @@ import { useRouter } from "next/router";
 import "@fontsource/roboto-mono";
 import "@fontsource/ubuntu";
 
+import Button from "components/Button";
+import MyDialog from "components/Dialog";
 import { Navigation } from "components/Navigation";
+import { localStorageKey } from "lib/const";
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
@@ -52,7 +55,38 @@ function Header() {
 
 function CookieConsent() {
   // TODO: Inserire modale per la prima visita del sito
-  return null;
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    if (!localStorage[localStorageKey]) setOpen(true);
+  }, []);
+  const closeDialog = useCallback(() => {
+    setOpen(false);
+    localStorage.setItem(localStorageKey, "true");
+  }, []);
+  return (
+    <MyDialog show={open} onClose={closeDialog} title="Cookie Consent">
+      <MyDialog.Body>
+        <p>
+          Questo sito non utilizza cookie di alcun genere, se non per ricordarsi
+          di avertelo già detto.
+        </p>
+        <p>
+          Utilizza però un servizio di analisi delle prestazioni dell&apos;app
+          fornito e gestito da Vercel.
+        </p>
+        <p>
+          Vengono raccolti dati anonimi ma non viene raccolto nessun dato
+          personale
+        </p>
+        <p>Non viene visualizzata pubblicità di alcun genere</p>
+      </MyDialog.Body>
+      <MyDialog.Footer>
+        <Button className="w-auto px-4 py-2" onClick={closeDialog}>
+          Capito
+        </Button>
+      </MyDialog.Footer>
+    </MyDialog>
+  );
 }
 
 function RoutesLoading() {
