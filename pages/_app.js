@@ -1,9 +1,11 @@
-/* eslint-disable @next/next/no-page-custom-font */
 import { useEffect, useState } from "react";
 
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
+
+import "@fontsource/roboto-mono";
+import "@fontsource/ubuntu";
 
 import { Navigation } from "components/Navigation";
 import "../styles/globals.css";

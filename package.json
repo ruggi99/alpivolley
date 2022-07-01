@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fontsource/roboto-mono": "^4.5.7",
+    "@fontsource/ubuntu": "^4.5.10",
     "@headlessui/react": "^1.6.5",
     "classnames": "^2.3.1",
     "googleapis": "^103.0.0",
