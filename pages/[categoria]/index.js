@@ -30,6 +30,9 @@ function Gironi({ gironi }) {
         <div className="grid grid-cols-2 gap-4">
           <ButtonWithLink href="gold">GOLD</ButtonWithLink>
           <ButtonWithLink href="silver">SILVER</ButtonWithLink>
+          <ButtonWithLink href="silver-perdenti" className="col-span-2">
+            SILVER Perdenti
+          </ButtonWithLink>
         </div>
       </div>
     </div>
