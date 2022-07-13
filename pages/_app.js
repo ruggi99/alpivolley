@@ -129,31 +129,31 @@ function Footer() {
     <footer className="flex-none bg-primary-yellow px-8 py-4">
       <div className="text-center">
         Developed by{" "}
-        <a href="https://github.com/ruggi99" target="_blank" rel="noreferrer">
+        <a href="https://github.com/ruggi99" target="_blank" rel="noopener">
           Ruggero Tomaselli
         </a>
       </div>
       <div className="text-center">
         Hosted on{" "}
-        <a href="https://vercel.com" target="_blank" rel="noreferrer">
+        <a href="https://vercel.com" target="_blank" rel="noopener">
           Vercel
         </a>
         .{" "}
         <a
           href="https://github.com/ruggi99/alpivolley"
           target="_blank"
-          rel="noreferrer"
+          rel="noopener"
         >
           Source Code
         </a>{" "}
         on{" "}
-        <a href="https://github.com" target="_blank" rel="noreferrer">
+        <a href="https://github.com" target="_blank" rel="noopener">
           GitHub
         </a>
       </div>
       <div className="text-center">
         <Link href="/feedback">Lascia un Feedback</Link> -{" "}
-        <a href="https://ko-fi.com/ruggio" target="_blank" rel="noreferrer">
+        <a href="https://ko-fi.com/ruggio" target="_blank" rel="noopener">
           Sostienimi
         </a>
       </div>
