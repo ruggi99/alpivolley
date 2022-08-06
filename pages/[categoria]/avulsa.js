@@ -9,13 +9,16 @@ import Title from "components/Title";
 import { EnumClassifica, transformEnum } from "lib/enums";
 import { getClient } from "lib/google";
 import { useClassificaAvulsa } from "lib/useClassifica";
+import { firstLetterUp } from "lib/utils";
 
 function Avulsa({ data, update }) {
   const router = useRouter();
   const classifica = useClassificaAvulsa(data);
   return (
     <div className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-2">
-      <Title>{`${router.query.categoria} - Classifica Avulsa`}</Title>
+      <Title>
+        {firstLetterUp(router.query.categoria) + " - Classifica Avulsa"}
+      </Title>
       <DataUpdate update={update} />
       <h2 className="text-center font-bold">Classifica Avulsa</h2>
       {classifica.map((v, i) => {

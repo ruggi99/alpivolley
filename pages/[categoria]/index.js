@@ -3,12 +3,13 @@ import { useRouter } from "next/router";
 import { ButtonWithLink } from "components/Button";
 import Title from "components/Title";
 import { categorie, gironi } from "lib/const";
+import { firstLetterUp } from "lib/utils";
 
 function Gironi({ gironi }) {
   const { query } = useRouter();
   return (
     <div className="mx-auto grid h-full place-content-center gap-4">
-      <Title>{query.categoria + " - Gironi"}</Title>
+      <Title>{firstLetterUp(query.categoria) + " - Gironi"}</Title>
       <h3 className="text-center">
         Categoria {firstLetterUp(query.categoria)}
       </h3>
@@ -31,7 +32,6 @@ function Gironi({ gironi }) {
 export default Gironi;
 
 export function getStaticProps({ params }) {
-  // TODO: fare il fetch da Google
   return {
     props: {
       gironi: gironi[params.categoria],

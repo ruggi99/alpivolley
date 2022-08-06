@@ -20,6 +20,7 @@ import {
 import { getClient } from "lib/google";
 import { howManyPoints, useClassifica } from "lib/useClassifica";
 import useUpdatedData from "lib/useUpdatedData";
+import { firstLetterUp } from "lib/utils";
 
 function Girone(pageProps) {
   // data: array di array delle partite
@@ -29,7 +30,9 @@ function Girone(pageProps) {
   const { query } = useRouter();
   return (
     <div className="mx-auto flex h-full w-fit flex-1 flex-col gap-2">
-      <Title>{`${query.categoria} - Girone ${query.girone}`}</Title>{" "}
+      <Title>
+        {firstLetterUp(query.categoria) + " - Girone " + query.girone}
+      </Title>
       <DataUpdate update={update} />
       <h3 className="text-center">
         Categoria {query.categoria} - Girone {query.girone}
@@ -262,7 +265,7 @@ export async function getStaticProps({ params }) {
     const client = await getClient();
     values = (
       await client.spreadsheets.values.batchGet({
-        spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID,
+        spreadsheetId: process.env[`GOOGLE_SPREADSHEET_ID_${params.categoria}`],
         ranges: getRanges(params),
       })
     ).data.valueRanges;
