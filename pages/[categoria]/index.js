@@ -25,16 +25,6 @@ function Gironi({ gironi }) {
           <ButtonWithLink href="avulsa">Classifica Avulsa</ButtonWithLink>
         </div>
       </div>
-      <div className="space-y-4 rounded-md border p-4">
-        <h2>Domenica</h2>
-        <div className="grid grid-cols-2 gap-4">
-          <ButtonWithLink href="gold">GOLD</ButtonWithLink>
-          <ButtonWithLink href="silver">SILVER</ButtonWithLink>
-          <ButtonWithLink href="silver-perdenti" className="col-span-2">
-            SILVER Perdenti
-          </ButtonWithLink>
-        </div>
-      </div>
     </div>
   );
 }
