@@ -16,7 +16,7 @@ export function ButtonWithLink({ children, href, ...props }) {
   const router = useRouter();
   return (
     <Link href={href[0] == "/" ? href : router.asPath + `/${href}`}>
-      <a {...props}>
+      <a {...props} rel="noopener">
         <Button {...props}>{children}</Button>
       </a>
     </Link>
