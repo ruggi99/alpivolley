@@ -6,6 +6,7 @@ import path from "path";
 
 import DataUpdate from "components/DataUpdate";
 import Title from "components/Title";
+import { gironi } from "lib/const";
 import { EnumClassifica, transformEnum } from "lib/enums";
 import { getClient } from "lib/google";
 import { useClassificaAvulsa } from "lib/useClassifica";
@@ -76,11 +77,14 @@ export async function getStaticProps({ params }) {
     const client = await getClient();
     values = (
       await client.spreadsheets.values.batchGet({
-        spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID,
+        spreadsheetId: process.env["GOOGLE_SHEET_ID_" + params.categoria],
         ranges: getRanges(params),
       })
     ).data.valueRanges;
-    fs.writeFileSync("public/data2.json", JSON.stringify(values));
+    fs.writeFileSync(
+      "public/data2.json",
+      JSON.stringify(values, null, 2) + "\n"
+    );
   } else {
     values = JSON.parse(
       fs.readFileSync(path.join(process.cwd(), "public/data2.json"))
@@ -99,6 +103,8 @@ export function getStaticPaths() {
   };
 }
 
-function getRanges(/* query */) {
-  return ["Partite_A"];
+function getRanges({ categoria }) {
+  return Array(gironi[categoria])
+    .fill(0)
+    .map((_, i) => "Partite_" + String.fromCharCode(65 + i));
 }

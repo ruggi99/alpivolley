@@ -15,6 +15,7 @@ import {
   EnumClassifica,
   EnumClassificaRev,
   EnumDataRev,
+  EnumNomiRev,
   transformEnum,
 } from "lib/enums";
 import { getClient } from "lib/google";
@@ -26,7 +27,8 @@ function Girone(pageProps) {
   // data: array di array delle partite
   // nomi: array di array dei nomi delle squadre
   // update: ultimo aggiornamento dati
-  const { data, nomi, update } = useUpdatedData(pageProps);
+  const { data, update } = useUpdatedData(pageProps);
+  const nomi = getNomifromData(data);
   const { query } = useRouter();
   return (
     <div className="mx-auto flex h-full w-fit flex-1 flex-col gap-2">
@@ -35,7 +37,7 @@ function Girone(pageProps) {
       </Title>
       <DataUpdate update={update} />
       <h3 className="text-center">
-        Categoria {query.categoria} - Girone {query.girone}
+        Categoria {firstLetterUp(query.categoria)} - Girone {query.girone}
       </h3>
       <Tab.Group>
         <Tab.List className="mx-auto flex w-full justify-center gap-2 border-b">
@@ -56,6 +58,27 @@ function Girone(pageProps) {
 }
 
 export default Girone;
+
+function getNomifromData(data) {
+  const nomi = [];
+  for (var row of data) {
+    if (
+      nomi.findIndex(
+        (v) => row[EnumDataRev.Squadra_1] == v[EnumNomiRev.Nome]
+      ) == -1
+    ) {
+      nomi.push([row[EnumDataRev.Squadra_1]]);
+    }
+    if (
+      nomi.findIndex(
+        (v) => row[EnumDataRev.Squadra_2] == v[EnumNomiRev.Nome]
+      ) == -1
+    ) {
+      nomi.push([row[EnumDataRev.Squadra_2]]);
+    }
+  }
+  return nomi;
+}
 
 const tabClassname = ({ selected }) =>
   cs(
@@ -264,12 +287,15 @@ export async function getStaticProps({ params }) {
   if (queryGoogle && process.env.FETCH_GOOGLE) {
     const client = await getClient();
     values = (
-      await client.spreadsheets.values.batchGet({
-        spreadsheetId: process.env[`GOOGLE_SPREADSHEET_ID_${params.categoria}`],
-        ranges: getRanges(params),
+      await client.spreadsheets.values.get({
+        spreadsheetId: process.env[`GOOGLE_SHEET_ID_${params.categoria}`],
+        range: getRange(params),
       })
-    ).data.valueRanges;
-    fs.writeFileSync("public/data.json", JSON.stringify(values));
+    ).data;
+    fs.writeFileSync(
+      "public/data.json",
+      JSON.stringify(values, null, 2) + "\n"
+    );
   } else {
     values = JSON.parse(
       fs.readFileSync(path.join(process.cwd(), "public/data.json"))
@@ -277,8 +303,7 @@ export async function getStaticProps({ params }) {
   }
   return {
     props: {
-      data: values[0].values,
-      nomi: values[1].values,
+      data: values.values,
       update: new Date().toJSON(),
     },
     revalidate,
@@ -292,6 +317,6 @@ export function getStaticPaths() {
   };
 }
 
-function getRanges(/* query */) {
-  return ["Partite_A", "Nomi_A"];
+function getRange({ girone }) {
+  return "Partite_" + girone;
 }
