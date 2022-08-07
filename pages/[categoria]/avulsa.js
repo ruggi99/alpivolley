@@ -10,10 +10,12 @@ import { gironi } from "lib/const";
 import { EnumClassifica, transformEnum } from "lib/enums";
 import { getClient } from "lib/google";
 import { useClassificaAvulsa } from "lib/useClassifica";
+import useUpdatedData from "lib/useUpdatedData";
 import { firstLetterUp } from "lib/utils";
 
-function Avulsa({ data, update }) {
+function Avulsa(pageProps) {
   const router = useRouter();
+  const { data, update } = useUpdatedData(pageProps);
   const classifica = useClassificaAvulsa(data);
   return (
     <div className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-2">
