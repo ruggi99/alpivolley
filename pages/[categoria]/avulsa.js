@@ -25,14 +25,15 @@ function Avulsa(pageProps) {
       <DataUpdate update={update} />
       <h2 className="text-center font-bold">Classifica Avulsa</h2>
       {classifica.map((v, i) => {
+        const vFiltered = v.filter(Boolean);
         const ultimaPos = calcPosPrec(classifica, i);
         return (
           <Disclosure key={i} as="div" className="rounded-md border">
             <Disclosure.Button className="block w-full px-4 py-2">
-              Classifica {ultimaPos + 1}° - {ultimaPos + v.length}°
+              Classifica {ultimaPos + 1}° - {ultimaPos + vFiltered.length}°
             </Disclosure.Button>
             <Disclosure.Panel className="px-2">
-              <Classifica classifica={v} />
+              <Classifica classifica={vFiltered} />
             </Disclosure.Panel>
           </Disclosure>
         );
@@ -68,7 +69,10 @@ function Classifica({ classifica }) {
 
 // Somma le lunghezze delle righe fino all'indice i
 function calcPosPrec(cl, i) {
-  return cl.reduce((acc, val, ind) => acc + (ind < i ? val.length : 0), 0);
+  return cl.reduce(
+    (acc, val, ind) => acc + (ind < i ? val.filter(Boolean).length : 0),
+    0
+  );
 }
 
 const queryGoogle = false;
