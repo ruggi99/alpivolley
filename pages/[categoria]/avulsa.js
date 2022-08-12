@@ -75,7 +75,7 @@ function calcPosPrec(cl, i) {
   );
 }
 
-const queryGoogle = false;
+const queryGoogle = true;
 
 export async function getStaticProps({ params }) {
   var values;

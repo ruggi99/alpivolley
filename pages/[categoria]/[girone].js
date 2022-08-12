@@ -263,7 +263,7 @@ function Classifica({ data, nomi }) {
   );
 }
 
-const queryGoogle = false;
+const queryGoogle = true;
 
 // Path validi a questo livello
 const paths = categorie

@@ -18,7 +18,11 @@ function Gironi({ gironi }) {
         {Array(gironi)
           .fill(0)
           .map((_, i) => (
-            <ButtonWithLink key={i} href={String.fromCharCode(65 + i)}>
+            <ButtonWithLink
+              className="whitespace-nowrap"
+              key={i}
+              href={String.fromCharCode(65 + i)}
+            >
               Girone {String.fromCharCode(65 + i)}
             </ButtonWithLink>
           ))}
