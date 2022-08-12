@@ -140,8 +140,7 @@ function Partite({ data, nomi }) {
                       <SqRounded
                         color={getSqColor(v[EnumDataRev.Squadra_1], nomi)}
                       >
-                        {/* {v[EnumDataRev.Squadra_1].repeat(5)} */}
-                        Lorem ipsum dolor sit amet
+                        {v[EnumDataRev.Squadra_1]}
                       </SqRounded>
                     </div>
                     <span>VS</span>
@@ -149,23 +148,25 @@ function Partite({ data, nomi }) {
                       <SqRounded
                         color={getSqColor(v[EnumDataRev.Squadra_2], nomi)}
                       >
-                        {/* {v[EnumDataRev.Squadra_2]} */}
-                        Lorem ipsum dolor sit amet
+                        {v[EnumDataRev.Squadra_2]}
                       </SqRounded>
                     </div>
                   </div>
                   <div className="all-center mt-2 basis-1/3 gap-2 sm:mt-0 sm:flex">
                     <h3 className="font-bold sm:hidden">Arbitro: </h3>
-                    <SqRounded color={getSqColor(v[EnumDataRev.Arbitro], nomi)}>
-                      {/* {v[EnumDataRev.Arbitro].repeat(10)} */}
-                      Lorem ipsum dolor sit amet
-                    </SqRounded>
+                    <div className="flex-1">
+                      <SqRounded
+                        color={getSqColor(v[EnumDataRev.Arbitro], nomi)}
+                      >
+                        {v[EnumDataRev.Arbitro]}
+                      </SqRounded>
+                    </div>
                   </div>
                 </Disclosure.Button>
                 <Disclosure.Panel className="space-y-2 px-4 py-2">
                   <div className="all-center flex">
                     <div className="w-full text-center">n° {i + 1}</div>
-                    <div className="w-full text-center font-roboto">
+                    <div className="hidden w-full text-center font-roboto">
                       &#x1F551;{" "}
                       <time
                         dateTime={v[EnumDataRev.Orario]
@@ -292,10 +293,12 @@ export async function getStaticProps({ params }) {
         range: getRange(params),
       })
     ).data;
-    fs.writeFileSync(
-      "public/data.json",
-      JSON.stringify(values, null, 2) + "\n"
-    );
+    if (!process.env.NEXT_PUBLIC_VERCEL_ENV) {
+      fs.writeFileSync(
+        "public/data.json",
+        JSON.stringify(values, null, 2) + "\n"
+      );
+    }
   } else {
     values = JSON.parse(
       fs.readFileSync(path.join(process.cwd(), "public/data.json"))

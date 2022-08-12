@@ -87,10 +87,12 @@ export async function getStaticProps({ params }) {
         ranges: getRanges(params),
       })
     ).data.valueRanges;
-    fs.writeFileSync(
-      "public/data2.json",
-      JSON.stringify(values, null, 2) + "\n"
-    );
+    if (!process.env.NEXT_PUBLIC_VERCEL_ENV) {
+      fs.writeFileSync(
+        "public/data2.json",
+        JSON.stringify(values, null, 2) + "\n"
+      );
+    }
   } else {
     values = JSON.parse(
       fs.readFileSync(path.join(process.cwd(), "public/data2.json"))
