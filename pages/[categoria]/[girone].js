@@ -166,23 +166,8 @@ function Partite({ data, nomi }) {
                 <Disclosure.Panel className="space-y-2 px-4 py-2">
                   <div className="all-center flex">
                     <div className="w-full text-center">n° {i + 1}</div>
-                    <div className="hidden w-full text-center font-roboto">
-                      &#x1F551;{" "}
-                      <time
-                        dateTime={v[EnumDataRev.Orario]
-                          .substring(0, 4)
-                          .replaceAll(".", ":")}
-                      >
-                        {v[EnumDataRev.Orario]
-                          .substring(0, 4)
-                          .replaceAll(".", ":")}
-                      </time>
-                    </div>
                     <div className="all-center flex w-full gap-2 text-center">
-                      Campo{" "}
-                      <span className="grid h-8 w-8 place-items-center rounded-md bg-green-600 font-semibold text-white">
-                        {v[EnumDataRev.Campo]}
-                      </span>
+                      <Campo v={v} />
                     </div>
                   </div>
                   {rowPoints && (
@@ -234,6 +219,22 @@ function Partite({ data, nomi }) {
 function SqRounded({ children, color }) {
   return (
     <div className={cs("rounded-xl p-2 px-4 py-1", color)}>{children}</div>
+  );
+}
+
+function Campo({ v }) {
+  return (
+    <>
+      Campo{" "}
+      <span
+        className={cs(
+          "grid h-8 w-8 place-items-center rounded-md font-semibold text-white",
+          v[EnumDataRev.Campo] ? "bg-green-600" : "bg-red-600"
+        )}
+      >
+        {v[EnumDataRev.Campo] || "ND"}
+      </span>
+    </>
   );
 }
 
