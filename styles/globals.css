@@ -1,3 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply text-4xl;
+  }
+  h2 {
+    @apply text-2xl;
+  }
+  h3 {
+    @apply text-lg;
+  }
+  :focus-visible {
+    @apply outline-0;
+  }
+}
+
+@layer components {
+  .all-center {
+    @apply items-center justify-center;
+  }
+}
+
 html,
 body {
   padding: 0;
@@ -6,11 +31,56 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+html,
+body,
+#__next {
+  @apply h-screen min-h-screen;
+}
+
+#__next {
+  @apply flex flex-col;
 }
 
 * {
-  box-sizing: border-box;
+  @apply caret-primary-green accent-primary-green;
+}
+
+a {
+  @apply text-blue-400;
+}
+
+td,
+th {
+  @apply px-2 py-2 text-center;
+}
+
+th {
+  @apply border-t border-b border-gray-400;
+}
+
+td:first-child,
+th:first-child {
+  @apply rounded-l-xl;
+}
+
+th:first-child {
+  @apply border-l;
+}
+
+td:last-child,
+th:last-child {
+  @apply rounded-r-xl;
+}
+
+th:last-child {
+  @apply border-r;
+}
+
+table.no-second-child th:nth-child(2),
+table.no-second-child td:nth-child(2) {
+  display: none;
+}
+
+time {
+  @apply select-all;
 }
