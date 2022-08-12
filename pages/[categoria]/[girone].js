@@ -160,6 +160,7 @@ function Partite({ data, nomi }) {
       {partiteInCorso.map((v, i) => {
         return <Partita key={i} v={v} nomi={nomi} />;
       })}
+      <h2 className="text-center">Partite da giocare:</h2>
       {partiteDaGiocare.map((v, i) => {
         return <Partita key={i} v={v} nomi={nomi} />;
       })}
