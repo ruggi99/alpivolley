@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { useRouter } from "next/router";
 
@@ -27,7 +27,12 @@ function Girone(pageProps) {
   // data: array di array delle partite
   // nomi: array di array dei nomi delle squadre
   // update: ultimo aggiornamento dati
-  const { data, update } = useUpdatedData(pageProps);
+  const { data: data_old, update } = useUpdatedData(pageProps);
+  const data = useMemo(() => {
+    return data_old.filter(
+      (p) => p[EnumDataRev.Squadra_1] && p[EnumDataRev.Squadra_2]
+    );
+  }, [data_old]);
   const nomi = getNomifromData(data);
   const { query } = useRouter();
   return (
@@ -88,6 +93,21 @@ const tabClassname = ({ selected }) =>
 
 function Partite({ data, nomi }) {
   const [showFinished, setShowFinished] = useState(false);
+  const [partiteFinite, partiteInCorso, partiteDaGiocare] = useMemo(() => {
+    const partiteInCorso = [];
+    const partiteFinite = [];
+    const partiteDaGiocare = [];
+    for (var p of data) {
+      if (howManyPoints(p)) {
+        partiteFinite.push(p);
+      } else if (p[EnumDataRev.Campo]) {
+        partiteInCorso.push(p);
+      } else {
+        partiteDaGiocare.push(p);
+      }
+    }
+    return [partiteFinite, partiteInCorso, partiteDaGiocare];
+  }, [data]);
   return (
     <div className="max-w-xl space-y-2">
       <div className="all-center my-4 flex gap-2">
@@ -112,107 +132,121 @@ function Partite({ data, nomi }) {
       </div>
       <div className="gap-4 px-4 sm:flex">
         <div className="flex basis-2/3 justify-evenly gap-2">
-          <h3 className="font-bold">Squadra 1</h3>
+          <h3 className="whitespace-nowrap font-bold">Squadra 1</h3>
           <span className="text-white">VS</span>
-          <h3 className="font-bold">Squadra 2</h3>
+          <h3 className="whitespace-nowrap font-bold">Squadra 2</h3>
         </div>
         <div className="hidden basis-1/3 justify-center sm:flex">
-          <h3 className="font-bold">Arbitro</h3>
+          <h3 className="whitespace-nowrap font-bold">Arbitro</h3>
         </div>
       </div>
-      {data.map((v, i) => {
-        const rowPoints = howManyPoints(v);
-        if (rowPoints && !showFinished) {
-          return null;
-        }
-        return (
-          <Disclosure key={i} as="div" className="rounded-lg border">
-            {({ open }) => (
-              <>
-                <Disclosure.Button
-                  className={cs(
-                    "w-full items-center gap-4 py-2 px-4 sm:flex",
-                    rowPoints && !open && "opacity-50"
-                  )}
-                >
-                  <div className="flex basis-2/3 items-center justify-evenly gap-2">
-                    <div className="w-full min-w-0 flex-1">
-                      <SqRounded
-                        color={getSqColor(v[EnumDataRev.Squadra_1], nomi)}
-                      >
-                        {v[EnumDataRev.Squadra_1]}
-                      </SqRounded>
-                    </div>
-                    <span>VS</span>
-                    <div className="w-full min-w-0 flex-1">
-                      <SqRounded
-                        color={getSqColor(v[EnumDataRev.Squadra_2], nomi)}
-                      >
-                        {v[EnumDataRev.Squadra_2]}
-                      </SqRounded>
-                    </div>
-                  </div>
-                  <div className="all-center mt-2 basis-1/3 gap-2 sm:mt-0 sm:flex">
-                    <h3 className="font-bold sm:hidden">Arbitro: </h3>
-                    <div className="flex-1">
-                      <SqRounded
-                        color={getSqColor(v[EnumDataRev.Arbitro], nomi)}
-                      >
-                        {v[EnumDataRev.Arbitro]}
-                      </SqRounded>
-                    </div>
-                  </div>
-                </Disclosure.Button>
-                <Disclosure.Panel className="space-y-2 px-4 py-2">
-                  <div className="all-center flex">
-                    <div className="w-full text-center">n° {i + 1}</div>
-                    <div className="all-center flex w-full gap-2 text-center">
-                      <Campo v={v} />
-                    </div>
-                  </div>
-                  {rowPoints && (
-                    <div className="flex justify-evenly border-t">
-                      <span
-                        className={cs(
-                          "text-2xl font-semibold",
-                          getPuntiColor(rowPoints[0])
-                        )}
-                      >
-                        {rowPoints[0]}
-                      </span>
-                      <div
-                        className={cs(
-                          "text-4xl font-bold",
-                          getPuntiColor(rowPoints[0])
-                        )}
-                      >
-                        {v[EnumDataRev.Punteggio$1]}
-                      </div>
-                      <div
-                        className={cs(
-                          "text-4xl font-bold",
-                          getPuntiColor(rowPoints[1])
-                        )}
-                      >
-                        {v[EnumDataRev.Punteggio$2]}
-                      </div>
-                      <div
-                        className={cs(
-                          "text-2xl font-semibold",
-                          getPuntiColor(rowPoints[1])
-                        )}
-                      >
-                        {rowPoints[1]}
-                      </div>
-                    </div>
-                  )}
-                </Disclosure.Panel>
-              </>
-            )}
-          </Disclosure>
-        );
+      {showFinished &&
+        (partiteFinite.length ? (
+          <>
+            <h2 className="text-center">Partite finite:</h2>
+            {partiteFinite.map((v, i) => {
+              const rowPoints = howManyPoints(v);
+              return (
+                <Partita key={i} v={v} nomi={nomi} rowPoints={rowPoints} />
+              );
+            })}
+          </>
+        ) : (
+          <h2 className="text-center">Nessuna partita finita</h2>
+        ))}
+      {!!partiteInCorso.length && (
+        <h2 className="text-center">Partite in corso:</h2>
+      )}
+      {partiteInCorso.map((v, i) => {
+        return <Partita key={i} v={v} nomi={nomi} />;
+      })}
+      {partiteDaGiocare.map((v, i) => {
+        return <Partita key={i} v={v} nomi={nomi} />;
       })}
     </div>
+  );
+}
+
+function Partita({ nomi, rowPoints, v }) {
+  return (
+    <Disclosure as="div" className="rounded-lg border">
+      {({ open }) => (
+        <>
+          <Disclosure.Button
+            className={cs(
+              "w-full items-center gap-4 py-2 px-4 sm:flex",
+              rowPoints && !open && "opacity-50"
+            )}
+          >
+            <div className="flex basis-2/3 items-center justify-evenly gap-2">
+              <div className="w-full min-w-0 flex-1">
+                <SqRounded color={getSqColor(v[EnumDataRev.Squadra_1], nomi)}>
+                  {v[EnumDataRev.Squadra_1]}
+                </SqRounded>
+              </div>
+              <span>VS</span>
+              <div className="w-full min-w-0 flex-1">
+                <SqRounded color={getSqColor(v[EnumDataRev.Squadra_2], nomi)}>
+                  {v[EnumDataRev.Squadra_2]}
+                </SqRounded>
+              </div>
+            </div>
+            <div className="all-center mt-2 basis-1/3 gap-2 sm:mt-0 sm:flex">
+              <h3 className="font-bold sm:hidden">Arbitro: </h3>
+              <div className="flex-1">
+                <SqRounded color={getSqColor(v[EnumDataRev.Arbitro], nomi)}>
+                  {v[EnumDataRev.Arbitro]}
+                </SqRounded>
+              </div>
+            </div>
+          </Disclosure.Button>
+          <Disclosure.Panel className="space-y-2 px-4 py-2">
+            <div className="all-center flex">
+              {/* <div className="w-full text-center">n° {i + 1}</div> */}
+              <div className="all-center flex w-full gap-2 text-center">
+                <Campo v={v} />
+              </div>
+            </div>
+            {rowPoints && (
+              <div className="flex justify-evenly border-t">
+                <span
+                  className={cs(
+                    "text-2xl font-semibold",
+                    getPuntiColor(rowPoints[0])
+                  )}
+                >
+                  {rowPoints[0]}
+                </span>
+                <div
+                  className={cs(
+                    "text-4xl font-bold",
+                    getPuntiColor(rowPoints[0])
+                  )}
+                >
+                  {v[EnumDataRev.Punteggio$1]}
+                </div>
+                <div
+                  className={cs(
+                    "text-4xl font-bold",
+                    getPuntiColor(rowPoints[1])
+                  )}
+                >
+                  {v[EnumDataRev.Punteggio$2]}
+                </div>
+                <div
+                  className={cs(
+                    "text-2xl font-semibold",
+                    getPuntiColor(rowPoints[1])
+                  )}
+                >
+                  {rowPoints[1]}
+                </div>
+              </div>
+            )}
+          </Disclosure.Panel>
+        </>
+      )}
+    </Disclosure>
   );
 }
 
