@@ -17,14 +17,25 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <MetaTags />
-      <Header />
-      <CookieConsent />
-      <Navigation className="mt-2 ml-2" />
-      <div className="content relative flex-auto flex-shrink-0 space-y-4 p-4">
+      {Component.noLayout ? (
         <Component {...pageProps} />
-      </div>
-      <RoutesLoading />
-      <Footer />
+      ) : (
+        <>
+          <Header />
+          <CookieConsent />
+          <Navigation className="mt-2 ml-2" />
+          <div className="content relative flex-auto flex-shrink-0 space-y-4 p-4">
+            <Component {...pageProps} />
+          </div>
+          <RoutesLoading />
+          <Footer />
+        </>
+      )}
+      {process.env.NODE_ENV !== "production" && (
+        <div>
+          <pre>{JSON.stringify(pageProps, null, 2)}</pre>
+        </div>
+      )}
     </>
   );
 }
