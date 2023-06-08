@@ -33,7 +33,7 @@ body {
 
 html,
 body,
-#__next {
+#__next:not(:has(.referto)) {
   @apply h-screen min-h-screen;
 }
 
@@ -56,6 +56,10 @@ th {
 
 th {
   @apply border-t border-b border-gray-400;
+}
+
+.referto td {
+  @apply border border-gray-400 p-0;
 }
 
 td:first-child,
@@ -83,4 +87,10 @@ table.no-second-child td:nth-child(2) {
 
 time {
   @apply select-all;
+}
+
+@media print {
+  .noprint {
+    display: none;
+  }
 }
