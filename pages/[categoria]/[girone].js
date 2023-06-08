@@ -4,21 +4,23 @@ import { useRouter } from "next/router";
 
 import { Disclosure, Switch, Tab } from "@headlessui/react";
 import cs from "classnames";
-import fs from "fs";
-import path from "path";
 
 import DataUpdate from "components/DataUpdate";
 import Title from "components/Title";
 import { getPuntiColor, getSqColor } from "lib/colors";
-import { categorie, gironi, revalidate } from "lib/const";
+import {
+  AIRTABLE_API_URL,
+  categorie,
+  gironi,
+  maxGironi,
+  revalidate,
+} from "lib/const";
 import {
   EnumClassifica,
   EnumClassificaRev,
-  EnumDataRev,
   EnumNomiRev,
   transformEnum,
 } from "lib/enums";
-import { getClient } from "lib/google";
 import { howManyPoints, useClassifica } from "lib/useClassifica";
 import useUpdatedData from "lib/useUpdatedData";
 import { firstLetterUp } from "lib/utils";
@@ -29,9 +31,7 @@ function Girone(pageProps) {
   // update: ultimo aggiornamento dati
   const { data: data_old, update } = useUpdatedData(pageProps);
   const data = useMemo(() => {
-    return data_old.filter(
-      (p) => p[EnumDataRev.Squadra_1] && p[EnumDataRev.Squadra_2]
-    );
+    return data_old.filter((p) => p["Squadra 1"] && p["Squadra 2"]);
   }, [data_old]);
   const nomi = getNomifromData(data);
   const { query } = useRouter();
@@ -68,18 +68,14 @@ function getNomifromData(data) {
   const nomi = [];
   for (var row of data) {
     if (
-      nomi.findIndex(
-        (v) => row[EnumDataRev.Squadra_1] == v[EnumNomiRev.Nome]
-      ) == -1
+      nomi.findIndex((v) => row["Squadra 1"][0] == v[EnumNomiRev.Nome]) == -1
     ) {
-      nomi.push([row[EnumDataRev.Squadra_1]]);
+      nomi.push([row["Squadra 1"][0]]);
     }
     if (
-      nomi.findIndex(
-        (v) => row[EnumDataRev.Squadra_2] == v[EnumNomiRev.Nome]
-      ) == -1
+      nomi.findIndex((v) => row["Squadra 2"][0] == v[EnumNomiRev.Nome]) == -1
     ) {
-      nomi.push([row[EnumDataRev.Squadra_2]]);
+      nomi.push([row["Squadra 2"][0]]);
     }
   }
   return nomi;
@@ -98,9 +94,9 @@ function Partite({ data, nomi }) {
     const partiteFinite = [];
     const partiteDaGiocare = [];
     for (var p of data) {
-      if (howManyPoints(p)) {
+      if (p.Status == "Terminata") {
         partiteFinite.push(p);
-      } else if (p[EnumDataRev.Campo]) {
+      } else if (p.Status == "In Corso") {
         partiteInCorso.push(p);
       } else {
         partiteDaGiocare.push(p);
@@ -160,7 +156,11 @@ function Partite({ data, nomi }) {
       {partiteInCorso.map((v, i) => {
         return <Partita key={i} v={v} nomi={nomi} />;
       })}
-      <h2 className="text-center">Partite da giocare:</h2>
+      {partiteDaGiocare.length ? (
+        <h2 className="text-center">Partite da giocare:</h2>
+      ) : (
+        <h2 className="text-center">Nessuna partita da giocare</h2>
+      )}
       {partiteDaGiocare.map((v, i) => {
         return <Partita key={i} v={v} nomi={nomi} />;
       })}
@@ -181,22 +181,22 @@ function Partita({ nomi, rowPoints, v }) {
           >
             <div className="flex basis-2/3 items-center justify-evenly gap-2">
               <div className="w-full min-w-0 flex-1">
-                <SqRounded color={getSqColor(v[EnumDataRev.Squadra_1], nomi)}>
-                  {v[EnumDataRev.Squadra_1]}
+                <SqRounded color={getSqColor(v["Squadra 1"][0], nomi)}>
+                  {v["Squadra 1"][0]}
                 </SqRounded>
               </div>
               <span>VS</span>
               <div className="w-full min-w-0 flex-1">
-                <SqRounded color={getSqColor(v[EnumDataRev.Squadra_2], nomi)}>
-                  {v[EnumDataRev.Squadra_2]}
+                <SqRounded color={getSqColor(v["Squadra 2"][0], nomi)}>
+                  {v["Squadra 2"][0]}
                 </SqRounded>
               </div>
             </div>
             <div className="all-center mt-2 basis-1/3 gap-2 sm:mt-0 sm:flex">
               <h3 className="font-bold sm:hidden">Arbitro: </h3>
               <div className="flex-1">
-                <SqRounded color={getSqColor(v[EnumDataRev.Arbitro], nomi)}>
-                  {v[EnumDataRev.Arbitro]}
+                <SqRounded color={getSqColor(v["Arbitro"]?.[0], nomi)}>
+                  {v["Arbitro"]?.[0] || "STAFF"}
                 </SqRounded>
               </div>
             </div>
@@ -224,7 +224,7 @@ function Partita({ nomi, rowPoints, v }) {
                     getPuntiColor(rowPoints[0])
                   )}
                 >
-                  {v[EnumDataRev.Punteggio$1]}
+                  {v["Punti 1"]}
                 </div>
                 <div
                   className={cs(
@@ -232,7 +232,7 @@ function Partita({ nomi, rowPoints, v }) {
                     getPuntiColor(rowPoints[1])
                   )}
                 >
-                  {v[EnumDataRev.Punteggio$2]}
+                  {v["Punti 2"]}
                 </div>
                 <div
                   className={cs(
@@ -264,10 +264,10 @@ function Campo({ v }) {
       <span
         className={cs(
           "grid h-8 w-8 place-items-center rounded-md font-semibold text-white",
-          v[EnumDataRev.Campo] ? "bg-green-600" : "bg-red-600"
+          v["Campo"] ? "bg-green-600" : "bg-red-600"
         )}
       >
-        {v[EnumDataRev.Campo] || "ND"}
+        {v["Campo"] || "ND"}
       </span>
     </>
   );
@@ -300,14 +300,16 @@ function Classifica({ data, nomi }) {
   );
 }
 
-const queryGoogle = true;
-
 // Path validi a questo livello
 const paths = categorie
   .map((c) =>
-    Array(gironi[c])
+    Array(3)
       .fill(0)
-      .map((_, i) => `/${c}/${String.fromCharCode(65 + i)}`)
+      .map((_, i) =>
+        Array(gironi[c])
+          .fill(0)
+          .map((_, k) => `/${c}/${String.fromCharCode(65 + maxGironi * i + k)}`)
+      )
   )
   .flat(2);
 
@@ -320,29 +322,22 @@ export async function getStaticProps({ params }) {
       },
     };
   }
-  var values;
-  if (queryGoogle && process.env.FETCH_GOOGLE) {
-    const client = await getClient();
-    values = (
-      await client.spreadsheets.values.get({
-        spreadsheetId: process.env[`GOOGLE_SHEET_ID_${params.categoria}`],
-        range: getRange(params),
-      })
-    ).data;
-    if (!process.env.NEXT_PUBLIC_VERCEL_ENV) {
-      fs.writeFileSync(
-        "public/data.json",
-        JSON.stringify(values, null, 2) + "\n"
-      );
+  const baseID = process.env["BASE_ID"];
+  const apiKey = process.env["APIKEY"];
+  const res = await fetch(
+    `${AIRTABLE_API_URL}/${baseID}/${
+      params.categoria == "men" ? "Gare%20M" : "Gare%20F"
+    }?filterByFormula=Girone="${params.girone}"&view=Scontri`,
+    {
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+      },
     }
-  } else {
-    values = JSON.parse(
-      fs.readFileSync(path.join(process.cwd(), "public/data.json"))
-    );
-  }
+  );
+  const response = await res.json();
   return {
     props: {
-      data: values.values,
+      data: response.records.map((v) => v.fields),
       update: new Date().toJSON(),
     },
     revalidate,
@@ -354,8 +349,4 @@ export function getStaticPaths() {
     paths: [],
     fallback: "blocking",
   };
-}
-
-function getRange({ girone }) {
-  return "Partite_" + girone;
 }
