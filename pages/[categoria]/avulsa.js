@@ -24,12 +24,18 @@ export default function Avulsa(props) {
   );
 }
 
+const fieldsToDisplay = [
+  EnumClassificaAvulsa.Nome,
+  EnumClassificaAvulsa.QuozientePunteggio,
+  EnumClassificaAvulsa.QuozientePunti,
+];
+
 function Classifica({ classifica }) {
   return (
     <table className="mx-auto border-separate border-spacing-x-0 border-spacing-y-2">
       <thead>
         <tr>
-          {EnumClassificaAvulsa.map((v) => (
+          {fieldsToDisplay.map((v) => (
             <th key={v}>{transformEnum(v)}</th>
           ))}
         </tr>
@@ -37,8 +43,12 @@ function Classifica({ classifica }) {
       <tbody>
         {classifica.map((c, i) => (
           <tr key={i} className={bgColors[i % bgColors.length]}>
-            {EnumClassificaAvulsa.map((v, k) => (
-              <td key={k}>{c[v]}</td>
+            {fieldsToDisplay.map((v, k) => (
+              <td key={k}>
+                {v == EnumClassificaAvulsa.QuozientePunti
+                  ? c[v].toFixed(2)
+                  : c[v]}
+              </td>
             ))}
           </tr>
         ))}
