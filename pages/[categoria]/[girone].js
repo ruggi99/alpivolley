@@ -302,7 +302,7 @@ function Classifica({ data, nomi }) {
 // Path validi a questo livello
 const paths = categorie
   .map((c) =>
-    Array(gironi[c])
+    Array(15)
           .fill(0)
           .map((_, i) => `/${c}/${String.fromCharCode(65 + i)}`)
       )
