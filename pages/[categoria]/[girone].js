@@ -11,7 +11,6 @@ import { getPuntiColor, getSqColor } from "lib/colors";
 import {
   AIRTABLE_API_URL,
   categorie,
-  gironi,
   revalidate,
 } from "lib/const";
 import {
