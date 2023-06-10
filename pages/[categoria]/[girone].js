@@ -12,7 +12,6 @@ import {
   AIRTABLE_API_URL,
   categorie,
   gironi,
-  maxGironi,
   revalidate,
 } from "lib/const";
 import {
@@ -303,14 +302,10 @@ function Classifica({ data, nomi }) {
 // Path validi a questo livello
 const paths = categorie
   .map((c) =>
-    Array(3)
-      .fill(0)
-      .map((_, i) =>
-        Array(gironi[c])
+    Array(gironi[c])
           .fill(0)
-          .map((_, k) => `/${c}/${String.fromCharCode(65 + maxGironi * i + k)}`)
+          .map((_, i) => `/${c}/${String.fromCharCode(65 + i)}`)
       )
-  )
   .flat(2);
 
 export async function getStaticProps({ params }) {
