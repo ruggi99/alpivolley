@@ -96,7 +96,7 @@ function Partite({ data, nomi }) {
     for (var p of data) {
       if (p.Status == "Terminata") {
         partiteFinite.push(p);
-      } else if (p.Status == "In Corso") {
+      } else if (p.Status == "In corso") {
         partiteInCorso.push(p);
       } else {
         partiteDaGiocare.push(p);
