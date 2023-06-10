@@ -30,7 +30,7 @@ export default function Referto(props) {
         </div>
         <div className="text-center">
           Categoria: <b>{props.categoria}</b>, Campo:{" "}
-          <b>{fields["Campo"] || "_____"}</b>
+          <b>{fields["Campo"] || "_____"}</b>, Girone: {fields["Girone"] || "_____"}
         </div>
         <div>
           <table className="mx-auto mt-4 w-3/4">
