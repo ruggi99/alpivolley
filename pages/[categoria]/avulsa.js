@@ -45,7 +45,7 @@ function Classifica({ classifica }) {
           <tr key={i} className={bgColors[i % bgColors.length]}>
             {fieldsToDisplay.map((v, k) => (
               <td key={k}>
-                {v == EnumClassificaAvulsa.QuozientePunti
+                {typeof c[v] == "number"
                   ? c[v].toFixed(2)
                   : c[v]}
               </td>
