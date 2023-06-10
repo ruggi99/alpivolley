@@ -10,7 +10,7 @@ export default function Referto(props) {
         className="referto relative bg-white"
       >
         <div className="p-2 text-right text-sm" style={{ height: "50px" }}>
-          ID: {fields["ID"] || 0}
+          ID: {fields["IDk"] || 0}
         </div>
         <div className="logo">
           <img
