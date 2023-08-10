@@ -14,19 +14,19 @@ function Gironi() {
       <h3 className="text-center">
         Categoria {firstLetterUp(query.categoria)}
       </h3>
-        <Grid className="flex flex-wrap gap-4" rows={2} gap={true}>
-          {Array(15)
-            .fill(0)
-            .map((_, i) => (
-              <ButtonWithLink
-                className="whitespace-nowrap"
-                key={i}
-                href={String.fromCharCode(65 + i)}
-              >
-                Girone {String.fromCharCode(65 + i)}
-              </ButtonWithLink>
-            ))}
-        </Grid>
+      <Grid className="flex flex-wrap gap-4" rows={2} gap={true}>
+        {Array(gironi[query.categoria])
+          .fill(0)
+          .map((_, i) => (
+            <ButtonWithLink
+              className="whitespace-nowrap"
+              key={i}
+              href={String.fromCharCode(65 + i)}
+            >
+              Girone {String.fromCharCode(65 + i)}
+            </ButtonWithLink>
+          ))}
+      </Grid>
       <div>
         <ButtonWithLink href="avulsa">Classifica Avulsa</ButtonWithLink>
       </div>

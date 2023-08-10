@@ -33,7 +33,7 @@ function MyApp({ Component, pageProps }) {
       )}
       {process.env.NODE_ENV !== "production" && (
         <div>
-          <pre>{JSON.stringify(pageProps, null, 2)}</pre>
+          <pre className="noprint">{JSON.stringify(pageProps, null, 2)}</pre>
         </div>
       )}
     </>

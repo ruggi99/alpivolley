@@ -11,6 +11,8 @@ import { getPuntiColor, getSqColor } from "lib/colors";
 import {
   AIRTABLE_API_URL,
   categorie,
+  categorie_obj,
+  gironi,
   revalidate,
 } from "lib/const";
 import {
@@ -301,14 +303,15 @@ function Classifica({ data, nomi }) {
 // Path validi a questo livello
 const paths = categorie
   .map((c) =>
-    Array(15)
-          .fill(0)
-          .map((_, i) => `/${c}/${String.fromCharCode(65 + i)}`)
-      )
+    Array(gironi[c])
+      .fill(0)
+      .map((_, i) => `/${c}/${String.fromCharCode(65 + i)}`)
+  )
   .flat(2);
 
 export async function getStaticProps({ params }) {
-  if (paths.indexOf(`/${params.categoria}/${params.girone}`) == -1) {
+  const cat = categorie_obj[params.categoria];
+  if (paths.indexOf(`/${params.categoria}/${params.girone}`) == -1 && !cat) {
     return {
       redirect: {
         destination: "/",
@@ -319,9 +322,9 @@ export async function getStaticProps({ params }) {
   const baseID = process.env["BASE_ID"];
   const apiKey = process.env["APIKEY"];
   const res = await fetch(
-    `${AIRTABLE_API_URL}/${baseID}/${
-      params.categoria == "men" ? "Gare%20M" : "Gare%20F"
-    }?filterByFormula=Girone="${params.girone}"&view=Scontri`,
+    `${AIRTABLE_API_URL}/${baseID}/${"Gare " + cat}?filterByFormula=Girone="${
+      params.girone
+    }"&view=Scontri`,
     {
       headers: {
         Authorization: `Bearer ${apiKey}`,
