@@ -5,7 +5,7 @@ export default function SingoloReferto(props) {
   if (props.empty) {
     return <Referto />;
   }
-  return <Referto {...props.records[0]} />;
+  return <Referto {...props.records[0]} categoria={props.categoria} />;
 }
 
 SingoloReferto.noLayout = true;

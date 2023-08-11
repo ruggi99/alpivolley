@@ -2,7 +2,9 @@ import Referto from "components/Referto";
 import { AIRTABLE_API_URL, categorie, categorie_obj, gironi } from "lib/const";
 
 export default function RefertoMultiplo(props) {
-  return props.records.map((v) => <Referto key={v.id} {...v} />);
+  return props.records.map((v) => (
+    <Referto key={v.id} {...v} categoria={props.categoria} />
+  ));
 }
 
 RefertoMultiplo.noLayout = true;
