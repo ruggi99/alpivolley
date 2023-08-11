@@ -2,6 +2,9 @@ import Referto from "components/Referto";
 import { AIRTABLE_API_URL } from "lib/const";
 
 export default function SingoloReferto(props) {
+  if (props.empty) {
+    return <Referto />;
+  }
   return <Referto {...props.records[0]} />;
 }
 
