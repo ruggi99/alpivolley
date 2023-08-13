@@ -94,7 +94,7 @@ export async function getServerSideProps({ params }) {
   const baseID = process.env["BASE_ID"];
   const apiKey = process.env["APIKEY"];
   const res = await fetch(
-    `${AIRTABLE_API_URL}/${baseID}/Squadre ${cat}?view=Squadre`,
+    `${AIRTABLE_API_URL}/${baseID}/Squadre ${cat}?view=SquadreE`,
     {
       headers: {
         Authorization: `Bearer ${apiKey}`,
