@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 
 import { Dialog, Transition } from "@headlessui/react";
-import { XIcon } from "@heroicons/react/outline";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import cs from "classnames";
 
 function MyDialog({ children, onClose, show, title, ...rest }) {
@@ -65,7 +65,7 @@ function Title({ children, className, onClose, ...rest }) {
         onClick={onClose}
         aria-label="Annulla"
       >
-        <XIcon className="h-6 w-6" />
+        <XMarkIcon className="h-6 w-6" />
       </button>
     </Dialog.Title>
   );
