@@ -64,10 +64,10 @@
   resolved "https://registry.yarnpkg.com/@fontsource/roboto-mono/-/roboto-mono-4.5.7.tgz#69a89b679ab962ea3591438f35833b09f0f8980f"
   integrity sha512-1uBjM95BEz7zJlmmnpNAM5afMvIxx0wqr86eA76vRqZw8OF5wmsRqYfF3caHuVarBH9/AGN7t9h+3UXK8fjq/Q==
 
-"@fontsource/ubuntu@^4.5.10":
-  version "4.5.10"
-  resolved "https://registry.yarnpkg.com/@fontsource/ubuntu/-/ubuntu-4.5.10.tgz#64a8cf2cf63e43bb750bb114306fe962d3f992bc"
-  integrity sha512-23RShv+KtrFTZveOh11yhFFwKfEC5k7DnOdSYSkVnZqcFoj98rpfIfhR6RoYORzDofr8zSOmZBHbfaamSZTnNg==
+"@fontsource/ubuntu@^5.0.8":
+  version "5.0.8"
+  resolved "https://registry.yarnpkg.com/@fontsource/ubuntu/-/ubuntu-5.0.8.tgz#5009cfaf00057277acdb88caa3537686248a484d"
+  integrity sha512-lZY64hVXrnkt/+5jRfm0uMiRv+lmrIdnATAnDj1SPqebmI2UDf3KC9p4rOkIYsBOjOsD6seJ82GIQE067DSvWw==
 
 "@headlessui/react@^1.7.16":
   version "1.7.16"
