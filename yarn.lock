@@ -51,10 +51,10 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.51.0.tgz#6d419c240cfb2b66da37df230f7e7eef801c32fa"
   integrity sha512-HxjQ8Qn+4SI3/AFv6sOrDB+g6PpUTDwSJiQqOrnneEk8L71161srI9gjzzZvYVbzHiVg/BvcH95+cK/zfIt4pg==
 
-"@fontsource/roboto-mono@^5.0.8":
-  version "5.0.8"
-  resolved "https://registry.yarnpkg.com/@fontsource/roboto-mono/-/roboto-mono-5.0.8.tgz#9b3df61f884f46e12d3eca46e75517fde58da68e"
-  integrity sha512-vjnNX8zQCSp4HadUJ3gpZiizCsK/ROjgGMpd4bcRxuyiTNGGMaznmKbhqdyVeFVap1sX8h2Qu380awaotey/mQ==
+"@fontsource/roboto-mono@^5.0.13":
+  version "5.0.13"
+  resolved "https://registry.yarnpkg.com/@fontsource/roboto-mono/-/roboto-mono-5.0.13.tgz#e8293d7493c424e49114de986e6e729a79ee71c8"
+  integrity sha512-kBoO+zPWkZuwiwdlFLipEov3fjEe7gB0aii3q/f5+rF9tKe6Rda/w6iW2d/lmBXU02dCSFqR0ncvSkxIsx9zsw==
 
 "@fontsource/ubuntu@^5.0.8":
   version "5.0.8"
