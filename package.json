@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@fontsource/roboto-mono": "^5.0.16",
+    "@fontsource/roboto-mono": "^5.0.17",
     "@fontsource/ubuntu": "^5.0.8",
     "@headlessui/react": "^1.7.18",
     "@heroicons/react": "^2.1.1",
