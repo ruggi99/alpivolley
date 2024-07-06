@@ -9,7 +9,6 @@ import { useRouter } from "next/router";
 
 import Button from "components/Button";
 import MyDialog from "components/Dialog";
-import { Navigation } from "components/Navigation";
 import { LOCALSTORAGEKEY } from "lib/const";
 import "../styles/globals.css";
 
@@ -23,7 +22,7 @@ function MyApp({ Component, pageProps }) {
         <>
           <Header />
           <CookieConsent />
-          <div className="content relative mx-auto max-w-2xl flex-auto flex-shrink-0 space-y-4 p-4">
+          <div className="content relative flex-auto flex-shrink-0 space-y-4 p-4">
             <Component {...pageProps} />
           </div>
           <RoutesLoading />
@@ -55,7 +54,6 @@ function Header() {
   return (
     <header className="flex-none bg-primary-green p-4 text-center text-3xl text-white">
       <div>
-        <Navigation className="ml-2 mt-2" />
         <Link href="/" className="text-inherit">
           Torneo ALPIVOLLEY
         </Link>

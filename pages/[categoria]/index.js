@@ -9,7 +9,7 @@ import { firstLetterUp } from "lib/utils";
 function Gironi() {
   const { query } = useRouter();
   return (
-    <div className="mx-auto grid h-full place-content-center gap-4">
+    <div className="mx-auto grid h-full max-w-2xl place-content-center gap-4">
       <Title>{firstLetterUp(query.categoria) + " - Gironi"}</Title>
       <h2 className="text-center">
         Categoria {firstLetterUp(query.categoria)}

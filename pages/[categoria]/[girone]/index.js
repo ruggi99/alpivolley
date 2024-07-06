@@ -2,7 +2,14 @@ import { useMemo, useState } from "react";
 
 import { useRouter } from "next/router";
 
-import { Disclosure, Switch, Tab } from "@headlessui/react";
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  Switch,
+  Tab,
+} from "@headlessui/react";
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import cs from "classnames";
 
 import DataUpdate from "components/DataUpdate";
@@ -167,9 +174,9 @@ function Partita({ nomi, rowPoints, v }) {
     <Disclosure as="div" className="rounded-lg border">
       {({ open }) => (
         <>
-          <Disclosure.Button
+          <DisclosureButton
             className={cs(
-              "w-full items-center gap-4 px-4 py-2 sm:flex",
+              "group w-full items-center gap-4 px-4 py-2 sm:flex",
               rowPoints && !open && "opacity-50",
             )}
           >
@@ -194,8 +201,9 @@ function Partita({ nomi, rowPoints, v }) {
                 </SqRounded>
               </div>
             </div>
-          </Disclosure.Button>
-          <Disclosure.Panel className="space-y-2 px-4 py-2">
+            <ChevronDownIcon className="ml-auto h-4 w-4 group-data-[open]:rotate-180" />
+          </DisclosureButton>
+          <DisclosurePanel className="space-y-2 px-4 py-2">
             <div className="all-center flex">
               {/* <div className="w-full text-center">n° {i + 1}</div> */}
               <div className="all-center flex w-full gap-2 text-center">
@@ -238,7 +246,7 @@ function Partita({ nomi, rowPoints, v }) {
                 </div>
               </div>
             )}
-          </Disclosure.Panel>
+          </DisclosurePanel>
         </>
       )}
     </Disclosure>
