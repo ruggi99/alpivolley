@@ -10,7 +10,7 @@ import "@fontsource/ubuntu";
 import Button from "components/Button";
 import MyDialog from "components/Dialog";
 import { Navigation } from "components/Navigation";
-import { localStorageKey } from "lib/const";
+import { LOCALSTORAGEKEY } from "lib/const";
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
@@ -23,7 +23,7 @@ function MyApp({ Component, pageProps }) {
         <>
           <Header />
           <CookieConsent />
-          <Navigation className="mt-2 ml-2" />
+          <Navigation className="ml-2 mt-2" />
           <div className="content relative flex-auto flex-shrink-0 space-y-4 p-4">
             <Component {...pageProps} />
           </div>
@@ -68,11 +68,11 @@ function CookieConsent() {
   // TODO: Inserire modale per la prima visita del sito
   const [open, setOpen] = useState(false);
   useEffect(() => {
-    if (!localStorage[localStorageKey]) setOpen(true);
+    if (!localStorage[LOCALSTORAGEKEY]) setOpen(true);
   }, []);
   const closeDialog = useCallback(() => {
     setOpen(false);
-    localStorage.setItem(localStorageKey, "true");
+    localStorage.setItem(LOCALSTORAGEKEY, "true");
   }, []);
   return (
     <MyDialog show={open} onClose={closeDialog} title="Cookie Consent">

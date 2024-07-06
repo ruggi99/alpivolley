@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { ButtonWithLink } from "components/Button";
 import Grid from "components/Grid";
 import Title from "components/Title";
-import { categorie, gironi } from "lib/const";
+import { CATEGORIE, DATA } from "lib/const";
 import { firstLetterUp } from "lib/utils";
 
 function Gironi() {
@@ -15,7 +15,7 @@ function Gironi() {
         Categoria {firstLetterUp(query.categoria)}
       </h3>
       <Grid className="flex flex-wrap gap-4" rows={2} gap={true}>
-        {Array(gironi[query.categoria])
+        {Array(DATA[query.categoria].gironi)
           .fill(0)
           .map((_, i) => (
             <ButtonWithLink
@@ -37,16 +37,24 @@ function Gironi() {
 export default Gironi;
 
 export function getStaticProps({ params }) {
+  if (!CATEGORIE.includes(params.categoria)) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
   return {
     props: {
-      gironi: gironi[params.categoria],
+      gironi: DATA[params.categoria].gironi,
     },
   };
 }
 
 export function getStaticPaths() {
   return {
-    paths: categorie.map((v) => "/" + v),
+    paths: Object.keys(DATA).map((v) => "/" + v),
     fallback: false,
   };
 }

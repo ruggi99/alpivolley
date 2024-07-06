@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import cs from "classnames";
 
-import { revalidate } from "lib/const";
+import { REVALIDATE } from "lib/const";
 
 export default function DataUpdate({ update }) {
   const [isMounted, setIsMounted] = useState(false);
@@ -12,9 +12,9 @@ export default function DataUpdate({ update }) {
     <div
       className={cs(
         "text-center",
-        new Date() - new Date(update) > revalidate * 1000
+        new Date() - new Date(update) > REVALIDATE * 1000
           ? "text-red-500"
-          : "text-green-500"
+          : "text-green-500",
       )}
     >
       Ultimo aggiornamento dati: {new Date(update).toLocaleTimeString()}

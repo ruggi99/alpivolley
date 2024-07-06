@@ -1,5 +1,5 @@
 import Referto from "components/Referto";
-import { AIRTABLE_API_URL, categorie, categorie_obj, gironi } from "lib/const";
+import { AIRTABLE_API_URL, CATEGORIE, DATA } from "lib/const";
 
 export default function RefertoMultiplo(props) {
   return props.records.map((v) => (
@@ -10,17 +10,14 @@ export default function RefertoMultiplo(props) {
 RefertoMultiplo.noLayout = true;
 
 // Path validi a questo livello
-const paths = categorie
-  .map((c) =>
-    Array(gironi[c])
-      .fill(0)
-      .map((_, i) => `/${c}/${String.fromCharCode(65 + i)}`)
-  )
-  .flat(2);
+const paths = CATEGORIE.map((c) =>
+  Array(DATA[c].gironi)
+    .fill(0)
+    .map((_, i) => `/${c}/${String.fromCharCode(65 + i)}`),
+).flat(2);
 
 export async function getServerSideProps({ params }) {
-  const cat = categorie_obj[params.categoria];
-  if (paths.indexOf(`/${params.categoria}/${params.girone}`) == -1 && !cat) {
+  if (paths.indexOf(`/${params.categoria}/${params.girone}`) == -1) {
     return {
       redirect: {
         destination: "/",
@@ -31,15 +28,15 @@ export async function getServerSideProps({ params }) {
   const baseID = process.env["BASE_ID"];
   const apiKey = process.env["APIKEY"];
   const res = await fetch(
-    `${AIRTABLE_API_URL}/${baseID}/Gare%20${cat}?filterByFormula=Girone="${params.girone}"&view=Tutto`,
+    `${AIRTABLE_API_URL}/${baseID}/Gare%20${params.categoria}?filterByFormula=Girone="${params.girone}"&view=Tutto`,
     {
       headers: {
         Authorization: `Bearer ${apiKey}`,
       },
-    }
+    },
   );
   const response = await res.json();
   return {
-    props: { ...response, categoria: cat },
+    props: { ...response, categoria: params.categoria },
   };
 }

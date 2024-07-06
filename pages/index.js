@@ -1,6 +1,6 @@
 import { ButtonWithLink } from "components/Button";
 import Title from "components/Title";
-import { categorie } from "lib/const";
+import { CATEGORIE } from "lib/const";
 
 export default function Home() {
   return (
@@ -8,7 +8,7 @@ export default function Home() {
       <Title>Categorie</Title>
       <div className="grid justify-items-stretch space-y-4">
         <h3>Seleziona una categoria</h3>
-        {categorie.map((v) => (
+        {CATEGORIE.map((v) => (
           <ButtonWithLink key={v} href={"/" + v}>
             {v.toUpperCase()}
           </ButtonWithLink>

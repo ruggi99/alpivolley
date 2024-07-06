@@ -4,12 +4,7 @@ import DataUpdate from "components/DataUpdate";
 import Title from "components/Title";
 import { calcClassificaAvulsa } from "lib/classificaAvulsa";
 import { bgColors } from "lib/colors";
-import {
-  AIRTABLE_API_URL,
-  categorie,
-  categorie_obj,
-  revalidate,
-} from "lib/const";
+import { AIRTABLE_API_URL, CATEGORIE, REVALIDATE } from "lib/const";
 import { EnumClassificaAvulsa, transformEnum } from "lib/enums";
 import useUpdatedData from "lib/useUpdatedData";
 import { firstLetterUp } from "lib/utils";
@@ -61,7 +56,7 @@ function Classifica({ classifica }) {
 }
 
 export async function getStaticProps({ params }) {
-  if (!categorie.includes(params.categoria)) {
+  if (!CATEGORIE.includes(params.categoria)) {
     return {
       redirect: {
         destination: "/",
@@ -69,24 +64,26 @@ export async function getStaticProps({ params }) {
       },
     };
   }
-  const cat = categorie_obj[params.categoria];
   const baseID = process.env["BASE_ID"];
   const apiKey = process.env["APIKEY"];
-  const res = await fetch(`${AIRTABLE_API_URL}/${baseID}/${"Gare " + cat}`, {
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
+  const res = await fetch(
+    `${AIRTABLE_API_URL}/${baseID}/${"Gare " + params.categoria}`,
+    {
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+      },
     },
-  });
+  );
   const response = await res.json();
   const classifica = calcClassificaAvulsa(
-    response.records.map((v) => v.fields)
+    response.records.map((v) => v.fields),
   );
   return {
     props: {
       data: classifica,
       update: new Date().toJSON(),
     },
-    revalidate,
+    revalidate: REVALIDATE,
   };
 }
 

@@ -8,13 +8,7 @@ import cs from "classnames";
 import DataUpdate from "components/DataUpdate";
 import Title from "components/Title";
 import { getPuntiColor, getSqColor } from "lib/colors";
-import {
-  AIRTABLE_API_URL,
-  categorie,
-  categorie_obj,
-  gironi,
-  revalidate,
-} from "lib/const";
+import { AIRTABLE_API_URL, CATEGORIE, DATA, REVALIDATE } from "lib/const";
 import {
   EnumClassifica,
   EnumClassificaRev,
@@ -84,7 +78,7 @@ function getNomifromData(data) {
 const tabClassname = ({ selected }) =>
   cs(
     "px-4 py-2 font-bold",
-    selected && "border-b-2 border-primary-green text-primary-green"
+    selected && "border-b-2 border-primary-green text-primary-green",
   );
 
 function Partite({ data, nomi }) {
@@ -112,7 +106,7 @@ function Partite({ data, nomi }) {
           onChange={setShowFinished}
           className={cs(
             showFinished ? "bg-primary-green" : "bg-gray-500",
-            "relative inline-flex h-[25px] w-[49px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out"
+            "relative inline-flex h-[25px] w-[49px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out",
           )}
         >
           <span className="sr-only">Mostra le partite finite</span>
@@ -120,7 +114,7 @@ function Partite({ data, nomi }) {
             aria-hidden="true"
             className={cs(
               showFinished ? "translate-x-6" : "translate-x-0",
-              "pointer-events-none inline-block h-[21px] w-[21px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out"
+              "pointer-events-none inline-block h-[21px] w-[21px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out",
             )}
           />
         </Switch>
@@ -175,8 +169,8 @@ function Partita({ nomi, rowPoints, v }) {
         <>
           <Disclosure.Button
             className={cs(
-              "w-full items-center gap-4 py-2 px-4 sm:flex",
-              rowPoints && !open && "opacity-50"
+              "w-full items-center gap-4 px-4 py-2 sm:flex",
+              rowPoints && !open && "opacity-50",
             )}
           >
             <div className="flex basis-2/3 items-center justify-evenly gap-2">
@@ -213,7 +207,7 @@ function Partita({ nomi, rowPoints, v }) {
                 <span
                   className={cs(
                     "text-2xl font-semibold",
-                    getPuntiColor(rowPoints[0])
+                    getPuntiColor(rowPoints[0]),
                   )}
                 >
                   {rowPoints[0]}
@@ -221,7 +215,7 @@ function Partita({ nomi, rowPoints, v }) {
                 <div
                   className={cs(
                     "text-4xl font-bold",
-                    getPuntiColor(rowPoints[0])
+                    getPuntiColor(rowPoints[0]),
                   )}
                 >
                   {v["Punti 1"]}
@@ -229,7 +223,7 @@ function Partita({ nomi, rowPoints, v }) {
                 <div
                   className={cs(
                     "text-4xl font-bold",
-                    getPuntiColor(rowPoints[1])
+                    getPuntiColor(rowPoints[1]),
                   )}
                 >
                   {v["Punti 2"]}
@@ -237,7 +231,7 @@ function Partita({ nomi, rowPoints, v }) {
                 <div
                   className={cs(
                     "text-2xl font-semibold",
-                    getPuntiColor(rowPoints[1])
+                    getPuntiColor(rowPoints[1]),
                   )}
                 >
                   {rowPoints[1]}
@@ -264,7 +258,7 @@ function Campo({ v }) {
       <span
         className={cs(
           "grid h-8 w-8 place-items-center rounded-md font-semibold text-white",
-          v["Campo"] ? "bg-green-600" : "bg-red-600"
+          v["Campo"] ? "bg-green-600" : "bg-red-600",
         )}
       >
         {v["Campo"] || "ND"}
@@ -301,17 +295,14 @@ function Classifica({ data, nomi }) {
 }
 
 // Path validi a questo livello
-const paths = categorie
-  .map((c) =>
-    Array(gironi[c])
-      .fill(0)
-      .map((_, i) => `/${c}/${String.fromCharCode(65 + i)}`)
-  )
-  .flat(2);
+const paths = CATEGORIE.map((c) =>
+  Array(DATA[c].gironi)
+    .fill(0)
+    .map((_, i) => `/${c}/${String.fromCharCode(65 + i)}`),
+).flat(2);
 
 export async function getStaticProps({ params }) {
-  const cat = categorie_obj[params.categoria];
-  if (paths.indexOf(`/${params.categoria}/${params.girone}`) == -1 && !cat) {
+  if (paths.indexOf(`/${params.categoria}/${params.girone}`) == -1) {
     return {
       redirect: {
         destination: "/",
@@ -322,14 +313,14 @@ export async function getStaticProps({ params }) {
   const baseID = process.env["BASE_ID"];
   const apiKey = process.env["APIKEY"];
   const res = await fetch(
-    `${AIRTABLE_API_URL}/${baseID}/${"Gare " + cat}?filterByFormula=Girone="${
+    `${AIRTABLE_API_URL}/${baseID}/${"Gare " + params.categoria}?filterByFormula=Girone="${
       params.girone
     }"&view=Scontri`,
     {
       headers: {
         Authorization: `Bearer ${apiKey}`,
       },
-    }
+    },
   );
   const response = await res.json();
   return {
@@ -337,7 +328,7 @@ export async function getStaticProps({ params }) {
       data: response.records.map((v) => v.fields),
       update: new Date().toJSON(),
     },
-    revalidate,
+    revalidate: REVALIDATE,
   };
 }
 

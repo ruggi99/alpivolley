@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import Referto from "components/Referto";
-import { AIRTABLE_API_URL, categorie, categorie_obj } from "lib/const";
+import { AIRTABLE_API_URL, CATEGORIE } from "lib/const";
 
 export default function RefertoMultiplo(props) {
   const [squadra1, setSquadra1] = useState();
@@ -67,7 +67,7 @@ function SelectWithInput({ setValue, squadre, title, value }) {
           .filter(
             (v) =>
               !inputText ||
-              v.fields.Nome.toLowerCase().includes(inputText.toLowerCase())
+              v.fields.Nome.toLowerCase().includes(inputText.toLowerCase()),
           )
           .map((v, i) => (
             <option key={i} value={v.fields.Nome}>
@@ -82,8 +82,7 @@ function SelectWithInput({ setValue, squadre, title, value }) {
 RefertoMultiplo.noLayout = true;
 
 export async function getServerSideProps({ params }) {
-  const cat = categorie_obj[params.categoria];
-  if (!categorie.includes(params.categoria)) {
+  if (!CATEGORIE.includes(params.categoria)) {
     return {
       redirect: {
         destination: "/",
@@ -94,15 +93,15 @@ export async function getServerSideProps({ params }) {
   const baseID = process.env["BASE_ID"];
   const apiKey = process.env["APIKEY"];
   const res = await fetch(
-    `${AIRTABLE_API_URL}/${baseID}/Squadre ${cat}?view=SquadreE`,
+    `${AIRTABLE_API_URL}/${baseID}/Squadre ${params.categoria}?view=SquadreE`,
     {
       headers: {
         Authorization: `Bearer ${apiKey}`,
       },
-    }
+    },
   );
   const response = await res.json();
   return {
-    props: { ...response, categoria: cat },
+    props: { ...response, categoria: params.categoria },
   };
 }
