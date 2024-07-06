@@ -1,11 +1,11 @@
+import "@fontsource/roboto-mono";
+import "@fontsource/ubuntu";
+
 import { useCallback, useEffect, useState } from "react";
 
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-
-import "@fontsource/roboto-mono";
-import "@fontsource/ubuntu";
 
 import Button from "components/Button";
 import MyDialog from "components/Dialog";
@@ -23,8 +23,7 @@ function MyApp({ Component, pageProps }) {
         <>
           <Header />
           <CookieConsent />
-          <Navigation className="ml-2 mt-2" />
-          <div className="content relative flex-auto flex-shrink-0 space-y-4 p-4">
+          <div className="content relative mx-auto max-w-2xl flex-auto flex-shrink-0 space-y-4 p-4">
             <Component {...pageProps} />
           </div>
           <RoutesLoading />
@@ -56,8 +55,9 @@ function Header() {
   return (
     <header className="flex-none bg-primary-green p-4 text-center text-3xl text-white">
       <div>
-        <Link href="/">
-          <a className="text-inherit">Torneo ALPIVOLLEY</a>
+        <Navigation className="ml-2 mt-2" />
+        <Link href="/" className="text-inherit">
+          Torneo ALPIVOLLEY
         </Link>
       </div>
     </header>

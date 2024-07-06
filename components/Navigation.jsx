@@ -9,9 +9,7 @@ export function Navigation({ className }) {
   return (
     <div className={cs("w-min", className)}>
       <Link href={router.pathname == "/404" ? "/" : router.asPath + "/.."}>
-        <a>
-          <button className="rounded-md border px-4 py-2">Indietro</button>
-        </a>
+        <button className="rounded-md border px-4 py-2">Indietro</button>
       </Link>
     </div>
   );

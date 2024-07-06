@@ -6,7 +6,7 @@ import cs from "classnames";
 export default function Button({ className, ...props }) {
   return (
     <button
-      className={cs(className, "w-full rounded-xl border py-4 px-8")}
+      className={cs(className, "w-full rounded-xl border px-8 py-4")}
       {...props}
     />
   );
@@ -15,10 +15,12 @@ export default function Button({ className, ...props }) {
 export function ButtonWithLink({ children, href, ...props }) {
   const router = useRouter();
   return (
-    <Link href={href[0] == "/" ? href : router.asPath + `/${href}`}>
-      <a {...props} rel="noopener">
-        <Button {...props}>{children}</Button>
-      </a>
+    <Link
+      href={href[0] == "/" ? href : router.asPath + `/${href}`}
+      rel="noopener"
+      {...props}
+    >
+      <Button {...props}>{children}</Button>
     </Link>
   );
 }

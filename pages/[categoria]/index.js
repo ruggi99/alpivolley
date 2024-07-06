@@ -11,9 +11,9 @@ function Gironi() {
   return (
     <div className="mx-auto grid h-full place-content-center gap-4">
       <Title>{firstLetterUp(query.categoria) + " - Gironi"}</Title>
-      <h3 className="text-center">
+      <h2 className="text-center">
         Categoria {firstLetterUp(query.categoria)}
-      </h3>
+      </h2>
       <Grid className="flex flex-wrap gap-4" rows={2} gap={true}>
         {Array(DATA[query.categoria].gironi)
           .fill(0)

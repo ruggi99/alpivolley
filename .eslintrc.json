@@ -51,12 +51,14 @@
       "error",
       {
         "groups": [
+          ["^\\u0000"],
+          ["^node:"],
           ["^react$"],
           ["^next/"],
-          ["^\\u0000"],
           ["^@?\\w"],
           ["components", "hooks", "lib", "pages", "public", "styles"],
-          ["^"]
+          ["^"],
+          ["^\\."]
         ]
       }
     ],

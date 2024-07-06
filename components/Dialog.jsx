@@ -12,7 +12,7 @@ function MyDialog({ children, onClose, show, title, ...rest }) {
         {...rest}
         onClose={onClose}
       >
-        <Transition.Child
+        {/* <Transition.Child
           as={Fragment}
           enterFrom="opacity-0"
           enterTo="opacity-30"
@@ -22,8 +22,8 @@ function MyDialog({ children, onClose, show, title, ...rest }) {
           enter="duration-200 transition"
           leave="duration-200 transition"
         >
-          <Dialog.Overlay className="fixed inset-0 bg-black" />
-        </Transition.Child>
+          <DialogBackdrop className="fixed inset-0 bg-black" />
+        </Transition.Child> */}
         <Transition.Child
           as={Fragment}
           enterFrom="opacity-0 scale-90"
@@ -54,7 +54,7 @@ function Title({ children, className, onClose, ...rest }) {
     <Dialog.Title
       className={cs(
         "flex items-center justify-between rounded-t border-b p-5 dark:border-gray-600",
-        className
+        className,
       )}
       {...rest}
     >
@@ -80,7 +80,7 @@ function Footer({ className, ...rest }) {
     <div
       className={cs(
         "flex items-center justify-end gap-2 rounded-b border-t border-gray-200 p-6 dark:border-gray-600",
-        className
+        className,
       )}
       {...rest}
     />
