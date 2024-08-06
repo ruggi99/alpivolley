@@ -22,7 +22,7 @@ import { getRows } from "lib/baserow";
 import { getPuntiColor, getSqColor } from "lib/colors";
 import { getNomifromData, GIRONI_PATHS, REVALIDATE } from "lib/const";
 import { EnumClassifica, EnumClassificaRev, transformEnum } from "lib/enums";
-import { howManyPoints } from "lib/useClassifica";
+import { howManyPoints, useClassifica } from "lib/useClassifica";
 import useUpdatedData from "lib/useUpdatedData";
 import { firstLetterUp } from "lib/utils";
 
@@ -92,8 +92,39 @@ function Partite({ data }) {
     return [partiteFinite, partiteInCorso, partiteDaGiocare];
   }, [data]);
   return (
-    <div className="max-w-xl space-y-2">
-      <div className="all-center my-4 flex gap-2">
+    <div className="space-y-2">
+      <div className="my-4 gap-4 px-4 sm:flex">
+        <div className="flex basis-2/3 justify-evenly gap-2">
+          <h3 className="whitespace-nowrap font-bold">Squadra 1</h3>
+          <span className="text-white">VS</span>
+          <h3 className="whitespace-nowrap font-bold">Squadra 2</h3>
+        </div>
+        <div className="hidden basis-1/3 justify-center gap-2 sm:flex">
+          <h3 className="flex-grow whitespace-nowrap text-center font-bold">
+            Arbitro
+          </h3>
+          <div className="h-4 w-4 py-2"></div>
+        </div>
+      </div>
+      {!!partiteInCorso.length && (
+        <>
+          <h2 className="text-center">Partita in corso:</h2>
+          {partiteInCorso.map((v, i) => {
+            return <Partita key={i} v={v} />;
+          })}
+        </>
+      )}
+      <hr className="!my-6 border-t-2"></hr>
+      {partiteDaGiocare.length ? (
+        <h2 className="text-center">Partite da giocare:</h2>
+      ) : (
+        <h2 className="text-center">Nessuna partita da giocare</h2>
+      )}
+      {partiteDaGiocare.map((v, i) => {
+        return <Partita key={i} v={v} />;
+      })}
+      <hr className="!my-6 border-t-2"></hr>
+      <div className="all-center flex gap-2">
         <Switch
           checked={showFinished}
           onChange={setShowFinished}
@@ -113,44 +144,18 @@ function Partite({ data }) {
         </Switch>
         <span>Mostra le partite finite</span>
       </div>
-      <div className="gap-4 px-4 sm:flex">
-        <div className="flex basis-2/3 justify-evenly gap-2">
-          <h3 className="whitespace-nowrap font-bold">Squadra 1</h3>
-          <span className="text-white">VS</span>
-          <h3 className="whitespace-nowrap font-bold">Squadra 2</h3>
-        </div>
-        <div className="hidden basis-1/3 justify-center sm:flex">
-          <h3 className="whitespace-nowrap font-bold">Arbitro</h3>
-        </div>
-      </div>
       {showFinished &&
         (partiteFinite.length ? (
           <>
             <h2 className="text-center">Partite finite:</h2>
             {partiteFinite.map((v, i) => {
               const rowPoints = howManyPoints(v);
-              return (
-                <Partita key={i} v={v} nomi={nomi} rowPoints={rowPoints} />
-              );
+              return <Partita key={i} v={v} rowPoints={rowPoints} />;
             })}
           </>
         ) : (
           <h2 className="text-center">Nessuna partita finita</h2>
         ))}
-      {!!partiteInCorso.length && (
-        <h2 className="text-center">Partite in corso:</h2>
-      )}
-      {partiteInCorso.map((v, i) => {
-        return <Partita key={i} v={v} nomi={nomi} />;
-      })}
-      {partiteDaGiocare.length ? (
-        <h2 className="text-center">Partite da giocare:</h2>
-      ) : (
-        <h2 className="text-center">Nessuna partita da giocare</h2>
-      )}
-      {partiteDaGiocare.map((v, i) => {
-        return <Partita key={i} v={v} nomi={nomi} />;
-      })}
     </div>
   );
 }
@@ -177,20 +182,22 @@ function Partita({ rowPoints, v }) {
                 </SqRounded>
               </div>
             </div>
-            <div className="all-center mt-2 basis-1/3 gap-2 sm:mt-0 sm:flex">
-              <h3 className="font-bold sm:hidden">Arbitro: </h3>
+            <div className="flex gap-2 sm:hidden">
+              <h3 className="mt-2 flex-grow font-bold sm:hidden">Arbitro: </h3>
+              <div className="h-4 w-4 py-2"></div>
+            </div>
+            <div className="all-center flex basis-1/3 gap-2 sm:mt-0">
               <div className="flex-1">
-                <SqRounded color={getSqColor(v["Arbitro"]?.[0], nomi)}>
-                  {v["Arbitro"]?.[0] || "STAFF"}
+                <SqRounded color={getSqColor(v["Arbitro"], nomi)}>
+                  {v["Arbitro"] || "STAFF"}
                 </SqRounded>
               </div>
+              <ChevronDownIcon className="h-4 w-4 group-data-[open]:rotate-180" />
             </div>
-            <ChevronDownIcon className="ml-auto h-4 w-4 group-data-[open]:rotate-180" />
           </DisclosureButton>
           <DisclosurePanel className="space-y-2 px-4 py-2">
-            <div className="all-center flex">
-              {/* <div className="w-full text-center">n° {i + 1}</div> */}
-              <div className="all-center flex w-full gap-2 text-center">
+            <div className="all-center flex justify-evenly">
+              <div className="all-center flex gap-2 text-center">
                 <Campo v={v} />
               </div>
               <div className="all-center flex gap-2">

@@ -1,7 +1,8 @@
 import { useState } from "react";
 
 import Referto from "components/Referto";
-import { AIRTABLE_API_URL, CATEGORIE } from "lib/const";
+import { getRows } from "lib/baserow";
+import { CATEGORIE } from "lib/const";
 
 export default function RefertoMultiplo(props) {
   const [squadra1, setSquadra1] = useState();
@@ -12,7 +13,6 @@ export default function RefertoMultiplo(props) {
     "Squadra 2": [squadra2],
     Arbitro: [arbitro],
   };
-  console.log(fields);
   return (
     <div className="flex">
       <div>
@@ -23,19 +23,19 @@ export default function RefertoMultiplo(props) {
           title="Squadra 1"
           value={squadra1}
           setValue={setSquadra1}
-          squadre={props.records}
+          squadre={props.results}
         />
         <SelectWithInput
           title="Squadra 2"
           value={squadra2}
           setValue={setSquadra2}
-          squadre={props.records}
+          squadre={props.results}
         />
         <SelectWithInput
           title="Arbitro"
           value={arbitro}
           setValue={setArbitro}
-          squadre={props.records}
+          squadre={props.results}
         />
       </div>
     </div>
@@ -67,11 +67,11 @@ function SelectWithInput({ setValue, squadre, title, value }) {
           .filter(
             (v) =>
               !inputText ||
-              v.fields.Nome.toLowerCase().includes(inputText.toLowerCase()),
+              v.Nome.toLowerCase().includes(inputText.toLowerCase()),
           )
           .map((v, i) => (
-            <option key={i} value={v.fields.Nome}>
-              {v.fields.Nome}
+            <option key={i} value={v.Nome}>
+              {v.Nome}
             </option>
           ))}
       </select>
@@ -90,17 +90,7 @@ export async function getServerSideProps({ params }) {
       },
     };
   }
-  const baseID = process.env["BASE_ID"];
-  const apiKey = process.env["APIKEY"];
-  const res = await fetch(
-    `${AIRTABLE_API_URL}/${baseID}/Squadre ${params.categoria}?view=SquadreE`,
-    {
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-      },
-    },
-  );
-  const response = await res.json();
+  const response = await getRows(params.categoria, "Squadre");
   return {
     props: { ...response, categoria: params.categoria },
   };

@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { ButtonWithLink } from "components/Button";
 import Grid from "components/Grid";
 import Title from "components/Title";
-import { CATEGORIE, DATA } from "lib/const";
+import { CATEGORIE, DATA, GIRONI_LETTERS, GIRONI_VALUES } from "lib/const";
 import { firstLetterUp } from "lib/utils";
 
 function Gironi() {
@@ -21,14 +21,17 @@ function Gironi() {
             <ButtonWithLink
               className="whitespace-nowrap"
               key={i}
-              href={String.fromCharCode(65 + i)}
+              href={GIRONI_LETTERS[i]}
             >
-              Girone {String.fromCharCode(65 + i)}
+              {GIRONI_VALUES[i]}
             </ButtonWithLink>
           ))}
       </Grid>
       <div>
         <ButtonWithLink href="avulsa">Classifica Avulsa</ButtonWithLink>
+      </div>
+      <div>
+        <ButtonWithLink href="eliminazione">Fase Eliminazione</ButtonWithLink>
       </div>
     </div>
   );
@@ -46,15 +49,13 @@ export function getStaticProps({ params }) {
     };
   }
   return {
-    props: {
-      gironi: DATA[params.categoria].gironi,
-    },
+    props: {},
   };
 }
 
 export function getStaticPaths() {
   return {
-    paths: Object.keys(DATA).map((v) => "/" + v),
+    paths: CATEGORIE.map((v) => "/" + v),
     fallback: false,
   };
 }

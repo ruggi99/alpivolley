@@ -1,15 +1,21 @@
+import cs from "classnames";
+
 const placeHolder = "_".repeat(40);
+const placeHolder2 = "_".repeat(5);
 
 export default function Referto(props) {
-  const fields = props.fields || {};
+  const { data: fields, empty } = props;
   return (
     <>
       <div
         style={{ width: "210mm", height: "297mm" }}
         className="referto relative bg-white"
       >
-        <div className="p-2 text-right text-sm" style={{ height: "50px" }}>
-          ID: {fields["IDk"] || 0}
+        <div
+          className={cs("p-2 text-right text-sm", !fields["ID"] && "invisible")}
+          style={{ height: "50px" }}
+        >
+          ID: {fields["ID"] || 0}
         </div>
         <div className="logo">
           <img
@@ -21,27 +27,22 @@ export default function Referto(props) {
         <h2 className="text-center text-primary-green">
           Il torneo green in Trentino
         </h2>
+
         <div className="mt-8 text-center">
-          Arbitra:{" "}
-          <b>
-            {fields["Arbitro"]?.[0] || (fields["ID"] && "STAFF") || placeHolder}
-          </b>
+          Categoria: <b>{props.categoria || placeHolder2}</b>, Campo:{" "}
+          <b>{fields["Campo"] || placeHolder2}</b>, Girone:{" "}
+          <b>{fields["Girone"]["value"] || placeHolder2}</b>
         </div>
         <div className="text-center">
-          Categoria: <b>{props.categoria || "_____"}</b>, Campo:{" "}
-          <b>{fields["Campo"] || "_____"}</b>, Girone:{" "}
-          <b>{fields["Girone"] || "_____"}</b>
+          Arbitra:{" "}
+          <b>{fields["Arbitro"] || (fields["ID"] && "STAFF") || placeHolder}</b>
         </div>
         <div>
           <table className="mx-auto mt-4 w-3/4">
             <thead>
               <tr>
-                <th className="w-1/2">
-                  {fields["Squadra 1"]?.[0] || placeHolder}
-                </th>
-                <th className="w-1/2">
-                  {fields["Squadra 2"]?.[0] || placeHolder}
-                </th>
+                <th className="w-1/2">{fields["Squadra 1"] || placeHolder}</th>
+                <th className="w-1/2">{fields["Squadra 2"] || placeHolder}</th>
               </tr>
             </thead>
             <tbody>
@@ -75,9 +76,6 @@ export default function Referto(props) {
           </p>
         </div>
       </div>
-      {process.env.NODE_ENV != "production" && (
-        <pre className="noprint">{JSON.stringify(props, null, 2)}</pre>
-      )}
     </>
   );
 }
