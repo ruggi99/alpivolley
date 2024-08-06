@@ -75,7 +75,6 @@ const tabClassname = ({ selected }) =>
   );
 
 function Partite({ data }) {
-  const nomi = useContext(NomiContext);
   const [showFinished, setShowFinished] = useState(false);
   const [partiteFinite, partiteInCorso, partiteDaGiocare] = useMemo(() => {
     const partiteInCorso = [];
