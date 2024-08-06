@@ -70,7 +70,8 @@ const tabClassname = ({ selected }) =>
     selected && "border-b-2 border-primary-green text-primary-green",
   );
 
-function Partite({ data, nomi }) {
+function Partite({ data }) {
+  const nomi = useContext(NomiContext);
   const [showFinished, setShowFinished] = useState(false);
   const [partiteFinite, partiteInCorso, partiteDaGiocare] = useMemo(() => {
     const partiteInCorso = [];
