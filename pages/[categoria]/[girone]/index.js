@@ -155,27 +155,25 @@ function Partite({ data }) {
   );
 }
 
-function Partita({ nomi, rowPoints, v }) {
+function Partita({ rowPoints, v }) {
+  const nomi = useContext(NomiContext);
   return (
     <Disclosure as="div" className="rounded-lg border">
       {({ open }) => (
         <>
           <DisclosureButton
-            className={cs(
-              "group w-full items-center gap-4 px-4 py-2 sm:flex",
-              rowPoints && !open && "opacity-50",
-            )}
+            className={cs("group w-full items-center gap-4 px-4 py-2 sm:flex")}
           >
             <div className="flex basis-2/3 items-center justify-evenly gap-2">
               <div className="w-full min-w-0 flex-1">
-                <SqRounded color={getSqColor(v["Squadra 1"][0], nomi)}>
-                  {v["Squadra 1"][0]}
+                <SqRounded color={getSqColor(v["Squadra 1"], nomi)}>
+                  {v["Squadra 1"]}
                 </SqRounded>
               </div>
               <span>VS</span>
               <div className="w-full min-w-0 flex-1">
-                <SqRounded color={getSqColor(v["Squadra 2"][0], nomi)}>
-                  {v["Squadra 2"][0]}
+                <SqRounded color={getSqColor(v["Squadra 2"], nomi)}>
+                  {v["Squadra 2"]}
                 </SqRounded>
               </div>
             </div>
@@ -194,6 +192,10 @@ function Partita({ nomi, rowPoints, v }) {
               {/* <div className="w-full text-center">n° {i + 1}</div> */}
               <div className="all-center flex w-full gap-2 text-center">
                 <Campo v={v} />
+              </div>
+              <div className="all-center flex gap-2">
+                <ClockIcon className="h-8 w-8"></ClockIcon>
+                <span>{new Date(v["Orario"]).toLocaleTimeString()}</span>
               </div>
             </div>
             {rowPoints && (
