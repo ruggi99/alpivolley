@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
 
 import { useRouter } from "next/router";
 
@@ -30,11 +30,10 @@ function Girone(pageProps) {
   // data: array di array delle partite
   // nomi: array di array dei nomi delle squadre
   // update: ultimo aggiornamento dati
-  const { data: data_old, update } = useUpdatedData(pageProps);
+  const { data: data_old, update, nomi } = useUpdatedData(pageProps);
   const data = useMemo(() => {
     return data_old.filter((p) => p["Squadra 1"] && p["Squadra 2"]);
   }, [data_old]);
-  const nomi = getNomifromData(data);
   const { query } = useRouter();
   return (
     <div className="mx-auto flex h-full w-fit flex-1 flex-col gap-2">
@@ -253,9 +252,11 @@ function Partita({ nomi, rowPoints, v }) {
   );
 }
 
-function SqRounded({ children, color }) {
+function SqRounded({ children, className, color }) {
   return (
-    <div className={cs("rounded-xl p-2 px-4 py-1", color)}>{children}</div>
+    <div className={cs("rounded-xl p-2 px-4 py-1", color, className)}>
+      {children}
+    </div>
   );
 }
 
@@ -275,11 +276,12 @@ function Campo({ v }) {
   );
 }
 
-function Classifica({ data, nomi }) {
+function Classifica({ data }) {
   // return: array di array. Non la migliore struttura da usare
+  const nomi = useContext(NomiContext);
   const classifica = useClassifica(data, nomi);
   return (
-    <table className="no-second-child border-separate border-spacing-x-0 border-spacing-y-2">
+    <table className="no-second-child w-full border-separate border-spacing-x-0 border-spacing-y-2">
       <thead>
         <tr>
           {EnumClassifica.map((v) => (
