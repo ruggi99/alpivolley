@@ -32,7 +32,7 @@ export default function Referto(props) {
       <div className="mt-8 text-center">
         Categoria: <b>{(empty && placeHolder2) || props.categoria}</b>, Campo:{" "}
         <b>{fields["Campo"] || placeHolder2}</b>, Girone:{" "}
-        <b>{fields["Girone"]["value"] || placeHolder2}</b>
+        <b>{fields["Girone"] || placeHolder2}</b>
       </div>
       <div className="text-center">
         Arbitra:{" "}
