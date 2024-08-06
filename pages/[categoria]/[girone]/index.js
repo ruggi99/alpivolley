@@ -32,7 +32,7 @@ function Girone(pageProps) {
   // data: array di array delle partite
   // nomi: array di array dei nomi delle squadre
   // update: ultimo aggiornamento dati
-  const { data: data_old, update, nomi } = useUpdatedData(pageProps);
+  const { data: data_old, nomi, update } = useUpdatedData(pageProps);
   const data = useMemo(() => {
     return data_old.filter((p) => p["Squadra 1"] && p["Squadra 2"]);
   }, [data_old]);
@@ -103,7 +103,7 @@ function Partite({ data }) {
           <h3 className="flex-grow whitespace-nowrap text-center font-bold">
             Arbitro
           </h3>
-          <div className="h-4 w-4 py-2"></div>
+          <div className="h-4 w-4 py-2" />
         </div>
       </div>
       {!!partiteInCorso.length && (
@@ -114,7 +114,7 @@ function Partite({ data }) {
           })}
         </>
       )}
-      <hr className="!my-6 border-t-2"></hr>
+      <hr className="!my-6 border-t-2" />
       {partiteDaGiocare.length ? (
         <h2 className="text-center">Partite da giocare:</h2>
       ) : (
@@ -123,7 +123,7 @@ function Partite({ data }) {
       {partiteDaGiocare.map((v, i) => {
         return <Partita key={i} v={v} />;
       })}
-      <hr className="!my-6 border-t-2"></hr>
+      <hr className="!my-6 border-t-2" />
       <div className="all-center flex gap-2">
         <Switch
           checked={showFinished}
@@ -164,7 +164,7 @@ function Partita({ rowPoints, v }) {
   const nomi = useContext(NomiContext);
   return (
     <Disclosure as="div" className="rounded-lg border">
-      {({ open }) => (
+      {() => (
         <>
           <DisclosureButton
             className={cs("group w-full items-center gap-4 px-4 py-2 sm:flex")}
@@ -184,7 +184,7 @@ function Partita({ rowPoints, v }) {
             </div>
             <div className="flex gap-2 sm:hidden">
               <h3 className="mt-2 flex-grow font-bold sm:hidden">Arbitro: </h3>
-              <div className="h-4 w-4 py-2"></div>
+              <div className="h-4 w-4 py-2" />
             </div>
             <div className="all-center flex basis-1/3 gap-2 sm:mt-0">
               <div className="flex-1">
@@ -201,7 +201,7 @@ function Partita({ rowPoints, v }) {
                 <Campo v={v} />
               </div>
               <div className="all-center flex gap-2">
-                <ClockIcon className="h-8 w-8"></ClockIcon>
+                <ClockIcon className="h-8 w-8" />
                 <span>{new Date(v["Orario"]).toLocaleTimeString()}</span>
               </div>
             </div>
