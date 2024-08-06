@@ -15,7 +15,6 @@ import cs from "classnames";
 import DataUpdate from "components/DataUpdate";
 import Title from "components/Title";
 import { getPuntiColor, getSqColor } from "lib/colors";
-import { AIRTABLE_API_URL, CATEGORIE, DATA, REVALIDATE } from "lib/const";
 import {
   EnumClassifica,
   EnumClassificaRev,
@@ -23,6 +22,7 @@ import {
   transformEnum,
 } from "lib/enums";
 import { howManyPoints, useClassifica } from "lib/useClassifica";
+import { getNomifromData, GIRONI_PATHS, REVALIDATE } from "lib/const";
 import useUpdatedData from "lib/useUpdatedData";
 import { firstLetterUp } from "lib/utils";
 
@@ -302,15 +302,8 @@ function Classifica({ data, nomi }) {
   );
 }
 
-// Path validi a questo livello
-const paths = CATEGORIE.map((c) =>
-  Array(DATA[c].gironi)
-    .fill(0)
-    .map((_, i) => `/${c}/${String.fromCharCode(65 + i)}`),
-).flat(2);
-
 export async function getStaticProps({ params }) {
-  if (paths.indexOf(`/${params.categoria}/${params.girone}`) == -1) {
+  if (GIRONI_PATHS.indexOf(`/${params.categoria}/${params.girone}`) == -1) {
     return {
       redirect: {
         destination: "/",
@@ -318,22 +311,13 @@ export async function getStaticProps({ params }) {
       },
     };
   }
-  const baseID = process.env["BASE_ID"];
-  const apiKey = process.env["APIKEY"];
-  const res = await fetch(
-    `${AIRTABLE_API_URL}/${baseID}/${"Gare " + params.categoria}?filterByFormula=Girone="${
-      params.girone
-    }"&view=Scontri`,
-    {
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-      },
-    },
-  );
-  const response = await res.json();
+  const response = await getRows(params.categoria, "Gironi", params.girone);
+  const data = response;
+  const nomi = getNomifromData(data);
   return {
     props: {
-      data: response.records.map((v) => v.fields),
+      data,
+      nomi,
       update: new Date().toJSON(),
     },
     revalidate: REVALIDATE,
