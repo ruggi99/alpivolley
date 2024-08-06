@@ -64,23 +64,6 @@ function Girone(pageProps) {
 
 export default Girone;
 
-function getNomifromData(data) {
-  const nomi = [];
-  for (var row of data) {
-    if (
-      nomi.findIndex((v) => row["Squadra 1"][0] == v[EnumNomiRev.Nome]) == -1
-    ) {
-      nomi.push([row["Squadra 1"][0]]);
-    }
-    if (
-      nomi.findIndex((v) => row["Squadra 2"][0] == v[EnumNomiRev.Nome]) == -1
-    ) {
-      nomi.push([row["Squadra 2"][0]]);
-    }
-  }
-  return nomi;
-}
-
 const tabClassname = ({ selected }) =>
   cs(
     "px-4 py-2 font-bold",
