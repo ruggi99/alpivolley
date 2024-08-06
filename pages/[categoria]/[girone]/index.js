@@ -8,23 +8,25 @@ import {
   DisclosurePanel,
   Switch,
   Tab,
+  TabGroup,
+  TabList,
+  TabPanel,
+  TabPanels,
 } from "@headlessui/react";
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon, ClockIcon } from "@heroicons/react/24/outline";
 import cs from "classnames";
 
 import DataUpdate from "components/DataUpdate";
 import Title from "components/Title";
+import { getRows } from "lib/baserow";
 import { getPuntiColor, getSqColor } from "lib/colors";
-import {
-  EnumClassifica,
-  EnumClassificaRev,
-  EnumNomiRev,
-  transformEnum,
-} from "lib/enums";
-import { howManyPoints, useClassifica } from "lib/useClassifica";
 import { getNomifromData, GIRONI_PATHS, REVALIDATE } from "lib/const";
+import { EnumClassifica, EnumClassificaRev, transformEnum } from "lib/enums";
+import { howManyPoints } from "lib/useClassifica";
 import useUpdatedData from "lib/useUpdatedData";
 import { firstLetterUp } from "lib/utils";
+
+const NomiContext = createContext({});
 
 function Girone(pageProps) {
   // data: array di array delle partite
@@ -36,29 +38,31 @@ function Girone(pageProps) {
   }, [data_old]);
   const { query } = useRouter();
   return (
-    <div className="mx-auto flex h-full w-fit flex-1 flex-col gap-2">
-      <Title>
-        {firstLetterUp(query.categoria) + " - Girone " + query.girone}
-      </Title>
-      <DataUpdate update={update} />
-      <h3 className="text-center">
-        Categoria {firstLetterUp(query.categoria)} - Girone {query.girone}
-      </h3>
-      <Tab.Group>
-        <Tab.List className="mx-auto flex w-full justify-center gap-2 border-b">
-          <Tab className={tabClassname}>Partite</Tab>
-          <Tab className={tabClassname}>Classifica</Tab>
-        </Tab.List>
-        <Tab.Panels>
-          <Tab.Panel>
-            <Partite data={data} nomi={nomi} />
-          </Tab.Panel>
-          <Tab.Panel>
-            <Classifica data={data} nomi={nomi} />
-          </Tab.Panel>
-        </Tab.Panels>
-      </Tab.Group>
-    </div>
+    <NomiContext.Provider value={nomi}>
+      <div className="mx-auto flex h-full max-w-2xl flex-1 flex-col gap-2">
+        <Title>
+          {firstLetterUp(query.categoria) + " - Girone " + query.girone}
+        </Title>
+        <DataUpdate update={update} />
+        <h3 className="text-center">
+          Categoria {firstLetterUp(query.categoria)} - Girone {query.girone}
+        </h3>
+        <TabGroup>
+          <TabList className="flex w-full justify-center gap-2 border-b">
+            <Tab className={tabClassname}>Partite</Tab>
+            <Tab className={tabClassname}>Classifica</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>
+              <Partite data={data} />
+            </TabPanel>
+            <TabPanel>
+              <Classifica data={data} />
+            </TabPanel>
+          </TabPanels>
+        </TabGroup>
+      </div>
+    </NomiContext.Provider>
   );
 }
 
