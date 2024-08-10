@@ -6,17 +6,16 @@ const placeHolder2 = "_".repeat(5);
 export default function Referto(props) {
   const { data } = props;
   const fields = data || {};
-  const empty = !fields;
   return (
     <div
       style={{ width: "210mm", height: "297mm" }}
       className="referto relative bg-white"
     >
       <div
-        className={cs("p-2 text-right text-sm", empty && "invisible")}
+        className={cs("p-2 text-right text-sm", !fields["ID"] && "invisible")}
         style={{ height: "50px" }}
       >
-        ID: {(!empty && fields["ID"]) || 0}
+        ID: {fields["ID"] || 0}
       </div>
       <div className="logo">
         <img
@@ -30,7 +29,7 @@ export default function Referto(props) {
       </h2>
 
       <div className="mt-8 text-center">
-        Categoria: <b>{(empty && placeHolder2) || props.categoria}</b>, Campo:{" "}
+        Categoria: <b>{props.categoria || placeHolder2}</b>, Campo:{" "}
         <b>{fields["Campo"] || placeHolder2}</b>, Girone:{" "}
         <b>{fields["Girone"] || placeHolder2}</b>
       </div>
