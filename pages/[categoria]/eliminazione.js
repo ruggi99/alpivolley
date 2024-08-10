@@ -5,8 +5,7 @@ import { useEffect, useState } from "react";
 import { CATEGORIE, REVALIDATE } from "lib/const";
 import { calculateEdges, nodes } from "lib/eliminazione";
 
-export default function Eliminazione(props) {
-  // const viewportRef = useRef();
+export default function Eliminazione() {
   const [edges, setEdges] = useState([]);
   useEffect(() => {
     const edges = calculateEdges();
@@ -14,11 +13,7 @@ export default function Eliminazione(props) {
   }, []);
   return (
     <div style={{ overflowX: "scroll" }} className="-m-4 p-4">
-      <div
-        // ref={viewportRef}
-        id="viewport"
-        className="relative w-min"
-      >
+      <div id="viewport" className="relative w-min">
         <div
           id="nodes"
           className="grid place-items-center gap-x-20 gap-y-2"
