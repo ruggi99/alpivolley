@@ -1,62 +1,77 @@
-import { useRouter } from "next/router";
+import "@xyflow/react/dist/style.css";
 
-import DataUpdate from "components/DataUpdate";
-import Title from "components/Title";
-import { getRows } from "lib/baserow";
-import { calcClassificaAvulsa } from "lib/classificaAvulsa";
-import { bgColors } from "lib/colors";
+import { useEffect, useState } from "react";
+
 import { CATEGORIE, REVALIDATE } from "lib/const";
-import { EnumClassificaAvulsa, transformEnum } from "lib/enums";
-import useUpdatedData from "lib/useUpdatedData";
-import { firstLetterUp } from "lib/utils";
+import { calculateEdges, nodes } from "lib/eliminazione";
 
-export default function Avulsa(props) {
-  const router = useRouter();
-  const { data, update } = useUpdatedData(props);
+export default function Eliminazione(props) {
+  // const viewportRef = useRef();
+  const [edges, setEdges] = useState([]);
+  useEffect(() => {
+    const edges = calculateEdges();
+    setEdges(edges);
+  }, []);
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-2">
-      <Title>
-        {firstLetterUp(router.query.categoria) + " - Classifica Avulsa"}
-      </Title>
-      <DataUpdate update={update} />
-      <h2 className="text-center font-bold">Classifica Avulsa</h2>
-      <Classifica classifica={data} />
+    <div style={{ overflowX: "scroll" }} className="-m-4 p-4">
+      <div
+        // ref={viewportRef}
+        id="viewport"
+        className="relative w-min"
+      >
+        <div
+          id="nodes"
+          className="grid place-items-center gap-x-20 gap-y-2"
+          style={{
+            gridTemplateColumns: "repeat(11, auto)",
+            gridTemplateRows: "repeat(17, auto)",
+          }}
+        >
+          <Header />
+          {nodes.map((v, i) => (
+            <div
+              key={i}
+              id={v.id}
+              style={v.style}
+              className="whitespace-nowrap rounded-lg border p-4"
+            >
+              {v.data.fase}
+            </div>
+          ))}
+        </div>
+        <div id="edges" className="absolute inset-0 -z-10">
+          <svg className="h-full" style={{ width: "100%" }}>
+            {edges.map((v, i) => (
+              <path
+                className="fill-none stroke-2"
+                key={i}
+                id={v.id}
+                d={v.path}
+                style={v.style}
+              />
+            ))}
+          </svg>
+        </div>
+      </div>
     </div>
   );
 }
 
-const fieldsToDisplay = [
-  EnumClassificaAvulsa.Nome,
-  EnumClassificaAvulsa.QuozientePunteggio,
-  EnumClassificaAvulsa.QuozientePunti,
-];
-
-function Classifica({ classifica }) {
+function Header() {
   return (
-    <table className="border-separate border-spacing-x-0 border-spacing-y-2">
-      <thead>
-        <tr>
-          {fieldsToDisplay.map((v) => (
-            <th key={v}>{transformEnum(v)}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {classifica.map((c, i) => (
-          <tr key={i} className={bgColors[i % bgColors.length]}>
-            {fieldsToDisplay.map((v, k) => (
-              <td key={k}>
-                {typeof c[v] == "number"
-                  ? c[v].toFixed(2)
-                  : c[v] == null
-                    ? "--"
-                    : c[v]}
-              </td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <>
+      <div style={{ gridColumnStart: 1 }}>32simi</div>
+      <div style={{ gridColumnStart: 2 }}>16simi</div>
+      <div style={{ gridColumnStart: 3 }}>Ottavi</div>
+      <div style={{ gridColumnStart: 4 }}>Quarti</div>
+      <div style={{ gridColumnStart: 5 }}>Semifinali</div>
+      <div style={{ gridColumnStart: 6 }}>Finali</div>
+      <div style={{ gridColumnStart: 7 }}>Semifinali</div>
+      <div style={{ gridColumnStart: 8 }}>Quarti</div>
+      <div style={{ gridColumnStart: 9 }}>Ottavi</div>
+      <div style={{ gridColumnStart: 10 }}>16simi</div>
+      <div style={{ gridColumnStart: 11 }}>32simi</div>
+    </>
   );
 }
 
@@ -69,11 +84,12 @@ export async function getStaticProps({ params }) {
       },
     };
   }
-  const response = await getRows(params.categoria, "Gironi");
-  const classifica = calcClassificaAvulsa(response.results);
+  // const response = await getRows(params.categoria, "Eliminazione");
+  const response = [];
+  // const classifica = calcClassificaAvulsa(response.results);
   return {
     props: {
-      data: classifica,
+      data: response,
       update: new Date().toJSON(),
     },
     revalidate: REVALIDATE,
