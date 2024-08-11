@@ -17,6 +17,7 @@ import { ChevronDownIcon, ClockIcon } from "@heroicons/react/24/outline";
 import cs from "classnames";
 
 import DataUpdate from "components/DataUpdate";
+import { Campo, SqRounded } from "components/Partita";
 import Title from "components/Title";
 import { getRows } from "lib/baserow";
 import { getPuntiColor, getSqColor } from "lib/colors";
@@ -128,9 +129,10 @@ function Partite({ data }) {
         <Switch
           checked={showFinished}
           onChange={setShowFinished}
+          disabled={!partiteFinite.length}
           className={cs(
             showFinished ? "bg-primary-green" : "bg-gray-500",
-            "relative inline-flex h-[25px] w-[49px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out",
+            "relative inline-flex h-[25px] w-[49px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-50",
           )}
         >
           <span className="sr-only">Mostra le partite finite</span>
@@ -144,18 +146,15 @@ function Partite({ data }) {
         </Switch>
         <span>Mostra le partite finite</span>
       </div>
-      {showFinished &&
-        (partiteFinite.length ? (
-          <>
-            <h2 className="text-center">Partite finite:</h2>
-            {partiteFinite.map((v, i) => {
-              const rowPoints = howManyPoints(v);
-              return <Partita key={i} v={v} rowPoints={rowPoints} />;
-            })}
-          </>
-        ) : (
-          <h2 className="text-center">Nessuna partita finita</h2>
-        ))}
+      {showFinished && (
+        <>
+          <h2 className="text-center">Partite finite:</h2>
+          {partiteFinite.map((v, i) => {
+            const rowPoints = howManyPoints(v);
+            return <Partita key={i} v={v} rowPoints={rowPoints} />;
+          })}
+        </>
+      )}
     </div>
   );
 }
@@ -166,9 +165,7 @@ function Partita({ rowPoints, v }) {
     <Disclosure as="div" className="rounded-lg border">
       {() => (
         <>
-          <DisclosureButton
-            className={cs("group w-full items-center gap-4 px-4 py-2 sm:flex")}
-          >
+          <DisclosureButton className="group w-full items-center gap-4 px-4 py-2 sm:flex">
             <div className="flex basis-2/3 items-center justify-evenly gap-2">
               <div className="w-full min-w-0 flex-1">
                 <SqRounded color={getSqColor(v["Squadra 1"], nomi)}>
@@ -245,30 +242,6 @@ function Partita({ rowPoints, v }) {
         </>
       )}
     </Disclosure>
-  );
-}
-
-function SqRounded({ children, className, color }) {
-  return (
-    <div className={cs("rounded-xl p-2 px-4 py-1", color, className)}>
-      {children}
-    </div>
-  );
-}
-
-function Campo({ v }) {
-  return (
-    <>
-      Campo{" "}
-      <span
-        className={cs(
-          "grid h-8 w-8 place-items-center rounded-md font-semibold text-white",
-          v["Campo"] ? "bg-green-600" : "bg-red-600",
-        )}
-      >
-        {v["Campo"] || "ND"}
-      </span>
-    </>
   );
 }
 
