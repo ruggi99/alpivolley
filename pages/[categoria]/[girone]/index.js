@@ -21,11 +21,12 @@ import { Campo, SqRounded } from "components/Partita";
 import Title from "components/Title";
 import { getRows } from "lib/baserow";
 import { getPuntiColor, getSqColor } from "lib/colors";
-import { getNomifromData, GIRONI_PATHS, REVALIDATE } from "lib/const";
+import { GIRONI_PATHS, REVALIDATE } from "lib/const";
 import { EnumClassifica, EnumClassificaRev, transformEnum } from "lib/enums";
 import { howManyPoints, useClassifica } from "lib/useClassifica";
 import useUpdatedData from "lib/useUpdatedData";
 import { firstLetterUp } from "lib/utils";
+import { getNomifromData } from "lib/utils";
 
 const NomiContext = createContext({});
 
