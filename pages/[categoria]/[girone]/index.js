@@ -115,7 +115,7 @@ function Partite({ data }) {
           })}
         </>
       )}
-      <hr className="!my-6 border-t-2" />
+      <hr className="!my-4 border-t-2" />
       {partiteDaGiocare.length ? (
         <h2 className="text-center">Partite da giocare:</h2>
       ) : (
@@ -124,28 +124,31 @@ function Partite({ data }) {
       {partiteDaGiocare.map((v, i) => {
         return <Partita key={i} v={v} />;
       })}
-      <hr className="!my-6 border-t-2" />
-      <div className="all-center flex gap-2">
-        <Switch
-          checked={showFinished}
-          onChange={setShowFinished}
-          disabled={!partiteFinite.length}
-          className={cs(
-            showFinished ? "bg-primary-green" : "bg-gray-500",
-            "relative inline-flex h-[25px] w-[49px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-50",
-          )}
-        >
-          <span className="sr-only">Mostra le partite finite</span>
-          <span
-            aria-hidden="true"
+      <hr className="!my-4 border-t-2" />
+      {partiteFinite.length ? (
+        <div className="all-center flex gap-2">
+          <Switch
+            checked={showFinished}
+            onChange={setShowFinished}
             className={cs(
-              showFinished ? "translate-x-6" : "translate-x-0",
-              "pointer-events-none inline-block h-[21px] w-[21px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out",
+              showFinished ? "bg-primary-green" : "bg-gray-500",
+              "relative inline-flex h-[25px] w-[49px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out",
             )}
-          />
-        </Switch>
-        <span>Mostra le partite finite</span>
-      </div>
+          >
+            <span className="sr-only">Mostra le partite finite</span>
+            <span
+              aria-hidden="true"
+              className={cs(
+                showFinished ? "translate-x-6" : "translate-x-0",
+                "pointer-events-none inline-block h-[21px] w-[21px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out",
+              )}
+            />
+          </Switch>
+          <span>Mostra le partite finite</span>
+        </div>
+      ) : (
+        <h2 className="text-center">Nessuna partita terminata ancora</h2>
+      )}
       {showFinished && (
         <>
           <h2 className="text-center">Partite finite:</h2>
