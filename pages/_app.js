@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 
 import Button from "components/Button";
 import MyDialog from "components/Dialog";
+import { Navigation } from "components/Navigation";
 import { LOCALSTORAGEKEY } from "lib/const";
 import "../styles/globals.css";
 
@@ -52,7 +53,8 @@ function MetaTags() {
 
 function Header() {
   return (
-    <header className="flex-none bg-primary-green p-4 text-center text-3xl text-white">
+    <header className="relative flex-none bg-primary-green p-4 text-center text-3xl text-white">
+      <Navigation />
       <div>
         <Link href="/" className="text-inherit">
           Torneo ALPIVOLLEY

@@ -1,30 +1,40 @@
 import { useEffect, useState } from "react";
 
+import { useRouter } from "next/router";
+
 import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
 } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { ClockIcon } from "@heroicons/react/24/outline";
 import cs from "classnames";
 
 import DataUpdate from "components/DataUpdate";
 import { SqRounded } from "components/Partita";
+import Title from "components/Title";
 import { CATEGORIE, REVALIDATE } from "lib/const";
 import { calculateEdges, nodes } from "lib/eliminazione";
 import useUpdatedData from "lib/useUpdatedData";
+import { firstLetterUp } from "lib/utils";
 
 export default function Eliminazione(pageProps) {
   const { data, update } = useUpdatedData(pageProps);
   const [number, setNumber] = useState(0);
   const [edges, setEdges] = useState([]);
+  const { query } = useRouter();
   useEffect(() => {
     const edges = calculateEdges();
     setEdges(edges);
   }, [number]);
   return (
     <>
+      <Title>{firstLetterUp(query.categoria) + " - Eliminazione"}</Title>
       <DataUpdate update={update} />
+      <h3 className="text-center">
+        Categoria {firstLetterUp(query.categoria)} - Eliminazione
+      </h3>
       <div style={{ overflowX: "scroll" }} className="-m-4 p-4">
         <div id="viewport" className="relative w-min">
           <div
@@ -89,7 +99,9 @@ export default function Eliminazione(pageProps) {
                   >
                     {v["Campo"] || "ND"}
                   </span>
-                  <div>Orario 9:00</div>
+                  <div className="flex">
+                    <ClockIcon className="h-8 w-8" /> 9:00
+                  </div>
                 </DisclosurePanel>
               </Disclosure>
             ))}
