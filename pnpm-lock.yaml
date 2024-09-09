@@ -12,8 +12,8 @@ importers:
         specifier: ^5.0.19
         version: 5.0.19
       '@fontsource/ubuntu':
-        specifier: ^5.0.14
-        version: 5.0.14
+        specifier: ^5.0.15
+        version: 5.0.15
       '@headlessui/react':
         specifier: ^2.1.3
         version: 2.1.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -121,8 +121,8 @@ packages:
   '@fontsource/roboto-mono@5.0.19':
     resolution: {integrity: sha512-v9xg3ewKQoOJVKZWzRvFIT75mtTkrvKbyx52SScre0qRfvEWt9WvOLoR+Wsxfj4l0A4kwGPlOdNs6sy74OJoow==}
 
-  '@fontsource/ubuntu@5.0.14':
-    resolution: {integrity: sha512-r8XIWG/yQx5IPQ86gFEsdvzlOKnnO5KZl1Shi1mVbn+c0wBY9jufdOKcIW6Fq4wCnA7EDEPZMxtZdWYjri3C4A==}
+  '@fontsource/ubuntu@5.0.15':
+    resolution: {integrity: sha512-5apHS+ktwaa97TGdsx7okvY+XIz+F+97Pbwckm10DusPElPQqYekXNhfuDB77FCQr/a7aW3kCShq9f0O6Mt5YQ==}
 
   '@headlessui/react@2.1.3':
     resolution: {integrity: sha512-Nt+NlnQbVvMHVZ/QsST6DNyfG8VWqjOYY3eZpp0PrRKpmZw+pzhwQ1F6wtNaW4jnudeC2a5MJC70vbGVcETNIg==}
@@ -1912,7 +1912,7 @@ snapshots:
 
   '@fontsource/roboto-mono@5.0.19': {}
 
-  '@fontsource/ubuntu@5.0.14': {}
+  '@fontsource/ubuntu@5.0.15': {}
 
   '@headlessui/react@2.1.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
