@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@fontsource/roboto-mono": "^5.0.20",
-    "@fontsource/ubuntu": "^5.0.15",
+    "@fontsource/ubuntu": "^5.1.0",
     "@headlessui/react": "^2.1.5",
     "@heroicons/react": "^2.1.5",
     "@xyflow/react": "^12.2.1",
