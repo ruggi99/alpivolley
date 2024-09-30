@@ -21,8 +21,8 @@ importers:
         specifier: ^2.1.5
         version: 2.1.5(react@18.3.1)
       '@xyflow/react':
-        specifier: ^12.3.0
-        version: 12.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^12.3.1
+        version: 12.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       classnames:
         specifier: ^2.5.1
         version: 2.5.1
@@ -387,14 +387,14 @@ packages:
   '@ungap/structured-clone@1.2.0':
     resolution: {integrity: sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==}
 
-  '@xyflow/react@12.3.0':
-    resolution: {integrity: sha512-dujEbjOn+5gMGg/wsojxtI7v2CfWm7ieRyiOHiZTPyw6p/VIdCoS3nLfSBP3TT+swoHSAXZ78iomHSKoUl4tMg==}
+  '@xyflow/react@12.3.1':
+    resolution: {integrity: sha512-PurYFxwzJa0U6RRX9k4VbNRU+vQd6mRKFR8Uk1dF81diCKZDj495y6AupqsjMHtkO66tGHV0LdenLpIHvnOEFw==}
     peerDependencies:
       react: '>=17'
       react-dom: '>=17'
 
-  '@xyflow/system@0.0.42':
-    resolution: {integrity: sha512-kWYj+Y0GOct0jKYTdyRMNOLPxGNbb2TYvPg2gTmJnZ31DOOMkL5uRBLX825DR2gOACDu+i5FHLxPJUPf/eGOJw==}
+  '@xyflow/system@0.0.43':
+    resolution: {integrity: sha512-1zHgad1cWr1mKm2xbFaarK0Jg8WRgaQ8ubSBIo/pRdq3fEgCuqgNkL9NSAP6Rvm8zi3+Lu4JPUMN+EEx5QgX9A==}
 
   acorn-jsx@5.3.2:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
@@ -2192,9 +2192,9 @@ snapshots:
 
   '@ungap/structured-clone@1.2.0': {}
 
-  '@xyflow/react@12.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@xyflow/react@12.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@xyflow/system': 0.0.42
+      '@xyflow/system': 0.0.43
       classcat: 5.0.5
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
@@ -2203,7 +2203,7 @@ snapshots:
       - '@types/react'
       - immer
 
-  '@xyflow/system@0.0.42':
+  '@xyflow/system@0.0.43':
     dependencies:
       '@types/d3-drag': 3.0.7
       '@types/d3-selection': 3.0.10
