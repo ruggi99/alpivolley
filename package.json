@@ -11,7 +11,7 @@
   "dependencies": {
     "@fontsource/roboto-mono": "^5.1.0",
     "@fontsource/ubuntu": "^5.1.0",
-    "@headlessui/react": "^2.1.9",
+    "@headlessui/react": "^2.1.10",
     "@heroicons/react": "^2.1.5",
     "@xyflow/react": "^12.3.2",
     "classnames": "^2.5.1",
