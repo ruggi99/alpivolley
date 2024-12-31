@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@fontsource/roboto-mono':
-        specifier: ^5.1.0
-        version: 5.1.0
+        specifier: ^5.1.1
+        version: 5.1.1
       '@fontsource/ubuntu':
         specifier: ^5.1.1
         version: 5.1.1
@@ -121,8 +121,8 @@ packages:
   '@floating-ui/utils@0.2.4':
     resolution: {integrity: sha512-dWO2pw8hhi+WrXq1YJy2yCuWoL20PddgGaqTgVe4cOS9Q6qklXCiA1tJEqX6BEwRNSCP84/afac9hd4MS+zEUA==}
 
-  '@fontsource/roboto-mono@5.1.0':
-    resolution: {integrity: sha512-7lIxTeanF2XrwAIukUrOUvO9veGkQiG7L7vizMxVjl+lrTwS4GAYyOvziyGZ6/3kU80K3lGd/FnWrmoTud0V6A==}
+  '@fontsource/roboto-mono@5.1.1':
+    resolution: {integrity: sha512-3Uwg4ZsoYlqzpGgPQn5bpBjCBX7HISbEmbycmrdyzK/dcMChlsmf0VGBjSs2AZV+UK7kLCUFYnCakXYz6VTIUA==}
 
   '@fontsource/ubuntu@5.1.1':
     resolution: {integrity: sha512-ghyIHIsqbBkUMA3zjvCIQENHl4CEhNgKrVxsuuC46XKw5Yfiy4C3W/A0eLGBR4+yre39b/1sVVsjK6VByVMAtg==}
@@ -2249,7 +2249,7 @@ snapshots:
 
   '@floating-ui/utils@0.2.4': {}
 
-  '@fontsource/roboto-mono@5.1.0': {}
+  '@fontsource/roboto-mono@5.1.1': {}
 
   '@fontsource/ubuntu@5.1.1': {}
 
