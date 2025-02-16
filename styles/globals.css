@@ -99,6 +99,13 @@ time {
   @apply select-all;
 }
 
+#svg-edges .green {
+  @apply stroke-green-500 stroke-2;
+}
+
+#svg-edges .red {
+  @apply stroke-red-500 stroke-1;
+}
 @media print {
   .noprint {
     display: none;
