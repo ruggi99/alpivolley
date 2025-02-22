@@ -1,4 +1,3 @@
-// @refresh reset
 import { useEffect, useState } from "react";
 
 import { useRouter } from "next/router";
@@ -15,23 +14,40 @@ import cs from "classnames";
 import DataUpdate from "components/DataUpdate";
 import { SqRounded } from "components/Partita";
 import Title from "components/Title";
-import Header from "components/Eliminazione2";
 import { CATEGORIE, REVALIDATE } from "lib/const";
-import { calculateEdges, nodes } from "lib/eliminazione2";
+import {
+  calculateData,
+  calculateEdgeCoords,
+  calculateEdges,
+  calculateNodes,
+} from "lib/eliminazione2";
 import useUpdatedData from "lib/useUpdatedData";
 import { firstLetterUp } from "lib/utils";
 
-const FASI = 5;
+const NUMERO_FASI = 4;
 
 export default function Eliminazione(pageProps) {
-  const { data, update } = useUpdatedData(pageProps);
+  const { data, numero_fasi, update } = useUpdatedData(pageProps);
   const [number, setNumber] = useState(0);
+  const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
   const { query } = useRouter();
   useEffect(() => {
-    const edges = calculateEdges();
-    setEdges(edges);
-  }, [number]);
+    const _nodes = calculateNodes(data);
+    console.log(_nodes);
+    setNodes(_nodes);
+  }, [data, number]);
+  useEffect(() => {
+    console.log(
+      nodes,
+      document.getElementById("viewport").children[0].children.length,
+    );
+    if (!document.getElementById("viewport").children[0].children.length)
+      return; // Da sistemare
+    const _edges = calculateEdges(data);
+    console.log(_edges);
+    setEdges(calculateEdgeCoords(_edges));
+  }, [nodes, data]);
   return (
     <>
       <Title>{firstLetterUp(query.categoria) + " - Eliminazione"}</Title>
@@ -45,11 +61,15 @@ export default function Eliminazione(pageProps) {
             id="nodes"
             className="grid place-items-center gap-x-20 gap-y-2"
             style={{
-              gridTemplateColumns: "repeat(11, auto)",
-              gridTemplateRows: "repeat(17, auto)",
+              gridTemplateColumns:
+                "repeat(" +
+                (numero_fasi + 2 + (numero_fasi - 1) * 2) +
+                ", auto)",
+              gridTemplateRows:
+                "repeat(" + (2 ** (numero_fasi - 1) + 1) + ", auto)",
             }}
           >
-            {data.map((v, i) => (
+            {nodes.map((v, i) => (
               <Node key={i} node={v} setNumber={setNumber} />
             ))}
             {/* <div className="col-start-1 row-span-8 row-start-2 h-full w-full bg-red-50/40" /> */}
@@ -63,7 +83,17 @@ export default function Eliminazione(pageProps) {
                   id={v.id}
                   d={v.path}
                   style={v.style}
-                />
+                  strokeDasharray="10"
+                  strokeDashoffset="1"
+                >
+                  <animate
+                    attributeName="stroke-dashoffset"
+                    values="100;0"
+                    dur="5s"
+                    calcMode="linear"
+                    repeatCount="indefinite"
+                  />
+                </path>
               ))}
             </svg>
           </div>
@@ -81,9 +111,9 @@ function Node(props) {
       <div
         id={node.id}
         style={node.style}
-        className="w-full rounded-lg border p-2 text-center text-red-500"
+        className="w-full whitespace-nowrap rounded-lg border p-2 text-center text-red-500"
       >
-        Ripescaggio
+        Ripescaggio {data.number}
       </div>
     );
   } else if (data.type == "header") {
@@ -121,7 +151,7 @@ function Node(props) {
             "text-red-600": node.winner == "2",
           })}
         >
-          20
+          22
         </div>
         <hr className="col-span-2 col-start-1 row-start-2 w-full" />
         <SqRounded
@@ -136,7 +166,7 @@ function Node(props) {
             "text-red-600": node.winner == "1",
           })}
         >
-          22
+          20
         </div>
         <ChevronDownIcon className="col-span-2 col-start-1 row-start-4 h-4 w-4 group-data-[open]:rotate-180" />
       </DisclosureButton>
@@ -171,7 +201,8 @@ export async function getStaticProps({ params }) {
   // const classifica = calcClassificaAvulsa(response.results);
   return {
     props: {
-      data: nodes,
+      data: calculateData(NUMERO_FASI),
+      numero_fasi: NUMERO_FASI,
       update: new Date().toJSON(),
     },
     revalidate: REVALIDATE,
