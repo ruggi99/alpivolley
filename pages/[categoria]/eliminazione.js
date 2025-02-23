@@ -16,9 +16,9 @@ import { SqRounded } from "components/Partita";
 import Title from "components/Title";
 import { CATEGORIE, REVALIDATE } from "lib/const";
 import {
-  calculateData,
   calculateEdgeCoords,
   calculateEdges,
+  calculateFakeData,
   calculateNodes,
 } from "lib/eliminazione2";
 import useUpdatedData from "lib/useUpdatedData";
@@ -42,12 +42,11 @@ export default function Eliminazione(pageProps) {
       nodes,
       document.getElementById("viewport").children[0].children.length,
     );
-    if (!document.getElementById("viewport").children[0].children.length)
-      return; // Da sistemare
-    const _edges = calculateEdges(data);
+    if (!nodes.length) return; // Da sistemare
+    const _edges = calculateEdges(NUMERO_FASI + 1);
     console.log(_edges);
     setEdges(calculateEdgeCoords(_edges));
-  }, [nodes, data]);
+  }, [nodes]);
   return (
     <>
       <Title>{firstLetterUp(query.categoria) + " - Eliminazione"}</Title>
@@ -201,7 +200,7 @@ export async function getStaticProps({ params }) {
   // const classifica = calcClassificaAvulsa(response.results);
   return {
     props: {
-      data: calculateData(NUMERO_FASI),
+      data: calculateFakeData(NUMERO_FASI),
       numero_fasi: NUMERO_FASI,
       update: new Date().toJSON(),
     },
