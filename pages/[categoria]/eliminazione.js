@@ -34,17 +34,17 @@ export default function Eliminazione(pageProps) {
   const { query } = useRouter();
   useEffect(() => {
     const _nodes = calculateNodes(data);
-    console.log(_nodes);
+    // console.log(_nodes);
     setNodes(_nodes);
   }, [data, number]);
   useEffect(() => {
-    console.log(
-      nodes,
-      document.getElementById("viewport").children[0].children.length,
-    );
+    // console.log(
+    //   nodes,
+    //   document.getElementById("viewport").children[0].children.length,
+    // );
     if (!nodes.length) return; // Da sistemare
     const _edges = calculateEdges(NUMERO_FASI + 1);
-    console.log(_edges);
+    // console.log(_edges);
     setEdges(calculateEdgeCoords(_edges));
   }, [nodes]);
   return (
