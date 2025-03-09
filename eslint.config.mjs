@@ -1,89 +1,108 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
 import { fixupConfigRules } from "@eslint/compat";
+import { FlatCompat } from "@eslint/eslintrc";
+import js from "@eslint/js";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import sortDestructureKeys from "eslint-plugin-sort-destructure-keys";
 import globals from "globals";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import js from "@eslint/js";
-import { FlatCompat } from "@eslint/eslintrc";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all
+  baseDirectory: __dirname,
+  recommendedConfig: js.configs.recommended,
+  allConfig: js.configs.all,
 });
 
-export default [{
+const eslintConfig = [
+  {
     ignores: ["**/.next", "**/out"],
-}, ...fixupConfigRules(compat.extends(
-    "next/core-web-vitals",
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:react/jsx-runtime",
-    "plugin:react-hooks/recommended",
-    "prettier",
-)), {
+  },
+  ...fixupConfigRules(
+    compat.extends(
+      "next/core-web-vitals",
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:react/jsx-runtime",
+      "plugin:react-hooks/recommended",
+      "prettier",
+    ),
+  ),
+  {
     plugins: {
-        "simple-import-sort": simpleImportSort,
-        "sort-destructure-keys": sortDestructureKeys,
+      "simple-import-sort": simpleImportSort,
+      "sort-destructure-keys": sortDestructureKeys,
     },
 
     languageOptions: {
-        globals: {
-            ...globals.browser,
-            ...globals.commonjs,
-            ...globals.node,
-        },
+      globals: {
+        ...globals.browser,
+        ...globals.commonjs,
+        ...globals.node,
+      },
 
-        ecmaVersion: 13,
-        sourceType: "module",
+      ecmaVersion: 13,
+      sourceType: "module",
 
-        parserOptions: {
-            ecmaFeatures: {
-                jsx: true,
-            },
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
         },
+      },
     },
 
     rules: {
-        "prefer-const": "error",
-        "react/prop-types": "off",
-        "react/self-closing-comp": "error",
-        "react/jsx-no-useless-fragment": "error",
-        "react/jsx-curly-brace-presence": ["error", "never"],
-        "react/jsx-fragments": "error",
+      "prefer-const": "error",
+      "react/prop-types": "off",
+      "react/self-closing-comp": "error",
+      "react/jsx-no-useless-fragment": "error",
+      "react/jsx-curly-brace-presence": ["error", "never"],
+      "react/jsx-fragments": "error",
 
-        "react/jsx-no-target-blank": ["error", {
-            allowReferrer: true,
-            warnOnSpreadAttributes: true,
-            forms: true,
-        }],
+      "react/jsx-no-target-blank": [
+        "error",
+        {
+          allowReferrer: true,
+          warnOnSpreadAttributes: true,
+          forms: true,
+        },
+      ],
 
-        "react/function-component-definition": [2, {
-            namedComponents: "function-declaration",
-        }],
+      "react/function-component-definition": [
+        2,
+        {
+          namedComponents: "function-declaration",
+        },
+      ],
 
-        "react/display-name": ["error"],
-        "react-hooks/exhaustive-deps": "error",
+      "react/display-name": ["error"],
+      "react-hooks/exhaustive-deps": "error",
 
-        "simple-import-sort/imports": ["error", {
-            groups: [
-                ["^\\u0000"],
-                ["^node:"],
-                ["^react$"],
-                ["^next/"],
-                ["^@?\\w"],
-                ["components", "hooks", "lib", "pages", "public", "styles"],
-                ["^"],
-                ["^\\."],
-            ],
-        }],
+      "simple-import-sort/imports": [
+        "error",
+        {
+          groups: [
+            ["^\\u0000"],
+            ["^node:"],
+            ["^react$"],
+            ["^next/"],
+            ["^@?\\w"],
+            ["components", "hooks", "lib", "pages", "public", "styles"],
+            ["^"],
+            ["^\\."],
+          ],
+        },
+      ],
 
-        "simple-import-sort/exports": "error",
-        "sort-destructure-keys/sort-destructure-keys": "error",
+      "simple-import-sort/exports": "error",
+      "sort-destructure-keys/sort-destructure-keys": "error",
     },
-}, {
+  },
+  {
     files: ["**/*.js", "**/*.jsx"],
-}];
+  },
+];
+
+export default eslintConfig;
