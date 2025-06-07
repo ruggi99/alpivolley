@@ -1,10 +1,10 @@
 module.exports = {
   plugins: {
-    tailwindcss: {},
+    "@tailwindcss/postcss": {},
     autoprefixer: {},
-    // eslint-disable-next-line no-undef
+     
     [`${__dirname}/node_modules/next/dist/compiled/postcss-flexbugs-fixes`]: {},
-    // eslint-disable-next-line no-undef
+     
     [`${__dirname}/node_modules/next/dist/compiled/postcss-preset-env`]: {
       autoprefixer: {
         flexbox: "no-2009",
