@@ -110,7 +110,7 @@ function Node(props) {
       <div
         id={node.id}
         style={node.style}
-        className="w-full whitespace-nowrap rounded-lg border p-2 text-center text-red-500"
+        className="w-full rounded-lg border p-2 text-center whitespace-nowrap text-red-500"
       >
         Ripescaggio {data.number}
       </div>
@@ -169,7 +169,7 @@ function Node(props) {
         </div>
         <ChevronDownIcon className="col-span-2 col-start-1 row-start-4 h-4 w-4 group-data-[open]:rotate-180" />
       </DisclosureButton>
-      <DisclosurePanel className="mb-2 mt-2 flex place-items-center justify-evenly">
+      <DisclosurePanel className="mt-2 mb-2 flex place-items-center justify-evenly">
         <span
           className={cs(
             "grid h-8 w-8 place-items-center rounded-md font-semibold text-white",
