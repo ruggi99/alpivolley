@@ -13,7 +13,7 @@
     "@fontsource/ubuntu": "^5.2.6",
     "@headlessui/react": "^2.2.3",
     "@heroicons/react": "^2.2.0",
-    "@xyflow/react": "^12.6.4",
+    "@xyflow/react": "^12.7.0",
     "classnames": "^2.5.1",
     "next": "15.3.3",
     "react": "19.1.0",
