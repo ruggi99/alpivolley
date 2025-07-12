@@ -16,6 +16,9 @@
   .all-center {
     @apply items-center justify-center;
   }
+  button {
+    @apply cursor-pointer;
+  }
   *,
   ::after,
   ::before,
