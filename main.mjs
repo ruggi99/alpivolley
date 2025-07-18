@@ -30,7 +30,7 @@ function whoIsWinner(row) {
 }
 
 function calculateFakeAvulsa() {
-  return Array(22) // E' 64
+  return Array(24) // E' 64
     .fill(0)
     .map((_, i) => "Squadra " + (i + 1).toString().padStart(2, "0"));
 }

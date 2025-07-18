@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import DataUpdate from "components/DataUpdate";
+import { Edges, NodeGrid,Nodes } from "components/Eliminazione";
 import Title from "components/Title";
 import { CATEGORIE, REVALIDATE } from "lib/const";
 import {
@@ -13,8 +14,6 @@ import {
 } from "lib/eliminazione";
 import useUpdatedData from "lib/useUpdatedData";
 import { firstLetterUp } from "lib/utils";
-
-import { Nodes, Edges, NodeGrid } from "components/Eliminazione";
 
 const NUMERO_FASI = 4;
 

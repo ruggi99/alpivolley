@@ -1,5 +1,3 @@
-import cs from "classnames";
-
 import {
   Disclosure,
   DisclosureButton,
@@ -7,8 +5,9 @@ import {
 } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { ClockIcon } from "@heroicons/react/24/outline";
+import cs from "classnames";
+
 import { SqRounded } from "components/Partita";
-import { FASI } from "lib/const";
 import { calculateHeaders } from "lib/eliminazione";
 
 export function NodeGrid({ children, viewFase }) {
