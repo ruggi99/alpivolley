@@ -132,7 +132,7 @@ function calculateInitialSchema() {
   const FASE_PARTENZA = Math.min(Math.ceil(Math.log2(fakeAvulsa.length)), 5); // 5 = Sedicesimi
   console.log(FASE_PARTENZA);
   const data = calculateSchema(FASE_PARTENZA);
-  writeFileSync(`./testInitialSchema.json`, JSON.stringify(data, null, 2));
+  writeFileSync(`./out/testInitialSchema.json`, JSON.stringify(data, null, 2));
   // Aggiungo la Finalissima
   data[`${FASI[0]},Diretta,1`] = {
     fase: FASI[0],
@@ -216,7 +216,7 @@ function calculateInitialSchema() {
         }
       }
     }
-    writeFileSync(`./test${fase}.json`, JSON.stringify(data, null, 2));
+    writeFileSync(`./out/test${fase}.json`, JSON.stringify(data, null, 2));
   }
   return data;
 }
@@ -260,7 +260,7 @@ async function calculateWinAndLoss(categoria) {
     }
   }
   console.log(new_data);
-  // writeFileSync("./test.json", JSON.stringify(schema, null, 2));
+  // writeFileSync("./out/test.json", JSON.stringify(schema, null, 2));
   await applyDifferences(categoria, "Eliminazione", data_grouped, new_data);
 }
 
@@ -432,4 +432,4 @@ await loadInitialData("MISTO");
 
 // const schema = calculateSchema();
 
-// writeFileSync("./test.json", JSON.stringify(data, null, 2));
+// writeFileSync("./out/test.json", JSON.stringify(data, null, 2));
