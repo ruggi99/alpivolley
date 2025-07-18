@@ -6,15 +6,16 @@ import DataUpdate from "components/DataUpdate";
 import Title from "components/Title";
 import { CATEGORIE, REVALIDATE } from "lib/const";
 import {
-  calculateEdgeCoords,
   calculateEdges,
   calculateFakeData,
   calculateNodes,
 } from "lib/eliminazione2";
+import { calculateEdgeCoords } from "lib/eliminazione";
 import useUpdatedData from "lib/useUpdatedData";
 import { firstLetterUp } from "lib/utils";
 
 import { Nodes, Edges } from "components/Eliminazione";
+import { NodeGrid } from "components/Eliminazione2";
 
 const NUMERO_FASI = 5;
 
@@ -48,12 +49,16 @@ export default function Eliminazione(pageProps) {
       <h3 className="text-center">
         Categoria {firstLetterUp(query.categoria)} - Gold
       </h3>
-      <div className="-mx-4 overflow-x-scroll px-4">
+      {/* <div className="-mx-4 overflow-x-scroll px-4">
         <div id="viewport" className="relative w-min">
           <Nodes nodes={nodes} viewFase={viewFase} setNumber={setNumber} />
           <Edges edges={edges} />
         </div>
-      </div>
+      </div> */}
+      <NodeGrid viewFase={viewFase}>
+        <Nodes nodes={nodes} setNumber={setNumber} />
+        <Edges edges={edges} />
+      </NodeGrid>
       <input
         type="number"
         id="view_fasi"

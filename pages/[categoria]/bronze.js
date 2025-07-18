@@ -14,9 +14,9 @@ import {
 import useUpdatedData from "lib/useUpdatedData";
 import { firstLetterUp } from "lib/utils";
 
-import { Nodes, Edges } from "components/Eliminazione";
+import { Nodes, Edges, NodeGrid } from "components/Eliminazione";
 
-const NUMERO_FASI = 5;
+const NUMERO_FASI = 4;
 
 export default function Eliminazione(pageProps) {
   const { data, numero_fasi, update } = useUpdatedData(pageProps);
@@ -31,13 +31,14 @@ export default function Eliminazione(pageProps) {
     setNodes(_nodes);
   }, [data, number, viewFase]);
   useEffect(() => {
-    console.log(
-      nodes,
-      document.getElementById("viewport").children[0].children.length,
-    );
+    // console.log(data);
+    // console.log(
+    //   nodes,
+    //   document.getElementById("viewport").children[0].children.length,
+    // );
     if (!nodes.length) return; // Da sistemare
     const _edges = calculateEdges(viewFase + 1);
-    console.log(_edges);
+    // console.log(_edges);
     setEdges(calculateEdgeCoords(_edges));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nodes]);
@@ -46,14 +47,12 @@ export default function Eliminazione(pageProps) {
       <Title>{firstLetterUp(query.categoria) + " - Eliminazione"}</Title>
       <DataUpdate update={update} />
       <h3 className="text-center">
-        Categoria {firstLetterUp(query.categoria)} - Gold
+        Categoria {firstLetterUp(query.categoria)} - Bronze
       </h3>
-      <div className="-mx-4 overflow-x-scroll px-4">
-        <div id="viewport" className="relative w-min">
-          <Nodes nodes={nodes} viewFase={viewFase} setNumber={setNumber} />
-          <Edges edges={edges} />
-        </div>
-      </div>
+      <NodeGrid viewFase={viewFase}>
+        <Nodes nodes={nodes} setNumber={setNumber} />
+        <Edges edges={edges} />
+      </NodeGrid>
       <input
         type="number"
         id="view_fasi"

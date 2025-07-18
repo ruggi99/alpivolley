@@ -1,8 +1,44 @@
 import cs from "classnames";
 
-const FASI = ["Sedicesimi", "Ottavi", "Quarti", "Semifinali", "Finali"];
+import { FASI } from "lib/const";
 
-export default function Header() {
+import { Node } from "./Eliminazione";
+
+import { calculateHeaders } from "lib/eliminazione2";
+
+export function NodeGrid({ children, viewFase }) {
+  return (
+    <div className="-mx-4 overflow-x-scroll px-4">
+      <div id="viewport" className="relative w-min">
+        <div
+          id="nodes"
+          className="grid place-items-center gap-x-20 gap-y-2"
+          style={{
+            gridTemplateColumns:
+              "repeat(" + (viewFase + 2 + (viewFase - 1) * 2) + ", auto)",
+            gridTemplateRows: "repeat(" + (2 ** (viewFase - 1) + 1) + ", auto)",
+          }}
+        >
+          <Header viewFase={viewFase} />
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Header({ viewFase }) {
+  const nodeHeaders = calculateHeaders(viewFase);
+  return (
+    <>
+      {nodeHeaders.map((node, i) => (
+        <Node key={i} node={node} />
+      ))}
+    </>
+  );
+}
+
+function Header2() {
   const commonClassName =
     "border rounded-lg p-2 w-full text-center row-start-1";
   return (

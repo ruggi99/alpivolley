@@ -31,7 +31,7 @@ function Gironi() {
         <ButtonWithLink href="avulsa">Classifica Avulsa</ButtonWithLink>
       </div>
       <div>
-        <ButtonWithLink href="eliminazione">Fase Gold</ButtonWithLink>
+        <ButtonWithLink href="gold">Fase Gold</ButtonWithLink>
       </div>
       <div>
         <ButtonWithLink href="silver">Fase Silver</ButtonWithLink>
