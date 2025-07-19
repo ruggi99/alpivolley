@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import DataUpdate from "components/DataUpdate";
-import { Edges,Nodes } from "components/Eliminazione";
+import { Edges, Nodes } from "components/Eliminazione";
 import { NodeGrid } from "components/Eliminazione2";
 import Title from "components/Title";
 import { CATEGORIE, REVALIDATE } from "lib/const";
@@ -48,12 +48,6 @@ export default function Eliminazione(pageProps) {
       <h3 className="text-center">
         Categoria {firstLetterUp(query.categoria)} - Gold
       </h3>
-      {/* <div className="-mx-4 overflow-x-scroll px-4">
-        <div id="viewport" className="relative w-min">
-          <Nodes nodes={nodes} viewFase={viewFase} setNumber={setNumber} />
-          <Edges edges={edges} />
-        </div>
-      </div> */}
       <NodeGrid viewFase={viewFase}>
         <Nodes nodes={nodes} setNumber={setNumber} />
         <Edges edges={edges} />

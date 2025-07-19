@@ -20,17 +20,17 @@ function whoIsWinner(row) {
   const punti1 = row["Punti 1"];
   const punti2 = row["Punti 2"];
   const diff = Math.abs(punti1 - punti2);
-  if (punti1 == 23 || (punti1 > 20 && diff > 1)) {
+  if (punti1 == 23 || (punti1 > punti2 && diff > 1)) {
     return 1;
   }
-  if (punti2 == 23 || (punti2 > 20 && diff > 1)) {
+  if (punti2 == 23 || (punti2 > punti1 && diff > 1)) {
     return 2;
   }
   return 0;
 }
 
 function calculateFakeAvulsa() {
-  return Array(24) // E' 64
+  return Array(15) // E' 64
     .fill(0)
     .map((_, i) => "Squadra " + (i + 1).toString().padStart(2, "0"));
 }
@@ -39,14 +39,28 @@ function calculateSchema(numero_fasi) {
   const data = {};
   for (let fase = 1; fase <= numero_fasi; fase++) {
     let algoritmoRet = algoritmo(fase);
+    // console.log(algoritmoRet, fase, 2 ** (fase - 1));
     for (let i = 0; i < 2 ** (fase - 1); i++) {
       const obj = {
         fase: FASI[fase],
         fase2: "Diretta",
         ordine: i + 1,
+        invalid: false,
         squadra1: algoritmoRet[i * 2],
         squadra2: algoritmoRet[i * 2 + 1],
+        turno: Math.floor(i / 8) + 1,
       };
+      if (i < 2 ** (fase - 2)) {
+        obj.referees = [
+          algoritmoRet[i * 2 + 2 ** (fase - 1) + 1],
+          algoritmoRet[i * 2 + 2 ** (fase - 1)],
+        ];
+      } else {
+        obj.referees = [
+          algoritmoRet[i * 2 - 2 ** (fase - 1) + 1],
+          algoritmoRet[i * 2 - 2 ** (fase - 1)],
+        ];
+      }
       obj.winner = {
         fase: FASI[fase - 1],
         fase2: "Diretta",
@@ -55,6 +69,9 @@ function calculateSchema(numero_fasi) {
       };
       // Se è la prima fase si va direttamente al Ripescaggio 1
       if (fase == numero_fasi) {
+        // La prima fase diretta deve per forza essere divisa in due turni
+        const turnoPrimaFase = Math.floor(i / (2 ** (fase - 1) / 2)) + 1;
+        if (turnoPrimaFase > obj["turno"]) obj["turno"] = turnoPrimaFase;
         obj.looser = {
           fase: FASI[fase - 1],
           fase2: "Ripescaggio 1",
@@ -73,13 +90,17 @@ function calculateSchema(numero_fasi) {
     }
     if (fase < numero_fasi) {
       let algoritmoRet = algoritmo(fase + 1);
+      console.log(algoritmoRet, fase);
       for (let i = 0; i < 2 ** (fase - 1); i++) {
         const obj = {
           fase: FASI[fase],
           fase2: "Ripescaggio 1",
           ordine: i + 1,
+          invalid: false,
           squadra1: algoritmoRet[i * 4 + 3],
           squadra2: algoritmoRet[i * 4 + 1],
+          turno: Math.floor(i / 8) + 1,
+          referees: [algoritmoRet[i * 4 + 2], algoritmoRet[i * 4 + 0]],
         };
         if (fase > 0) {
           obj.winner = {
@@ -102,8 +123,11 @@ function calculateSchema(numero_fasi) {
           fase: FASI[fase],
           fase2: "Ripescaggio 2",
           ordine: i + 1,
+          invalid: false,
           squadra1: algoritmoRet[i * 4 + 2],
           squadra2: algoritmoRet[i * 4 + 3],
+          turno: Math.floor(i / 8) + 1,
+          referees: [algoritmoRet[i * 4 + 1], algoritmoRet[i * 4 + 0]],
         };
         if (fase > 0) {
           obj.winner = {
@@ -112,51 +136,47 @@ function calculateSchema(numero_fasi) {
             ordine: parseInt(i / 2) + 1,
             squadra: 2 - (i % 2),
           };
-          obj.looser = {
-            fase: FASI[fase - 1],
-            fase2: fase == 1 ? "Diretta" : "Ripescaggio 1",
-            ordine: parseInt(i / 2) + 1,
-            referee: true,
-          };
+          // Dal ripescaggio 2 al ripescaggio 1 basta un singolo arbitro
+          if (i % 2 == 1) {
+            obj.looser = {
+              fase: FASI[fase - 1],
+              fase2: fase == 1 ? "Diretta" : "Ripescaggio 1",
+              ordine: parseInt(i / 2) + 1,
+              referee: true,
+            };
+          } else {
+            obj.looser = null;
+          }
         }
         data[`${obj.fase},${obj.fase2},${obj.ordine}`] = obj;
       }
     }
   }
+  // Aggiungo la Finalissima
+  data[`${FASI[0]},Diretta,1`] = {
+    fase: FASI[0],
+    fase2: "Diretta",
+    ordine: 1,
+    turno: 1,
+    winner: null,
+    looser: null,
+  };
+  writeFileSync("./out/schema.json", JSON.stringify(data, null, 2));
   return data;
 }
 
 function calculateInitialSchema() {
   // Gold c'è sempre, Silver solo se > 32
   const fakeAvulsa = calculateFakeAvulsa();
+  console.log(fakeAvulsa);
   const FASE_PARTENZA = Math.min(Math.ceil(Math.log2(fakeAvulsa.length)), 5); // 5 = Sedicesimi
   console.log(FASE_PARTENZA);
   const data = calculateSchema(FASE_PARTENZA);
-  writeFileSync(`./out/testInitialSchema.json`, JSON.stringify(data, null, 2));
-  // Aggiungo la Finalissima
-  data[`${FASI[0]},Diretta,1`] = {
-    fase: FASI[0],
-    fase2: "Diretta",
-    ordine: 1,
-  };
-  // const algoritmoRet = algoritmo(FASE_PARTENZA);
-  // console.log(algoritmoRet);
-  // for (let i = 0; i < algoritmoRet.length; i += 2) {
-  //   const firstSqPos = algoritmoRet[i];
-  //   const secondSqPos = algoritmoRet[i + 1];
-  //   data[`${FASI[FASE_PARTENZA]},Diretta,${i / 2 + 1}`]["squadra1"] =
-  //     firstSqPos;
-  //   data[`${FASI[FASE_PARTENZA]},Diretta,${i / 2 + 1}`]["squadra2"] =
-  //     secondSqPos;
-  // }
 
-  for (let fase = FASE_PARTENZA; fase >= 0; fase--) {
+  for (let fase = FASE_PARTENZA; fase > 0; fase--) {
     for (const fase2 of FASI2) {
       // La prima e l'ultima fase non hanno ripescaggio
       if ((fase == FASE_PARTENZA || fase == 0) && fase2 != "Diretta") {
-        continue;
-      }
-      if (fase == 0) {
         continue;
       }
       for (let i = 0; i < 2 ** (fase - 1); i++) {
@@ -171,31 +191,34 @@ function calculateInitialSchema() {
         const isSecondValid = secondSqPos <= fakeAvulsa.length;
         const isSecondInvalid = !isSecondUndefined && !isSecondValid;
 
-        const atLeastOneUndefined = isFirstUndefined || isSecondUndefined;
-        const areAllDefined = !isFirstUndefined && !isSecondUndefined;
+        // const atLeastOneUndefined = isFirstUndefined || isSecondUndefined;
+        // const areAllDefined = !isFirstUndefined && !isSecondUndefined;
         const atLeastOneInvalid = isFirstInvalid || isSecondInvalid;
-        const areAllValid = isFirstValid && isSecondValid;
+        // const areAllValid = isFirstValid && isSecondValid;
 
         if (isFirstUndefined) {
-          // La squadra esiste o non è ancora definita -> propago l'undefined
+          // La squadra esiste e non è ancora definita -> propago l'undefined
           const winner = thisData.winner;
           data[`${winner.fase},${winner.fase2},${winner.ordine}`][
             "squadra" + winner.squadra
           ] = undefined;
+          data[`${winner.fase},${winner.fase2},${winner.ordine}`].referees = [];
         }
         if (isSecondUndefined) {
           // La squadra esiste o non è ancora definita -> propago l'undefined
           const looser = thisData.looser;
-          if (looser.referee === undefined) {
+          if (looser && looser.referee === undefined) {
             data[`${looser.fase},${looser.fase2},${looser.ordine}`][
               "squadra" + looser.squadra
             ] = undefined;
+            data[`${looser.fase},${looser.fase2},${looser.ordine}`].referees =
+              [];
           }
         }
 
         if (atLeastOneInvalid) {
-          // Annullo la partita
-          data[`${FASI[fase]},${fase2},${i + 1}`] = null;
+          // Se almeno una delle due squadre, annullo la partita
+          data[`${FASI[fase]},${fase2},${i + 1}`].invalid = true;
         } else {
           if (isFirstValid) {
             // La squadra esiste o non è ancora definita -> propago l'undefined
@@ -203,14 +226,25 @@ function calculateInitialSchema() {
             data[`${winner.fase},${winner.fase2},${winner.ordine}`][
               "squadra" + winner.squadra
             ] = undefined;
+            data[`${winner.fase},${winner.fase2},${winner.ordine}`].referees =
+              [];
           }
           if (isSecondValid) {
             // La squadra esiste o non è ancora definita -> propago l'undefined
             const looser = thisData.looser;
-            if (looser.referee === undefined) {
+            if (looser && looser?.referee === undefined) {
               data[`${looser.fase},${looser.fase2},${looser.ordine}`][
                 "squadra" + looser.squadra
               ] = undefined;
+              data[`${looser.fase},${looser.fase2},${looser.ordine}`].referees =
+                [];
+            }
+          }
+          for (const referee of thisData.referees) {
+            if (referee <= fakeAvulsa.length) {
+              data[`${FASI[fase]},${fase2},${i + 1}`].referee = referee;
+              data[`${FASI[fase]},${fase2},${i + 1}`].referees = undefined;
+              break;
             }
           }
         }
@@ -231,12 +265,21 @@ async function calculateWinAndLoss(categoria) {
     v.Ordine,
   ]);
 
-  const schema = calculateSchema();
+  // console.log(data);
+
+  const calcMaxFase = Object.groupBy(data, (v) => [v.Fase]);
+
+  // console.log(Object.keys(calcMaxFase).length - 1);
+
+  // const schema = calculateSchema(Object.keys(calcMaxFase).length - 1);
+  const schema = calculateInitialSchema(Object.keys(calcMaxFase).length - 1);
   const new_data = {};
 
   // const keys = Object.keys(data_grouped).filter((v) => v.startsWith("Ottavi"));
   const keys = Object.keys(data_grouped);
+  // console.log(keys);
 
+  // For cycle on real data
   for (const key of keys) {
     const row = data_grouped[key][0];
     const whoWinner = whoIsWinner(row);
@@ -246,9 +289,11 @@ async function calculateWinAndLoss(categoria) {
     for (const type of ["winner", "looser"]) {
       const obj = schema[key][type];
       const key2 = `${obj.fase},${obj.fase2},${obj.ordine}`;
+      const temp_obj = schema[key2];
       if (!(key2 in new_data)) {
         new_data[key2] = {};
       }
+      new_data.invalid = temp_obj.invalid;
       if (type == "winner") {
         new_data[key2]["squadra" + obj.squadra] = row["Squadra " + whoWinner];
       } else if (obj.referee) {
@@ -265,8 +310,12 @@ async function calculateWinAndLoss(categoria) {
 }
 
 async function applyDifferences(categoria, fase, data_grouped, new_data) {
+  console.log(new_data);
   for (const key in new_data) {
+    // if (!(key in data_grouped)) continue;
+    console.log(key);
     const data = new_data[key];
+    if (data.invalid) continue;
     const old_data = data_grouped[key][0];
     if (
       (data.squadra1 && data.squadra1 != old_data["Squadra 1"]) ||
@@ -302,7 +351,7 @@ async function loadInitialData(categoria) {
     if (rows != undefined && rows.length > 0) {
       row = rows[0];
     }
-    if (nodo != null) {
+    if (!nodo.invalid) {
       if (row == undefined) {
         // Create the row if no match
         await baserow.create_row(categoria, "Eliminazione", {
@@ -311,6 +360,8 @@ async function loadInitialData(categoria) {
           Fase: nodo.fase,
           "Fase 2": nodo.fase2,
           Ordine: nodo.ordine,
+          Arbitro: nodo.referee,
+          Turno: nodo.turno?.toString(),
           Girone: "Gold",
         });
         continue;
@@ -331,7 +382,22 @@ async function loadInitialData(categoria) {
     if (nodo.squadra2) {
       squadra2 = squadre[nodo.squadra2 - 1]["Nome"];
     }
-    if (row["Squadra 1"] !== squadra1 || row["Squadra 2"] !== squadra2) {
+    let referee = undefined;
+    if (nodo.referee) {
+      referee = squadre[nodo.referee - 1]["Nome"];
+    }
+    let turno = undefined;
+    if (nodo.turno) {
+      turno = nodo.turno.toString();
+    }
+    console.log(squadra1, squadra2);
+    if (
+      row["Squadra 1"] !== squadra1 ||
+      row["Squadra 2"] !== squadra2 ||
+      row["Arbitro"] !== referee ||
+      row["Turno"] !== turno
+    ) {
+      // console.log(row["Turno"] !== turno, row["Turno"], turno);
       const res = await baserow.modify_row(
         categoria,
         "Eliminazione",
@@ -339,8 +405,11 @@ async function loadInitialData(categoria) {
         {
           "Squadra 1": squadra1 || [],
           "Squadra 2": squadra2 || [],
+          Arbitro: referee || [],
+          Turno: turno,
         },
       );
+      // console.log(await res.text());
     }
   }
 
@@ -352,7 +421,7 @@ async function loadInitialData(categoria) {
     if (key in nodi) {
       continue;
     }
-    console.log(rows[0]["id"]);
+    // console.log(rows[0]["id"]);
     await baserow.delete_row(categoria, "Eliminazione", rows[0]["id"]);
   }
 }
@@ -426,10 +495,11 @@ async function deleteData(categoria) {
 // const data = transformData((await res.json())["results"]);
 // console.log(data);
 
-await loadInitialData("MISTO");
+// await loadInitialData("MISTO");
+await calculateWinAndLoss("MISTO");
 
 // const data = calculateInitialSchema();
 
-// const schema = calculateSchema();
+// const schema = calculateSchema(5);
 
-// writeFileSync("./out/test.json", JSON.stringify(data, null, 2));
+// writeFileSync("./out/schema.json", JSON.stringify(schema, null, 2));
