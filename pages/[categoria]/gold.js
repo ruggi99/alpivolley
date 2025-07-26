@@ -8,13 +8,10 @@ import { NodeGrid } from "components/Eliminazione2";
 import Title from "components/Title";
 import { CATEGORIE, REVALIDATE } from "lib/const";
 import { calculateEdgeCoords } from "lib/eliminazione";
-import {
-  calculateEdges,
-  calculateFakeData,
-  calculateNodes,
-} from "lib/eliminazione2";
+import { calculateEdges, calculateFakeData, calculateNodes } from "lib/eliminazione2";
 import useUpdatedData from "lib/useUpdatedData";
 import { firstLetterUp } from "lib/utils";
+import { getRows } from "lib/baserow";
 
 const NUMERO_FASI = 5;
 
@@ -41,13 +38,13 @@ export default function Eliminazione(pageProps) {
     setEdges(calculateEdgeCoords(_edges));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nodes]);
+  // console.log(data);
+  // console.log(nodes);
   return (
     <>
       <Title>{firstLetterUp(query.categoria) + " - Eliminazione"}</Title>
       <DataUpdate update={update} />
-      <h3 className="text-center">
-        Categoria {firstLetterUp(query.categoria)} - Gold
-      </h3>
+      <h3 className="text-center">Categoria {firstLetterUp(query.categoria)} - Gold</h3>
       <NodeGrid viewFase={viewFase}>
         <Nodes nodes={nodes} setNumber={setNumber} />
         <Edges edges={edges} />
@@ -72,12 +69,13 @@ export async function getStaticProps({ params }) {
       },
     };
   }
-  // const response = await getRows(params.categoria, "Eliminazione");
-  // const response = [];
+  const response = await getRows(params.categoria, "Eliminazione");
+  // const response = calculateFakeData(NUMERO_FASI);
   // const classifica = calcClassificaAvulsa(response.results);
+  // console.log(response);
   return {
     props: {
-      data: calculateFakeData(NUMERO_FASI),
+      data: response,
       numero_fasi: NUMERO_FASI,
       update: new Date().toJSON(),
     },

@@ -1,8 +1,4 @@
-import {
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-} from "@headlessui/react";
+import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { ClockIcon } from "@heroicons/react/24/outline";
 import cs from "classnames";
@@ -44,6 +40,10 @@ function Header({ viewFase }) {
 export function Node(props) {
   const { node, setNumber } = props;
   const { data } = node;
+  const additionalNodeCs = [];
+  if (data.punti1 == "21" && data.punti2 == "0") {
+    additionalNodeCs.push("opacity-50");
+  }
   if (data.type == "ripescaggio") {
     return (
       <div
@@ -56,11 +56,7 @@ export function Node(props) {
     );
   } else if (data.type == "header") {
     return (
-      <div
-        id={node.id}
-        style={node.style}
-        className="w-full rounded-lg border p-2 text-center"
-      >
+      <div id={node.id} style={node.style} className="w-full rounded-lg border p-2 text-center">
         {data.fase}
       </div>
     );
@@ -68,7 +64,7 @@ export function Node(props) {
   return (
     <Disclosure
       as="div"
-      className="w-full rounded-lg border p-4 pb-2"
+      className={cs("w-full min-w-48 rounded-lg border p-4 pb-2", additionalNodeCs)}
       id={node.id}
       style={node.style}
       onClick={() => setNumber((v) => v + 1)}
@@ -80,8 +76,8 @@ export function Node(props) {
         }}
         className="group grid w-full place-items-center gap-2 whitespace-nowrap"
       >
-        <SqRounded color="bg-squadre-1 w-min" className="row-start-1">
-          Squadra {data.squadra1}
+        <SqRounded color="bg-squadre-1 w-full" className="row-start-1">
+          {data.squadra1 || "???"}
         </SqRounded>
         <div
           className={cs("col-start-2 row-start-1", {
@@ -89,14 +85,11 @@ export function Node(props) {
             "text-red-600": node.winner == "2",
           })}
         >
-          22
+          {data.punti1 || "--"}
         </div>
         <hr className="col-span-2 col-start-1 row-start-2 w-full" />
-        <SqRounded
-          color="bg-squadre-2 w-min"
-          className="col-start-1 row-start-3"
-        >
-          Squadra {data.squadra2}
+        <SqRounded color="bg-squadre-2 w-full" className="col-start-1 row-start-3">
+          {data.squadra2 || "???"}
         </SqRounded>
         <div
           className={cs("col-start-2 row-start-3", {
@@ -104,7 +97,7 @@ export function Node(props) {
             "text-red-600": node.winner == "1",
           })}
         >
-          20
+          {data.punti2 || "--"}
         </div>
         <ChevronDownIcon className="col-span-2 col-start-1 row-start-4 h-4 w-4 group-data-[open]:rotate-180" />
       </DisclosureButton>
@@ -115,7 +108,7 @@ export function Node(props) {
             data["Campo"] ? "bg-green-600" : "bg-red-600",
           )}
         >
-          {data["Campo"] || "ND"}
+          {data.campo || "ND"}
         </span>
         <div className="flex">
           <ClockIcon className="h-8 w-8" /> 9:00
