@@ -14,7 +14,7 @@ import { firstLetterUp } from "lib/utils";
 import { getRows } from "lib/baserow";
 
 export default function Eliminazione(pageProps) {
-  const { data, numero_fasi, update } = useUpdatedData(pageProps);
+  const { data, update } = useUpdatedData(pageProps);
   // const [viewFase, setViewFase] = useState(numero_fasi);
   const viewFase = 5;
   const [number, setNumber] = useState(0); // To update the state and recalculate the edges
