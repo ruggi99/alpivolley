@@ -1,6 +1,6 @@
-import nextEnv from "@next/env";
-
 import { writeFileSync } from "node:fs";
+
+import nextEnv from "@next/env";
 
 import { algoritmo } from "./lib/algoritmo.js";
 import { BaseRow, transformData } from "./lib/baserow.js";
@@ -28,7 +28,7 @@ function calculateFakeAvulsa() {
 function calculateSchema(numero_fasi) {
   const data = {};
   for (let fase = 1; fase <= numero_fasi; fase++) {
-    let algoritmoRet = algoritmo(fase);
+    const algoritmoRet = algoritmo(fase);
     for (let i = 0; i < 2 ** (fase - 1); i++) {
       const obj = {
         fase: FASI[fase],
@@ -73,7 +73,7 @@ function calculateSchema(numero_fasi) {
     }
     // Se c'è il ripescaggio. La prima fase non lo ha
     if (fase < numero_fasi) {
-      let algoritmoRet = algoritmo(fase + 1);
+      const algoritmoRet = algoritmo(fase + 1);
       for (let i = 0; i < 2 ** (fase - 1); i++) {
         const obj = {
           fase: FASI[fase],
@@ -333,7 +333,7 @@ async function applyDifferences(categoria, fase, data_grouped, new_data) {
   }
 }
 
-async function loadInitialData(categoria) {
+export async function loadInitialData(categoria) {
   let res = await baserow.list_rows(categoria, "Eliminazione");
   const data = transformData((await res.json())["results"]);
   res = await baserow.list_rows(categoria, "Squadre");
@@ -389,7 +389,7 @@ async function loadInitialData(categoria) {
       row["Turno"] !== turno
     ) {
       // console.log(row["Turno"] !== turno, row["Turno"], turno);
-      const res = await baserow.modify_row(categoria, "Eliminazione", rows[0]["id"], {
+      await baserow.modify_row(categoria, "Eliminazione", rows[0]["id"], {
         "Squadra 1": squadra1 || [],
         "Squadra 2": squadra2 || [],
         Arbitro: referee || [],
@@ -418,7 +418,7 @@ async function loadInitialData(categoria) {
   }
 }
 
-async function deleteData(categoria) {
+export async function deleteData(categoria) {
   const res = await baserow.list_rows(categoria, "Eliminazione");
   const data = transformData((await res.json())["results"]);
 
