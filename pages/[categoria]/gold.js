@@ -27,7 +27,7 @@ export default function Eliminazione(pageProps) {
   }, [data, number, numero_fasi]);
   useEffect(() => {
     if (!nodes.length) return; // Da sistemare
-    const _edges = calculateEdges(numero_fasi);
+    const _edges = calculateEdges(numero_fasi + 1);
     // console.log(_edges);
     setEdges(calculateEdgeCoords(_edges));
     // eslint-disable-next-line react-hooks/exhaustive-deps
