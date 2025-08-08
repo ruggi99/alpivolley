@@ -54,6 +54,7 @@ const eslintConfig = [
     },
 
     rules: {
+      "no-unreachable": "warn",
       "prefer-const": "error",
       "react/prop-types": "off",
       "react/self-closing-comp": "error",

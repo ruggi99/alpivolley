@@ -43,21 +43,18 @@ export default MyApp;
 function MetaTags() {
   return (
     <Head>
-      <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, user-scalable=0"
-      />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
     </Head>
   );
 }
 
 function Header() {
   return (
-    <header className="relative flex-none bg-primary-green p-4 text-center text-3xl text-white">
+    <header className="bg-primary-green relative flex-none p-4 text-center text-3xl text-white">
       <Navigation />
       <div>
         <Link href="/" className="text-inherit">
-          Torneo ALPIVOLLEY
+          Torneo SUPERVOLLEY
         </Link>
       </div>
     </header>
@@ -77,18 +74,9 @@ function CookieConsent() {
   return (
     <MyDialog show={open} onClose={closeDialog} title="Cookie Consent">
       <MyDialog.Body>
-        <p>
-          Questo sito non utilizza cookie di alcun genere, se non per ricordarsi
-          di avertelo già detto.
-        </p>
-        <p>
-          Utilizza però un servizio di analisi delle prestazioni dell&apos;app
-          fornito e gestito da Vercel.
-        </p>
-        <p>
-          Vengono raccolti dati anonimi ma non viene raccolto nessun dato
-          personale
-        </p>
+        <p>Questo sito non utilizza cookie di alcun genere, se non per ricordarsi di avertelo già detto.</p>
+        <p>Utilizza però un servizio di analisi delle prestazioni dell&apos;app fornito e gestito da Vercel.</p>
+        <p>Vengono raccolti dati anonimi ma non viene raccolto nessun dato personale</p>
         <p>Non viene visualizzata pubblicità di alcun genere</p>
       </MyDialog.Body>
       <MyDialog.Footer>
@@ -137,7 +125,7 @@ function RoutesLoading() {
 
 function Footer() {
   return (
-    <footer className="flex-none bg-primary-yellow px-8 py-4">
+    <footer className="bg-primary-yellow flex-none px-8 py-4">
       <div className="text-center">
         Developed by{" "}
         <a href="https://github.com/ruggi99" target="_blank" rel="noopener">
@@ -150,11 +138,7 @@ function Footer() {
           Vercel
         </a>
         .{" "}
-        <a
-          href="https://github.com/ruggi99/alpivolley"
-          target="_blank"
-          rel="noopener"
-        >
+        <a href="https://github.com/ruggi99/alpivolley" target="_blank" rel="noopener">
           Source Code
         </a>{" "}
         on{" "}

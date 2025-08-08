@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 @layer base {
   h1 {
@@ -15,12 +13,33 @@
   :focus-visible {
     @apply outline-0;
   }
-}
-
-@layer components {
   .all-center {
     @apply items-center justify-center;
   }
+  button {
+    @apply cursor-pointer;
+  }
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
+
+@theme {
+  --color-primary-yellow: #ebc15a;
+  --color-primary-green: #429446;
+  --color-squadre-1: #92aad0;
+  --color-squadre-2: #fbf595;
+  --color-squadre-3: #f7b0b6;
+  --color-squadre-4: #d5b6d5;
+  --color-squadre-5: #b4e794;
+  --color-squadre-6: #ff8175;
+  --color-squadre-7: #a3f6ff;
+  --color-squadre-8: #ffce86;
+  --color-squadre-9: #49b675;
 }
 
 html,
@@ -55,9 +74,9 @@ body,
   @apply caret-primary-green accent-primary-green;
 }
 
-a {
+/* a {
   @apply text-blue-400;
-}
+} */
 
 td,
 th {
@@ -65,7 +84,7 @@ th {
 }
 
 th {
-  @apply border-b border-t border-gray-400;
+  @apply border-t border-b border-gray-400;
 }
 
 .referto td {
@@ -99,6 +118,13 @@ time {
   @apply select-all;
 }
 
+#svg-edges .green {
+  @apply stroke-green-500 stroke-2;
+}
+
+#svg-edges .red {
+  @apply stroke-red-500 stroke-1;
+}
 @media print {
   .noprint {
     display: none;
