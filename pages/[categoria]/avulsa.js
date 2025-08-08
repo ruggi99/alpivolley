@@ -70,7 +70,7 @@ export async function getStaticProps({ params }) {
     };
   }
   const response = await getRows(params.categoria, "Gironi");
-  const classifica = calcClassificaAvulsa(response.results);
+  const classifica = calcClassificaAvulsa(response);
   return {
     props: {
       data: classifica,
