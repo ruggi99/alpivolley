@@ -5,7 +5,7 @@ import { BaseRow } from "lib/baserow";
 const loginObj = {
   credentials: {
     client_email: process.env.GCP_SERVICE_ACCOUNT_EMAIL,
-    private_key: process.env.GCP_PRIVATE_KEY,
+    private_key: process.env.GCP_PRIVATE_KEY.split(String.raw`\n`).join("\n"),
   },
   projectId: process.env.GCP_PROJECT_ID,
 };
@@ -27,7 +27,9 @@ export async function getServerSideProps({ query }) {
   const googleClient = new TextToSpeechClient(loginObj);
   // Get Baserow row data
   const baserow = new BaseRow(process.env.BASEROW_TOKEN);
-  const row = await baserow.get_row(query.categoria, query.fase, query.row_id).then((v) => v.json());
+  const row = await baserow
+    .get_row(query.categoria, query.fase, query.row_id)
+    .then((v) => v.json());
   const squadra1 = row["Squadra 1"][0]["value"];
   const squadra2 = row["Squadra 2"][0]["value"];
   const arbitro = row["Arbitro"][0]["value"];
@@ -51,7 +53,8 @@ export async function getServerSideProps({ query }) {
   const [response] = await googleClient.synthesizeSpeech(obj);
   return {
     props: {
-      audioContent: "data:audio/mp3;base64," + response.audioContent.toString("base64"),
+      audioContent:
+        "data:audio/mp3;base64," + response.audioContent.toString("base64"),
     },
   };
 }
