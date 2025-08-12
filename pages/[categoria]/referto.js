@@ -1,13 +1,23 @@
 import { useState } from "react";
 
 import Referto from "components/Referto";
-import { getRows } from "lib/baserow";
+import { BaseRow, getRows } from "lib/baserow";
 import { CATEGORIE } from "lib/const";
 
 export default function RefertoMultiplo(props) {
   const [squadra1, setSquadra1] = useState();
   const [squadra2, setSquadra2] = useState();
   const [arbitro, setArbitro] = useState();
+  if (props.fields) {
+    const fields = {
+      "Squadra 1": props.fields["Squadra 1"][0]["value"],
+      "Squadra 2": props.fields["Squadra 2"][0]["value"],
+      Arbitro: props.fields["Arbitro"][0]["value"],
+      Campo: props.fields["Campo"],
+      Girone: props.fields["Girone"]["value"],
+    };
+    return <Referto categoria={props.categoria} data={fields} />;
+  }
   const fields = {
     "Squadra 1": squadra1,
     "Squadra 2": squadra2,
@@ -57,7 +67,7 @@ function SelectWithInput({ setValue, squadre, title, value }) {
 
 RefertoMultiplo.noLayout = true;
 
-export async function getServerSideProps({ params }) {
+export async function getServerSideProps({ params, query }) {
   if (!CATEGORIE.includes(params.categoria)) {
     return {
       redirect: {
@@ -66,8 +76,19 @@ export async function getServerSideProps({ params }) {
       },
     };
   }
-  const response = await getRows(params.categoria, "Squadre");
-  return {
-    props: { squadre: response, categoria: params.categoria },
-  };
+  if (query.id) {
+    parseInt(query.id);
+    if (!["Gironi", "Eliminazione"].includes(query.fase)) throw "fase not recognized";
+    const BASEROW_TOKEN = process.env["BASEROW_TOKEN"];
+    const baserow = new BaseRow(BASEROW_TOKEN);
+    const response = await baserow.get_row(params.categoria, query.fase, query.id).then((v) => v.json());
+    return {
+      props: { fields: response, categoria: params.categoria },
+    };
+  } else {
+    const response = await getRows(params.categoria, "Squadre");
+    return {
+      props: { squadre: response, categoria: params.categoria },
+    };
+  }
 }

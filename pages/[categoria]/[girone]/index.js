@@ -21,7 +21,7 @@ import { Campo, SqRounded } from "components/Partita";
 import Title from "components/Title";
 import { getRows } from "lib/baserow";
 import { getPuntiColor, getSqColor } from "lib/colors";
-import { GIRONI_PATHS, REVALIDATE } from "lib/const";
+import { GIRONI, GIRONI_PATHS, REVALIDATE } from "lib/const";
 import { EnumClassifica, EnumClassificaRev, transformEnum } from "lib/enums";
 import { howManyPoints, useClassifica } from "lib/useClassifica";
 import useUpdatedData from "lib/useUpdatedData";
@@ -42,12 +42,10 @@ function Girone(pageProps) {
   return (
     <NomiContext.Provider value={nomi}>
       <div className="mx-auto flex h-full max-w-2xl flex-1 flex-col gap-2">
-        <Title>
-          {firstLetterUp(query.categoria) + " - Girone " + query.girone}
-        </Title>
+        <Title>{firstLetterUp(query.categoria) + " - Girone " + query.girone}</Title>
         <DataUpdate update={update} />
         <h3 className="text-center">
-          Categoria {firstLetterUp(query.categoria)} - Girone {query.girone}
+          Categoria {firstLetterUp(query.categoria)} - Girone {GIRONI[query.girone]}
         </h3>
         <TabGroup>
           <TabList className="flex w-full justify-center gap-2 border-b">
@@ -71,10 +69,7 @@ function Girone(pageProps) {
 export default Girone;
 
 const tabClassname = ({ selected }) =>
-  cs(
-    "px-4 py-2 font-bold",
-    selected && "border-b-2 border-primary-green text-primary-green",
-  );
+  cs("px-4 py-2 font-bold", selected && "border-b-2 border-primary-green text-primary-green");
 
 function Partite({ data }) {
   const [showFinished, setShowFinished] = useState(false);
@@ -97,14 +92,12 @@ function Partite({ data }) {
     <div className="space-y-2">
       <div className="my-4 gap-4 px-4 sm:flex">
         <div className="flex basis-2/3 justify-evenly gap-2">
-          <h3 className="whitespace-nowrap font-bold">Squadra 1</h3>
+          <h3 className="font-bold whitespace-nowrap">Squadra 1</h3>
           <span className="text-white">VS</span>
-          <h3 className="whitespace-nowrap font-bold">Squadra 2</h3>
+          <h3 className="font-bold whitespace-nowrap">Squadra 2</h3>
         </div>
         <div className="hidden basis-1/3 justify-center gap-2 sm:flex">
-          <h3 className="flex-grow whitespace-nowrap text-center font-bold">
-            Arbitro
-          </h3>
+          <h3 className="flex-grow text-center font-bold whitespace-nowrap">Arbitro</h3>
           <div className="h-4 w-4 py-2" />
         </div>
       </div>
@@ -172,15 +165,11 @@ function Partita({ rowPoints, v }) {
           <DisclosureButton className="group w-full items-center gap-4 px-4 py-2 sm:flex">
             <div className="flex basis-2/3 items-center justify-evenly gap-2">
               <div className="w-full min-w-0 flex-1">
-                <SqRounded color={getSqColor(v["Squadra 1"], nomi)}>
-                  {v["Squadra 1"]}
-                </SqRounded>
+                <SqRounded color={getSqColor(v["Squadra 1"], nomi)}>{v["Squadra 1"]}</SqRounded>
               </div>
               <span>VS</span>
               <div className="w-full min-w-0 flex-1">
-                <SqRounded color={getSqColor(v["Squadra 2"], nomi)}>
-                  {v["Squadra 2"]}
-                </SqRounded>
+                <SqRounded color={getSqColor(v["Squadra 2"], nomi)}>{v["Squadra 2"]}</SqRounded>
               </div>
             </div>
             <div className="flex gap-2 sm:hidden">
@@ -189,9 +178,7 @@ function Partita({ rowPoints, v }) {
             </div>
             <div className="all-center flex basis-1/3 gap-2 sm:mt-0">
               <div className="flex-1">
-                <SqRounded color={getSqColor(v["Arbitro"], nomi)}>
-                  {v["Arbitro"] || "STAFF"}
-                </SqRounded>
+                <SqRounded color={getSqColor(v["Arbitro"], nomi)}>{v["Arbitro"] || "STAFF"}</SqRounded>
               </div>
               <ChevronDownIcon className="h-4 w-4 group-data-[open]:rotate-180" />
             </div>
@@ -208,38 +195,10 @@ function Partita({ rowPoints, v }) {
             </div>
             {rowPoints && (
               <div className="flex justify-evenly border-t">
-                <span
-                  className={cs(
-                    "text-2xl font-semibold",
-                    getPuntiColor(rowPoints[0]),
-                  )}
-                >
-                  {rowPoints[0]}
-                </span>
-                <div
-                  className={cs(
-                    "text-4xl font-bold",
-                    getPuntiColor(rowPoints[0]),
-                  )}
-                >
-                  {v["Punti 1"]}
-                </div>
-                <div
-                  className={cs(
-                    "text-4xl font-bold",
-                    getPuntiColor(rowPoints[1]),
-                  )}
-                >
-                  {v["Punti 2"]}
-                </div>
-                <div
-                  className={cs(
-                    "text-2xl font-semibold",
-                    getPuntiColor(rowPoints[1]),
-                  )}
-                >
-                  {rowPoints[1]}
-                </div>
+                <span className={cs("text-2xl font-semibold", getPuntiColor(rowPoints[0]))}>{rowPoints[0]}</span>
+                <div className={cs("text-4xl font-bold", getPuntiColor(rowPoints[0]))}>{v["Punti 1"]}</div>
+                <div className={cs("text-4xl font-bold", getPuntiColor(rowPoints[1]))}>{v["Punti 2"]}</div>
+                <div className={cs("text-2xl font-semibold", getPuntiColor(rowPoints[1]))}>{rowPoints[1]}</div>
               </div>
             )}
           </DisclosurePanel>
