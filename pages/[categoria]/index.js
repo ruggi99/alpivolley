@@ -24,10 +24,9 @@ function Gironi() {
             </ButtonWithLink>
           ))}
       </Grid>
-      <hr />
+      {/* <hr />
       <h3 className="text-center">Fase 2</h3>
       <Grid className="flex flex-wrap gap-4" rows={2} gap={true}>
-        {/* {Array(DATA[query.categoria].gironi) */}
         {Array(4)
           .fill(0)
           .map((_, i) => (
@@ -35,11 +34,10 @@ function Gironi() {
               {GIRONI_VALUES[i + 4]}
             </ButtonWithLink>
           ))}
-      </Grid>
-      <hr />
+      </Grid> */}
+      {/* <hr />
       <h3 className="text-center">Fase 3</h3>
       <Grid className="flex flex-wrap gap-4" rows={2} gap={true}>
-        {/* {Array(DATA[query.categoria].gironi) */}
         {Array(6)
           .fill(0)
           .map((_, i) => (
@@ -47,15 +45,16 @@ function Gironi() {
               {GIRONI_VALUES[i + 8]}
             </ButtonWithLink>
           ))}
-      </Grid>
+      </Grid> */}
       <hr />
-      <h3 className="text-center">Fase Eliminazione</h3>
       <div>
         <ButtonWithLink href="avulsa">Classifica Avulsa</ButtonWithLink>
       </div>
+      {/* <hr />
+      <h3 className="text-center">Fase Eliminazione</h3>
       <div>
         <ButtonWithLink href="gold">Fase Gold</ButtonWithLink>
-      </div>
+      </div> */}
       {/* <div>
         <ButtonWithLink href="silver">Fase Silver</ButtonWithLink>
       </div> */}
