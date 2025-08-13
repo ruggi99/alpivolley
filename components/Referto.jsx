@@ -22,7 +22,12 @@ export default function Referto(props) {
 
       <div className="mt-8 text-center">
         Categoria: <b>{props.categoria || placeHolder2}</b>, Campo: <b>{fields["Campo"] || placeHolder2}</b>, Girone:{" "}
-        <b>{fields["Girone"] || placeHolder2}</b>
+        <b>{fields["Girone"] || placeHolder2}</b>, Orario:{" "}
+        <b>
+          {fields["Orario"]
+            ? new Date(fields["Orario"]).toLocaleTimeString(undefined, { timeStyle: "short" })
+            : placeHolder2}
+        </b>
       </div>
       <div className="text-center">
         Arbitra: <b>{fields["Arbitro"] || (fields["ID"] && "STAFF") || placeHolder}</b>

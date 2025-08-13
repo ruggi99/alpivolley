@@ -19,6 +19,7 @@ export default function RefertoMultiplo(props) {
       Arbitro: props.fields["Arbitro"][0]["value"],
       Campo: props.fields["Campo"],
       Girone: props.fields["Girone"]["value"],
+      Orario: props.fields["Orario"],
     };
     return <Referto categoria={props.categoria} data={fields} />;
   }
