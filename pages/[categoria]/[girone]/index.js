@@ -45,7 +45,7 @@ function Girone(pageProps) {
         <Title>{firstLetterUp(query.categoria) + " - Girone " + query.girone}</Title>
         <DataUpdate update={update} />
         <h3 className="text-center">
-          Categoria {firstLetterUp(query.categoria)} - Girone {GIRONI[query.girone]}
+          Categoria {firstLetterUp(query.categoria)} - Girone {query.girone}
         </h3>
         <TabGroup>
           <TabList className="flex w-full justify-center gap-2 border-b">
