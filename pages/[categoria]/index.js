@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { ButtonWithLink } from "components/Button";
 import Grid from "components/Grid";
 import Title from "components/Title";
-import { CATEGORIE, GIRONI_LETTERS, GIRONI_VALUES } from "lib/const";
+import { CATEGORIE, GIRONI_LETTERS } from "lib/const";
 import { firstLetterUp } from "lib/utils";
 
 function Gironi() {
@@ -20,7 +20,7 @@ function Gironi() {
           .fill(0)
           .map((_, i) => (
             <ButtonWithLink className="whitespace-nowrap" key={i} href={GIRONI_LETTERS[i]}>
-              {GIRONI_VALUES[i]}
+              Girone {GIRONI_LETTERS[i]}
             </ButtonWithLink>
           ))}
       </Grid>
@@ -31,7 +31,7 @@ function Gironi() {
           .fill(0)
           .map((_, i) => (
             <ButtonWithLink className="whitespace-nowrap" key={i} href={GIRONI_LETTERS[i + 4]}>
-              {GIRONI_VALUES[i + 4]}
+              Girone {GIRONI_LETTERS[i + 4]}
             </ButtonWithLink>
           ))}
       </Grid> */}
@@ -42,7 +42,7 @@ function Gironi() {
           .fill(0)
           .map((_, i) => (
             <ButtonWithLink className="whitespace-nowrap" key={i} href={GIRONI_LETTERS[i + 8]}>
-              {GIRONI_VALUES[i + 8]}
+              Girone {GIRONI_LETTERS[i + 8]}
             </ButtonWithLink>
           ))}
       </Grid> */}
