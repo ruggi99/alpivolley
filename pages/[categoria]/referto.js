@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Referto from "components/Referto";
 import { BaseRow, getRows } from "lib/baserow";
@@ -8,6 +8,10 @@ export default function RefertoMultiplo(props) {
   const [squadra1, setSquadra1] = useState();
   const [squadra2, setSquadra2] = useState();
   const [arbitro, setArbitro] = useState();
+  useEffect(() => {
+    if (props.fields) print();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   if (props.fields) {
     const fields = {
       "Squadra 1": props.fields["Squadra 1"][0]["value"],
