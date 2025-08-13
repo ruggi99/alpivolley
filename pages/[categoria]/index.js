@@ -16,7 +16,7 @@ function Gironi() {
       <h3 className="text-center">Fase 1</h3>
       <Grid className="flex flex-wrap gap-4" rows={2} gap={true}>
         {/* {Array(DATA[query.categoria].gironi) */}
-        {Array(5)
+        {Array(4)
           .fill(0)
           .map((_, i) => (
             <ButtonWithLink className="whitespace-nowrap" key={i} href={GIRONI_LETTERS[i]}>
@@ -28,11 +28,11 @@ function Gironi() {
       <h3 className="text-center">Fase 2</h3>
       <Grid className="flex flex-wrap gap-4" rows={2} gap={true}>
         {/* {Array(DATA[query.categoria].gironi) */}
-        {Array(5)
+        {Array(4)
           .fill(0)
           .map((_, i) => (
-            <ButtonWithLink className="whitespace-nowrap" key={i} href={GIRONI_LETTERS[i + 5]}>
-              {GIRONI_VALUES[i + 5]}
+            <ButtonWithLink className="whitespace-nowrap" key={i} href={GIRONI_LETTERS[i + 4]}>
+              {GIRONI_VALUES[i + 4]}
             </ButtonWithLink>
           ))}
       </Grid>
@@ -40,11 +40,11 @@ function Gironi() {
       <h3 className="text-center">Fase 3</h3>
       <Grid className="flex flex-wrap gap-4" rows={2} gap={true}>
         {/* {Array(DATA[query.categoria].gironi) */}
-        {Array(5)
+        {Array(6)
           .fill(0)
           .map((_, i) => (
-            <ButtonWithLink className="whitespace-nowrap" key={i} href={GIRONI_LETTERS[i + 10]}>
-              {GIRONI_VALUES[i + 10]}
+            <ButtonWithLink className="whitespace-nowrap" key={i} href={GIRONI_LETTERS[i + 8]}>
+              {GIRONI_VALUES[i + 8]}
             </ButtonWithLink>
           ))}
       </Grid>
@@ -56,9 +56,9 @@ function Gironi() {
       <div>
         <ButtonWithLink href="gold">Fase Gold</ButtonWithLink>
       </div>
-      <div>
+      {/* <div>
         <ButtonWithLink href="silver">Fase Silver</ButtonWithLink>
-      </div>
+      </div> */}
       {/* <div>
         <ButtonWithLink href="bronze">Fase Bronze</ButtonWithLink>
       </div> */}
