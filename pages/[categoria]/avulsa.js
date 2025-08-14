@@ -32,24 +32,26 @@ const fieldsToDisplay = [
 
 function Classifica({ classifica }) {
   return (
-    <table className="border-separate border-spacing-x-0 border-spacing-y-2">
-      <thead>
-        <tr>
-          {fieldsToDisplay.map((v) => (
-            <th key={v}>{transformEnum(v)}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {classifica.map((c, i) => (
-          <tr key={i} className={bgColors[i % bgColors.length]}>
-            {fieldsToDisplay.map((v, k) => (
-              <td key={k}>{typeof c[v] == "number" ? c[v].toFixed(2) : c[v] == null ? "--" : c[v]}</td>
+    <div className="overflow-x-auto">
+      <table className="border-separate border-spacing-x-0 border-spacing-y-2">
+        <thead>
+          <tr>
+            {fieldsToDisplay.map((v) => (
+              <th key={v}>{transformEnum(v)}</th>
             ))}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {classifica.map((c, i) => (
+            <tr key={i} className={bgColors[i % bgColors.length]}>
+              {fieldsToDisplay.map((v, k) => (
+                <td key={k}>{typeof c[v] == "number" ? c[v].toFixed(2) : c[v] == null ? "--" : c[v]}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
