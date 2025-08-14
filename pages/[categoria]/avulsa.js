@@ -33,7 +33,7 @@ const fieldsToDisplay = [
 function Classifica({ classifica }) {
   return (
     <div className="overflow-x-auto">
-      <table className="border-separate border-spacing-x-0 border-spacing-y-2">
+      <table className="mx-auto border-separate border-spacing-x-0 border-spacing-y-2">
         <thead>
           <tr>
             {fieldsToDisplay.map((v) => (

@@ -3,7 +3,8 @@ import { writeFileSync } from "node:fs";
 import nextEnv from "@next/env";
 
 import { algoritmo } from "./lib/algoritmo.js";
-import { BaseRow, transformData } from "./lib/baserow.js";
+import { BaseRow, getRows, transformData } from "./lib/baserow.js";
+import { calcClassificaAvulsa } from "./lib/classificaAvulsa.js";
 import { FASI, FASI2 } from "./lib/const.js";
 import { whoIsWinner } from "./lib/utils.js";
 
@@ -31,9 +32,8 @@ function calculateSchema(numero_fasi) {
     const algoritmoRet = algoritmo(fase);
     for (let i = 0; i < 2 ** (fase - 1); i++) {
       const obj = {
-        girone: "Gold",
         fase: FASI[fase],
-        fase2: fase == 1 ? "1° - 2°" : "Diretta",
+        fase2: "Diretta",
         ordine: i + 1,
         invalid: false,
         turno: Math.floor(i / 8) + 1,
@@ -46,54 +46,114 @@ function calculateSchema(numero_fasi) {
         obj.referees = [algoritmoRet[i * 2 - 2 ** (fase - 1) + 1], algoritmoRet[i * 2 - 2 ** (fase - 1)]];
       }
       obj.winner = {
-        girone: "Gold",
         fase: FASI[fase - 1],
-        fase2: fase == 2 ? "1° - 2°" : "Diretta",
+        fase2: "Diretta",
         ordine: parseInt(i / 2) + 1,
         squadra: (i % 2) + 1,
       };
-      // Se è la prima fase si va direttamente al girone Silver
+      // Se è la prima fase non c'è ripescaggio
       if (fase == numero_fasi) {
+        console.log(fase);
         // La prima fase diretta deve per forza essere divisa in due turni
         const turnoPrimaFase = Math.floor(i / (2 ** (fase - 1) / 2)) + 1;
         if (turnoPrimaFase > obj["turno"]) obj["turno"] = turnoPrimaFase;
         obj.looser = {
-          girone: "Silver",
-          fase: FASI[fase],
-          fase2: "Diretta",
-          ordine: parseInt(algoritmoRet.indexOf(algoritmoRet[i * 2 + 1] - 8) / 2) + 1,
-          squadra: 1,
-        };
-      } else if (fase == 2) {
-        obj.looser = {
-          girone: "Gold",
           fase: FASI[fase - 1],
-          fase2: "3° - 4°",
-          ordine: 1,
-          squadra: i + 1,
+          fase2: "Ripescaggio 1",
+          referee: true,
+        };
+      } else if (fase == numero_fasi - 1) {
+        obj.looser = {
+          fase: FASI[fase - 1],
+          fase2: "Ripescaggio 1",
+          ordine: parseInt(i / 2) + 1,
+          squadra: (i % 2) + 1,
         };
       } else {
         obj.looser = {
-          girone: "Gold",
           fase: FASI[fase],
-          fase2: "Diretta",
+          fase2: "Ripescaggio 2",
           ordine: i + 1,
-          referee: true,
+          squadra: 1,
         };
       }
-      data[`${obj.girone},${obj.fase},${obj.fase2},${obj.ordine}`] = obj;
+      data[`${obj.fase},${obj.fase2},${obj.ordine}`] = obj;
+    }
+    // Se c'è il ripescaggio. La prima fase non lo ha
+    if (fase < numero_fasi - 1) {
+      const algoritmoRet = algoritmo(fase + 1);
+      for (let i = 0; i < 2 ** (fase - 1); i++) {
+        const obj = {
+          fase: FASI[fase],
+          fase2: "Ripescaggio 1",
+          ordine: i + 1,
+          invalid: false,
+          turno: Math.floor(i / 8) + 1,
+          squadra1: algoritmoRet[i * 4 + 3],
+          squadra2: algoritmoRet[i * 4 + 1],
+          referees: [algoritmoRet[i * 4 + 2], algoritmoRet[i * 4 + 0]],
+        };
+        // L'ultima fase non ha vincitori
+        if (fase > 0) {
+          obj.winner = {
+            fase: FASI[fase],
+            fase2: "Ripescaggio 2",
+            ordine: i + 1,
+            squadra: 2,
+          };
+          obj.looser = {
+            fase: FASI[fase],
+            fase2: "Ripescaggio 2",
+            ordine: i + 1,
+            referee: true,
+          };
+        }
+        data[`${obj.fase},${obj.fase2},${obj.ordine}`] = obj;
+      }
+      for (let i = 0; i < 2 ** (fase - 1); i++) {
+        const obj = {
+          fase: FASI[fase],
+          fase2: "Ripescaggio 2",
+          ordine: i + 1,
+          invalid: false,
+          turno: Math.floor(i / 8) + 1,
+          squadra1: algoritmoRet[i * 4 + 2],
+          squadra2: algoritmoRet[i * 4 + 3],
+          referees: [algoritmoRet[i * 4 + 1], algoritmoRet[i * 4 + 0]],
+        };
+        // L'ultima fase non ha vincitori
+        if (fase > 0) {
+          obj.winner = {
+            fase: FASI[fase - 1],
+            // Dalla finale R2 si passa alla Finalissima diretta
+            fase2: fase == 1 ? "Diretta" : "Ripescaggio 1",
+            ordine: parseInt(i / 2) + 1,
+            squadra: 2 - (i % 2),
+          };
+          // Dal ripescaggio 2 al ripescaggio 1 basta un singolo arbitro
+          if (i % 2 == 1) {
+            obj.looser = {
+              fase: FASI[fase - 1],
+              // Dalla finale R2 si passa alla Finalissima diretta
+              fase2: fase == 1 ? "Diretta" : "Ripescaggio 1",
+              ordine: parseInt(i / 2) + 1,
+              referee: true,
+            };
+          } else {
+            obj.looser = null;
+          }
+        }
+        data[`${obj.fase},${obj.fase2},${obj.ordine}`] = obj;
+      }
     }
   }
-  data["Gold,Finali,3° - 4°,1"] = {
-    girone: "Gold",
-    fase: "Finali",
-    fase2: "3° - 4°",
+  // Aggiungo la Finalissima
+  data[`${FASI[0]},Diretta,1`] = {
+    fase: FASI[0],
+    fase2: "Diretta",
     ordine: 1,
     invalid: false,
     turno: 1,
-    squadra1: 3,
-    squadra2: 4,
-    referees: [],
     winner: null,
     looser: null,
   };
@@ -101,175 +161,24 @@ function calculateSchema(numero_fasi) {
   return data;
 }
 
-function calculateSilverSchema(numero_fasi) {
-  const data = {};
-  for (let fase = 1; fase <= numero_fasi; fase++) {
-    const algoritmoRet = algoritmo(fase);
-    for (let i = 0; i < 2 ** (fase - 1); i++) {
-      const obj = {
-        girone: "Silver",
-        fase: FASI[fase],
-        fase2: fase == 1 ? "1° - 2°" : "Diretta",
-        ordine: i + 1,
-        invalid: false,
-        turno: Math.floor(i / 8) + 1,
-        squadra1: algoritmoRet[i * 2] + 8,
-        squadra2: algoritmoRet[i * 2 + 1] + 8,
-      };
-      if (i < 2 ** (fase - 2)) {
-        obj.referees = [algoritmoRet[i * 2 + 2 ** (fase - 1) + 1], algoritmoRet[i * 2 + 2 ** (fase - 1)]];
-      } else {
-        obj.referees = [algoritmoRet[i * 2 - 2 ** (fase - 1) + 1], algoritmoRet[i * 2 - 2 ** (fase - 1)]];
-      }
-      obj.winner = {
-        girone: "Silver",
-        fase: FASI[fase - 1],
-        fase2: fase == 2 ? "1° - 2°" : "Diretta",
-        ordine: parseInt(i / 2) + 1,
-        squadra: (i % 2) + 1,
-      };
-      if (fase == 2) {
-        obj.looser = {
-          girone: "Silver",
-          fase: FASI[fase - 1],
-          fase2: "3° - 4°",
-          ordine: 1,
-          squadra: i + 1,
-        };
-      } else {
-        obj.looser = {
-          girone: "Silver",
-          fase: FASI[fase],
-          fase2: "Diretta",
-          ordine: i + 1,
-          referee: true,
-        };
-      }
-      data[`${obj.girone},${obj.fase},${obj.fase2},${obj.ordine}`] = obj;
-    }
-  }
-  data["Silver,Finali,3° - 4°,1"] = {
-    girone: "Silver",
-    fase: "Finali",
-    fase2: "3° - 4°",
-    ordine: 1,
-    invalid: false,
-    turno: 1,
-    squadra1: 3,
-    squadra2: 4,
-    referees: [],
-    winner: null,
-    looser: null,
-  };
-  writeFileSync("./out/schemaSilver.json", JSON.stringify(data, null, 2));
-  return data;
-}
-
 // Calcola il reale schema in base alle squadre presenti
-function calculateInitialSchema() {
+async function calculateInitialSchema() {
   // Gold c'è sempre, Silver solo se > 16
-  const fakeAvulsa = calculateFakeAvulsa();
+  // const fakeAvulsa = calculateFakeAvulsa();
+  const fakeAvulsa = calcClassificaAvulsa(await getRows("MISTO", "Gironi")).map((v) => v.Nome);
   console.log(fakeAvulsa);
-  // const FASE_PARTENZA = Math.min(Math.ceil(Math.log2(fakeAvulsa.length)), 5); // 5 = Sedicesimi
-  const FASE_PARTENZA = 4; // 5 = Sedicesimi
+  const FASE_PARTENZA = Math.min(Math.ceil(Math.log2(fakeAvulsa.length)), 5); // 5 = Sedicesimi
   // console.log(FASE_PARTENZA);
-  const data = { ...calculateSchema(FASE_PARTENZA), ...calculateSilverSchema(FASE_PARTENZA) };
+  const data = calculateSchema(FASE_PARTENZA);
 
   for (let fase = FASE_PARTENZA; fase > 0; fase--) {
-    const fasi2 = fase == 1 ? ["1° - 2°", "3° - 4°"] : FASI2;
-    for (const fase2 of fasi2) {
+    for (const fase2 of FASI2) {
       // La prima e l'ultima fase non hanno ripescaggio
-      if ((fase == FASE_PARTENZA || fase == 0) && fase2 != "Diretta") {
-        continue;
-      }
-      if (fase2 != "Diretta") {
+      if ((fase == FASE_PARTENZA || fase == FASE_PARTENZA - 1 || fase == 0) && fase2 != "Diretta") {
         continue;
       }
       for (let i = 0; i < 2 ** (fase - 1); i++) {
-        const key = `Gold,${FASI[fase]},${fase2},${i + 1}`;
-        const thisData = data[key];
-        console.log(key);
-        const firstSqPos = thisData.squadra1;
-        const secondSqPos = thisData.squadra2;
-
-        const isFirstUndefined = firstSqPos === undefined;
-        const isFirstValid = firstSqPos <= fakeAvulsa.length;
-        const isFirstInvalid = !isFirstUndefined && !isFirstValid;
-        const isSecondUndefined = secondSqPos === undefined;
-        const isSecondValid = secondSqPos <= fakeAvulsa.length;
-        const isSecondInvalid = !isSecondUndefined && !isSecondValid;
-
-        // const atLeastOneUndefined = isFirstUndefined || isSecondUndefined;
-        // const areAllDefined = !isFirstUndefined && !isSecondUndefined;
-        const atLeastOneInvalid = isFirstInvalid || isSecondInvalid;
-        // const areAllValid = isFirstValid && isSecondValid;
-
-        if (isFirstUndefined) {
-          // La squadra esiste e non è ancora definita -> propago l'undefined
-          const winner = thisData.winner;
-          data[`${winner.girone},${winner.fase},${winner.fase2},${winner.ordine}`]["squadra" + winner.squadra] =
-            undefined;
-          data[`${winner.girone},${winner.fase},${winner.fase2},${winner.ordine}`].referees = [];
-        } else if (isFirstInvalid) {
-          data[key].squadra1 = undefined;
-        }
-
-        if (isSecondUndefined) {
-          // La squadra esiste o non è ancora definita -> propago l'undefined
-          const looser = thisData.looser;
-          if (looser && looser.referee === undefined) {
-            data[`${looser.girone},${looser.fase},${looser.fase2},${looser.ordine}`]["squadra" + looser.squadra] =
-              undefined;
-            data[`${looser.girone},${looser.fase},${looser.fase2},${looser.ordine}`].referees = [];
-          }
-        } else if (isSecondInvalid) {
-          data[key].squadra2 = undefined;
-        }
-
-        if (atLeastOneInvalid) {
-          // Se almeno una delle due squadre non è valida, invalido la partita
-          data[key].invalid = true;
-        } else {
-          if (isFirstValid) {
-            // La squadra esiste e deve giocare questo turno -> prossimo turno è undefined
-            const winner = thisData.winner;
-            data[`${winner.girone},${winner.fase},${winner.fase2},${winner.ordine}`]["squadra" + winner.squadra] =
-              undefined;
-            data[`${winner.girone},${winner.fase},${winner.fase2},${winner.ordine}`].referees = [];
-          }
-          if (isSecondValid) {
-            // La squadra esiste e deve giocare questo turno -> prossimo turno è undefined
-            const looser = thisData.looser;
-            if (looser && looser?.referee === undefined) {
-              data[`${looser.girone},${looser.fase},${looser.fase2},${looser.ordine}`]["squadra" + looser.squadra] =
-                undefined;
-              data[`${looser.girone},${looser.fase},${looser.fase2},${looser.ordine}`].referees = [];
-            }
-          }
-          for (const referee of thisData.referees) {
-            if (referee <= fakeAvulsa.length) {
-              data[key].referee = referee;
-              data[key].referees = undefined;
-              break;
-            }
-          }
-        }
-      }
-    }
-    writeFileSync(`./out/test${fase}.json`, JSON.stringify(data, null, 2));
-  }
-  for (let fase = FASE_PARTENZA; fase > 0; fase--) {
-    const fasi2 = fase == 1 ? ["1° - 2°", "3° - 4°"] : FASI2;
-    for (const fase2 of fasi2) {
-      // La prima e l'ultima fase non hanno ripescaggio
-      if ((fase == FASE_PARTENZA || fase == 0) && fase2 != "Diretta") {
-        continue;
-      }
-      if (fase2 != "Diretta") {
-        continue;
-      }
-      for (let i = 0; i < 2 ** (fase - 1); i++) {
-        const key = `Silver,${FASI[fase]},${fase2},${i + 1}`;
+        const key = `${FASI[fase]},${fase2},${i + 1}`;
         const thisData = data[key];
         const firstSqPos = thisData.squadra1;
         const secondSqPos = thisData.squadra2;
@@ -289,9 +198,8 @@ function calculateInitialSchema() {
         if (isFirstUndefined) {
           // La squadra esiste e non è ancora definita -> propago l'undefined
           const winner = thisData.winner;
-          data[`${winner.girone},${winner.fase},${winner.fase2},${winner.ordine}`]["squadra" + winner.squadra] =
-            undefined;
-          data[`${winner.girone},${winner.fase},${winner.fase2},${winner.ordine}`].referees = [];
+          data[`${winner.fase},${winner.fase2},${winner.ordine}`]["squadra" + winner.squadra] = undefined;
+          data[`${winner.fase},${winner.fase2},${winner.ordine}`].referees = [];
         } else if (isFirstInvalid) {
           data[key].squadra1 = undefined;
         }
@@ -300,9 +208,9 @@ function calculateInitialSchema() {
           // La squadra esiste o non è ancora definita -> propago l'undefined
           const looser = thisData.looser;
           if (looser && looser.referee === undefined) {
-            data[`${looser.girone},${looser.fase},${looser.fase2},${looser.ordine}`]["squadra" + looser.squadra] =
-              undefined;
-            data[`${looser.girone},${looser.fase},${looser.fase2},${looser.ordine}`].referees = [];
+            // console.log(looser);
+            data[`${looser.fase},${looser.fase2},${looser.ordine}`]["squadra" + looser.squadra] = undefined;
+            data[`${looser.fase},${looser.fase2},${looser.ordine}`].referees = [];
           }
         } else if (isSecondInvalid) {
           data[key].squadra2 = undefined;
@@ -315,17 +223,16 @@ function calculateInitialSchema() {
           if (isFirstValid) {
             // La squadra esiste e deve giocare questo turno -> prossimo turno è undefined
             const winner = thisData.winner;
-            data[`${winner.girone},${winner.fase},${winner.fase2},${winner.ordine}`]["squadra" + winner.squadra] =
-              undefined;
-            data[`${winner.girone},${winner.fase},${winner.fase2},${winner.ordine}`].referees = [];
+            data[`${winner.fase},${winner.fase2},${winner.ordine}`]["squadra" + winner.squadra] = undefined;
+            data[`${winner.fase},${winner.fase2},${winner.ordine}`].referees = [];
           }
           if (isSecondValid) {
             // La squadra esiste e deve giocare questo turno -> prossimo turno è undefined
             const looser = thisData.looser;
             if (looser && looser?.referee === undefined) {
-              data[`${looser.girone},${looser.fase},${looser.fase2},${looser.ordine}`]["squadra" + looser.squadra] =
-                undefined;
-              data[`${looser.girone},${looser.fase},${looser.fase2},${looser.ordine}`].referees = [];
+              // console.log(looser);
+              data[`${looser.fase},${looser.fase2},${looser.ordine}`]["squadra" + looser.squadra] = undefined;
+              data[`${looser.fase},${looser.fase2},${looser.ordine}`].referees = [];
             }
           }
           for (const referee of thisData.referees) {
@@ -347,16 +254,16 @@ async function calculateWinAndLoss(categoria) {
   const res = await baserow.list_rows(categoria, "Eliminazione");
   const data = transformData((await res.json())["results"]);
 
-  const data_grouped = Object.groupBy(data, (v) => [v.Girone, v.Fase, v["Fase 2"], v.Ordine]);
+  const data_grouped = Object.groupBy(data, (v) => [v.Fase, v["Fase 2"], v.Ordine]);
 
   // console.log(data);
 
-  // const calcMaxFase = Object.groupBy(data, (v) => [v.Fase]);
+  const calcMaxFase = Object.groupBy(data, (v) => [v.Fase]);
 
   // console.log(Object.keys(calcMaxFase).length - 1);
 
   // const schema = calculateSchema(Object.keys(calcMaxFase).length - 1);
-  const schema = calculateInitialSchema(4);
+  const schema = calculateInitialSchema(Object.keys(calcMaxFase).length - 1);
   const new_data = {};
 
   // const keys = Object.keys(data_grouped).filter((v) => v.startsWith("Ottavi"));
@@ -374,10 +281,10 @@ async function calculateWinAndLoss(categoria) {
 
   // For cycle on real data
   for (const key of keys) {
-    // console.log(key);
+    console.log(key);
     const row = data_grouped[key][0];
     const whoWinner = whoIsWinner(row);
-    // console.log(whoWinner);
+    console.log(whoWinner);
     if (whoWinner == 0) {
       continue;
     }
@@ -388,8 +295,8 @@ async function calculateWinAndLoss(categoria) {
         continue;
       }
       // console.log("schema type", schema[key]);
-      const key2 = `${obj.girone},${obj.fase},${obj.fase2},${obj.ordine}`;
-      console.log(type, key2);
+      const key2 = `${obj.fase},${obj.fase2},${obj.ordine}`;
+      // console.log(type, key2);
       const temp_obj = schema[key2];
       if (!(key2 in new_data)) {
         new_data[key2] = {};
@@ -419,13 +326,13 @@ async function applyDifferences(categoria, fase, data_grouped, new_data) {
     const old_data = data_grouped[key][0];
     if (
       (data.squadra1 && data.squadra1 != old_data["Squadra 1"]) ||
-      (data.squadra2 && data.squadra2 != old_data["Squadra 2"]) ||
-      (data.arbitro && data.arbitro != old_data["Arbitro"])
+      (data.squadra2 && data.squadra2 != old_data["Squadra 2"])
+      // (data.arbitro && data.arbitro != old_data["Arbitro"])
     ) {
       await baserow.modify_row(categoria, fase, old_data["id"], {
         "Squadra 1": data.squadra1,
         "Squadra 2": data.squadra2,
-        Arbitro: data.arbitro,
+        // Arbitro: data.arbitro,
       });
     }
     if (data.invalid && (old_data["Punti 1"] != 21 || old_data["Punti 2"] != 0)) {
@@ -443,10 +350,9 @@ export async function loadInitialData(categoria) {
   res = await baserow.list_rows(categoria, "Squadre");
   const squadre = transformData((await res.json())["results"]);
 
-  const data_grouped = Object.groupBy(data, (v) => [v.Girone, v.Fase, v["Fase 2"], v.Ordine]);
-  // console.log(data_grouped);
+  const data_grouped = Object.groupBy(data, (v) => [v.Fase, v["Fase 2"], v.Ordine]);
 
-  const nodi = calculateInitialSchema();
+  const nodi = await calculateInitialSchema();
   for (const key in nodi) {
     const nodo = nodi[key];
     const rows = data_grouped[key];
@@ -462,9 +368,9 @@ export async function loadInitialData(categoria) {
         Fase: nodo.fase,
         "Fase 2": nodo.fase2,
         Ordine: nodo.ordine,
-        Arbitro: nodo.referee,
+        // Arbitro: nodo.referee,
         Turno: nodo.turno?.toString(),
-        Girone: nodo.girone,
+        Girone: "Gold",
       });
       continue;
     }
@@ -490,14 +396,14 @@ export async function loadInitialData(categoria) {
     if (
       row["Squadra 1"] !== squadra1 ||
       row["Squadra 2"] !== squadra2 ||
-      row["Arbitro"] !== referee ||
+      // row["Arbitro"] !== referee ||
       row["Turno"] !== turno
     ) {
       // console.log(row["Turno"] !== turno, row["Turno"], turno);
       await baserow.modify_row(categoria, "Eliminazione", rows[0]["id"], {
         "Squadra 1": squadra1 || [],
         "Squadra 2": squadra2 || [],
-        Arbitro: referee || [],
+        // Arbitro: referee || [],
         Turno: turno,
       });
       // console.log(await res.text());
@@ -590,11 +496,11 @@ export async function deleteData(categoria) {
 // const data = transformData((await res.json())["results"]);
 // console.log(data);
 
-// await loadInitialData("MISTO");
-await calculateWinAndLoss("MISTO");
+await loadInitialData("MISTO");
+// await calculateWinAndLoss("MISTO");
 
-// const data = calculateInitialSchema();
+// const data = await calculateInitialSchema();
 
-const schema = calculateSchema(4);
+// const schema = calculateSchema(5);
 
-writeFileSync("./out/schema.json", JSON.stringify(schema, null, 2));
+// writeFileSync("./out/schema.json", JSON.stringify(schema, null, 2));
