@@ -21,7 +21,7 @@ import { Campo, SqRounded } from "components/Partita";
 import Title from "components/Title";
 import { getRows } from "lib/baserow";
 import { getPuntiColor, getSqColor } from "lib/colors";
-import { GIRONI, GIRONI_PATHS, REVALIDATE } from "lib/const";
+import { GIRONI_PATHS, REVALIDATE } from "lib/const";
 import { EnumClassifica, EnumClassificaRev, transformEnum } from "lib/enums";
 import { howManyPoints, useClassifica } from "lib/useClassifica";
 import useUpdatedData from "lib/useUpdatedData";
@@ -47,7 +47,7 @@ function Girone(pageProps) {
         <h3 className="text-center">
           Categoria {firstLetterUp(query.categoria)} - Girone {query.girone}
         </h3>
-        <TabGroup>
+        <TabGroup className="hidden">
           <TabList className="flex w-full justify-center gap-2 border-b">
             <Tab className={tabClassname}>Partite</Tab>
             <Tab className={tabClassname}>Classifica</Tab>
@@ -61,6 +61,7 @@ function Girone(pageProps) {
             </TabPanel>
           </TabPanels>
         </TabGroup>
+        <Partite data={data} />
       </div>
     </NomiContext.Provider>
   );
