@@ -64,7 +64,7 @@ export function Node(props) {
   return (
     <Disclosure
       as="div"
-      className={cs("w-full min-w-48 rounded-lg border p-4 pb-2", additionalNodeCs)}
+      className={cs("w-full min-w-56 rounded-lg border p-4 pb-2", additionalNodeCs)}
       id={node.id}
       style={node.style}
       onClick={() => setNumber((v) => v + 1)}
@@ -74,9 +74,9 @@ export function Node(props) {
           gridTemplateRows: "repeat(4, auto)",
           gridTemplateColumns: "repeat(2, auto)",
         }}
-        className="group grid w-full place-items-center gap-2 whitespace-nowrap"
+        className="group grid w-full place-items-center gap-2"
       >
-        <SqRounded color="bg-squadre-1 w-full" className="row-start-1">
+        <SqRounded color="bg-squadre-1 w-full" className="row-start-1 wrap-anywhere hyphens-auto">
           {data.squadra1 || "???"}
         </SqRounded>
         <div
@@ -88,7 +88,7 @@ export function Node(props) {
           {data.punti1 || "--"}
         </div>
         <hr className="col-span-2 col-start-1 row-start-2 w-full" />
-        <SqRounded color="bg-squadre-2 w-full" className="col-start-1 row-start-3">
+        <SqRounded color="bg-squadre-2 w-full" className="col-start-1 row-start-3 wrap-anywhere hyphens-auto">
           {data.squadra2 || "???"}
         </SqRounded>
         <div
