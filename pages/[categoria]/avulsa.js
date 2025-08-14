@@ -15,9 +15,7 @@ export default function Avulsa(props) {
   const { data, update } = useUpdatedData(props);
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-2">
-      <Title>
-        {firstLetterUp(router.query.categoria) + " - Classifica Avulsa"}
-      </Title>
+      <Title>{firstLetterUp(router.query.categoria) + " - Classifica Avulsa"}</Title>
       <DataUpdate update={update} />
       <h2 className="text-center font-bold">Classifica Avulsa</h2>
       <Classifica classifica={data} />
@@ -27,7 +25,8 @@ export default function Avulsa(props) {
 
 const fieldsToDisplay = [
   EnumClassificaAvulsa.Nome,
-  EnumClassificaAvulsa.QuozientePunteggio,
+  EnumClassificaAvulsa.Punteggio,
+  EnumClassificaAvulsa.Vittorie,
   EnumClassificaAvulsa.QuozientePunti,
 ];
 
@@ -45,13 +44,7 @@ function Classifica({ classifica }) {
         {classifica.map((c, i) => (
           <tr key={i} className={bgColors[i % bgColors.length]}>
             {fieldsToDisplay.map((v, k) => (
-              <td key={k}>
-                {typeof c[v] == "number"
-                  ? c[v].toFixed(2)
-                  : c[v] == null
-                    ? "--"
-                    : c[v]}
-              </td>
+              <td key={k}>{typeof c[v] == "number" ? c[v].toFixed(2) : c[v] == null ? "--" : c[v]}</td>
             ))}
           </tr>
         ))}
