@@ -15,7 +15,6 @@ function Gironi() {
       <hr />
       <h3 className="text-center">Fase 1</h3>
       <Grid className="flex flex-wrap gap-4" rows={2} gap={true}>
-        {/* {Array(DATA[query.categoria].gironi) */}
         {Array(4)
           .fill(0)
           .map((_, i) => (
@@ -24,7 +23,7 @@ function Gironi() {
             </ButtonWithLink>
           ))}
       </Grid>
-      {/* <hr />
+      <hr />
       <h3 className="text-center">Fase 2</h3>
       <Grid className="flex flex-wrap gap-4" rows={2} gap={true}>
         {Array(4)
@@ -34,7 +33,7 @@ function Gironi() {
               Girone {GIRONI_LETTERS[i + 4]}
             </ButtonWithLink>
           ))}
-      </Grid> */}
+      </Grid>
       {/* <hr />
       <h3 className="text-center">Fase 3</h3>
       <Grid className="flex flex-wrap gap-4" rows={2} gap={true}>
