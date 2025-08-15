@@ -53,13 +53,14 @@ function calculateSchema(numero_fasi) {
       };
       // Se è la prima fase non c'è ripescaggio
       if (fase == numero_fasi) {
-        console.log(fase);
+        // console.log(fase);
         // La prima fase diretta deve per forza essere divisa in due turni
         const turnoPrimaFase = Math.floor(i / (2 ** (fase - 1) / 2)) + 1;
         if (turnoPrimaFase > obj["turno"]) obj["turno"] = turnoPrimaFase;
         obj.looser = {
-          fase: FASI[fase - 1],
+          fase: FASI[fase - 2],
           fase2: "Ripescaggio 1",
+          ordine: parseInt(i / 4) + 1,
           referee: true,
         };
       } else if (fase == numero_fasi - 1) {
@@ -164,10 +165,8 @@ function calculateSchema(numero_fasi) {
 // Calcola il reale schema in base alle squadre presenti
 async function calculateInitialSchema() {
   // Gold c'è sempre, Silver solo se > 16
-  // const fakeAvulsa = calculateFakeAvulsa();
-  const fakeAvulsa = calcClassificaAvulsa(await getRows("MISTO", "Gironi")).map((v) => v.Nome);
-  console.log(fakeAvulsa);
-  const FASE_PARTENZA = Math.min(Math.ceil(Math.log2(fakeAvulsa.length)), 5); // 5 = Sedicesimi
+  const TOT_SQUADRE = 24;
+  const FASE_PARTENZA = Math.min(Math.ceil(Math.log2(TOT_SQUADRE)), 5); // 5 = Sedicesimi
   // console.log(FASE_PARTENZA);
   const data = calculateSchema(FASE_PARTENZA);
 
@@ -184,10 +183,10 @@ async function calculateInitialSchema() {
         const secondSqPos = thisData.squadra2;
 
         const isFirstUndefined = firstSqPos === undefined;
-        const isFirstValid = firstSqPos <= fakeAvulsa.length;
+        const isFirstValid = firstSqPos <= TOT_SQUADRE;
         const isFirstInvalid = !isFirstUndefined && !isFirstValid;
         const isSecondUndefined = secondSqPos === undefined;
-        const isSecondValid = secondSqPos <= fakeAvulsa.length;
+        const isSecondValid = secondSqPos <= TOT_SQUADRE;
         const isSecondInvalid = !isSecondUndefined && !isSecondValid;
 
         // const atLeastOneUndefined = isFirstUndefined || isSecondUndefined;
@@ -236,7 +235,7 @@ async function calculateInitialSchema() {
             }
           }
           for (const referee of thisData.referees) {
-            if (referee <= fakeAvulsa.length) {
+            if (referee <= TOT_SQUADRE) {
               data[key].referee = referee;
               data[key].referees = undefined;
               break;
@@ -263,7 +262,7 @@ async function calculateWinAndLoss(categoria) {
   // console.log(Object.keys(calcMaxFase).length - 1);
 
   // const schema = calculateSchema(Object.keys(calcMaxFase).length - 1);
-  const schema = calculateInitialSchema(Object.keys(calcMaxFase).length - 1);
+  const schema = await calculateInitialSchema();
   const new_data = {};
 
   // const keys = Object.keys(data_grouped).filter((v) => v.startsWith("Ottavi"));
@@ -281,10 +280,9 @@ async function calculateWinAndLoss(categoria) {
 
   // For cycle on real data
   for (const key of keys) {
-    console.log(key);
     const row = data_grouped[key][0];
     const whoWinner = whoIsWinner(row);
-    console.log(whoWinner);
+    console.log(key, whoWinner);
     if (whoWinner == 0) {
       continue;
     }
@@ -348,7 +346,8 @@ export async function loadInitialData(categoria) {
   let res = await baserow.list_rows(categoria, "Eliminazione");
   const data = transformData((await res.json())["results"]);
   res = await baserow.list_rows(categoria, "Squadre");
-  const squadre = transformData((await res.json())["results"]);
+  // const squadre = transformData((await res.json())["results"]);
+  const squadre = calcClassificaAvulsa(await getRows("MISTO", "Gironi"));
 
   const data_grouped = Object.groupBy(data, (v) => [v.Fase, v["Fase 2"], v.Ordine]);
 
@@ -369,42 +368,42 @@ export async function loadInitialData(categoria) {
         "Fase 2": nodo.fase2,
         Ordine: nodo.ordine,
         // Arbitro: nodo.referee,
-        Turno: nodo.turno?.toString(),
+        // Turno: nodo.turno?.toString(),
         Girone: "Gold",
       });
       continue;
     }
     // Check if the first row is aligned
     // console.log(key, nodo.squadra1);
-    let squadra1 = undefined;
+    let squadra1 = null;
     if (nodo.squadra1) {
       squadra1 = squadre[nodo.squadra1 - 1]["Nome"];
     }
-    let squadra2 = undefined;
+    let squadra2 = null;
     if (nodo.squadra2) {
       squadra2 = squadre[nodo.squadra2 - 1]["Nome"];
     }
-    let referee = undefined;
+    let referee = null;
     if (nodo.referee) {
       referee = squadre[nodo.referee - 1]["Nome"];
     }
-    let turno = undefined;
+    let turno = null;
     if (nodo.turno) {
       turno = nodo.turno.toString();
     }
     console.log(squadra1, squadra2);
     if (
       row["Squadra 1"] !== squadra1 ||
-      row["Squadra 2"] !== squadra2 ||
+      row["Squadra 2"] !== squadra2
       // row["Arbitro"] !== referee ||
-      row["Turno"] !== turno
+      // row["Turno"] !== turno
     ) {
       // console.log(row["Turno"] !== turno, row["Turno"], turno);
       await baserow.modify_row(categoria, "Eliminazione", rows[0]["id"], {
         "Squadra 1": squadra1 || [],
         "Squadra 2": squadra2 || [],
         // Arbitro: referee || [],
-        Turno: turno,
+        // Turno: turno,
       });
       // console.log(await res.text());
     }
