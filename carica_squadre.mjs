@@ -54,9 +54,10 @@ const SCHEMA_GIRONI = {
   },
 };
 
-const START_TIME = new Date(2025, 7, 15, 9, 10, 0);
+const START_TIME = new Date(2025, 7, 16, 9, 10, 0);
+const MINUTES = 20;
 
-const SCHEMA_PARTITE = [
+const SCHEMA_PARTITE_6 = [
   {
     squadra1: 1,
     squadra2: 6,
@@ -164,6 +165,30 @@ const SCHEMA_PARTITE = [
   },
 ];
 
+const SCHEMA_PARTITE_3 = [
+  {
+    squadra1: 1,
+    squadra2: 2,
+    arbitro: 3,
+    campo: 1,
+    slot: 1,
+  },
+  {
+    squadra1: 2,
+    squadra2: 3,
+    arbitro: 1,
+    campo: 1,
+    slot: 2,
+  },
+  {
+    squadra1: 3,
+    squadra2: 1,
+    arbitro: 2,
+    campo: 1,
+    slot: 3,
+  },
+];
+
 async function main() {
   const baserow = new BaseRow(process.env.BASEROW_TOKEN);
   const gironi = Object.keys(SCHEMA_GIRONI);
@@ -181,8 +206,8 @@ async function main() {
       }
     }
     // Confronto la partita generata con le partite già presenti
-    for (const partite_schema of SCHEMA_PARTITE) {
-      const orario = new Date(START_TIME.getTime() + (partite_schema.slot - 1) * 20 * 60 * 1000).toISOString();
+    for (const partite_schema of SCHEMA_PARTITE_3) {
+      const orario = new Date(START_TIME.getTime() + (partite_schema.slot - 1) * MINUTES * 60 * 1000).toISOString();
       const partita = {
         Girone: girone,
         "Squadra 1": squadre_girone[partite_schema.squadra1 - 1],
