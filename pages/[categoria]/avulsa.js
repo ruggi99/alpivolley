@@ -36,6 +36,7 @@ function Classifica({ classifica }) {
       <table className="mx-auto border-separate border-spacing-x-0 border-spacing-y-2">
         <thead>
           <tr>
+            <th>Pos.</th>
             {fieldsToDisplay.map((v) => (
               <th key={v}>{transformEnum(v)}</th>
             ))}
@@ -44,6 +45,7 @@ function Classifica({ classifica }) {
         <tbody>
           {classifica.map((c, i) => (
             <tr key={i} className={bgColors[i % bgColors.length]}>
+              <td>{i + 1}</td>
               {fieldsToDisplay.map((v, k) => (
                 <td key={k}>{typeof c[v] == "number" ? c[v].toFixed(2) : c[v] == null ? "--" : c[v]}</td>
               ))}
