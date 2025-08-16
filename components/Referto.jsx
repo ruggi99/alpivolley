@@ -28,6 +28,7 @@ export default function Referto(props) {
             ? new Date(fields["Orario"]).toLocaleTimeString(undefined, { timeStyle: "short" })
             : placeHolder2}
         </b>
+        , Fase2: <b>{fields.Fase2}</b>
       </div>
       <div className="text-center">
         Arbitra: <b>{fields["Arbitro"] || (fields["ID"] && "STAFF") || placeHolder}</b>
