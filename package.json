@@ -15,7 +15,7 @@
     "@headlessui/react": "^2.2.7",
     "@heroicons/react": "^2.2.0",
     "@next/env": "^15.4.6",
-    "@xyflow/react": "^12.8.2",
+    "@xyflow/react": "^12.8.3",
     "classnames": "^2.5.1",
     "next": "15.4.6",
     "react": "19.1.0",
