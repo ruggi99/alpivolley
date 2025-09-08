@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@fontsource/roboto-mono": "^5.2.5",
-    "@fontsource/ubuntu": "^5.2.6",
+    "@fontsource/ubuntu": "^5.2.7",
     "@google-cloud/text-to-speech": "^6.2.0",
     "@headlessui/react": "^2.2.7",
     "@heroicons/react": "^2.2.0",
