@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@fontsource/roboto-mono": "^5.2.5",
+    "@fontsource/roboto-mono": "^5.2.7",
     "@fontsource/ubuntu": "^5.2.6",
     "@google-cloud/text-to-speech": "^6.2.0",
     "@headlessui/react": "^2.2.7",
