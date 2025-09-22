@@ -12,8 +12,8 @@ importers:
         specifier: ^5.2.5
         version: 5.2.6
       '@fontsource/ubuntu':
-        specifier: ^5.2.6
-        version: 5.2.6
+        specifier: ^5.2.8
+        version: 5.2.8
       '@google-cloud/text-to-speech':
         specifier: ^6.2.0
         version: 6.2.0
@@ -187,8 +187,8 @@ packages:
   '@fontsource/roboto-mono@5.2.6':
     resolution: {integrity: sha512-fLCa3zs9XruKE8Fdbq0UWB0wqTi5dzi09QsnW7HgTwwnSVDZ3nH+X7Qg7l0yeIZs+E472cKE3RUD21ZnaXk4Zg==}
 
-  '@fontsource/ubuntu@5.2.6':
-    resolution: {integrity: sha512-ktUjEGS/QmvNmhO8Vb6kEv+BgTRspRUon07SkC7Rh/T4ziu8AfwJe2xuJzGxWv8fJqx0ZNYeCCJdABta7991sA==}
+  '@fontsource/ubuntu@5.2.8':
+    resolution: {integrity: sha512-esSJCpgigwWOm4Ug9f7AMozUyBq5Iobea5C9QYsl2OlCb62wZABBUbXahHLdFv5Ru4lJCD9tUX6xEAeLwUTNBg==}
 
   '@google-cloud/text-to-speech@6.2.0':
     resolution: {integrity: sha512-CsmGFNZVL0mPrgcrkBPJ5LB8TPEKiPsER0N5h3nAkkPIeyAGGn3YwuRWyQhDYI5/XWLp11LlDEWqL8B14aYtNg==}
@@ -2562,7 +2562,7 @@ snapshots:
 
   '@fontsource/roboto-mono@5.2.6': {}
 
-  '@fontsource/ubuntu@5.2.6': {}
+  '@fontsource/ubuntu@5.2.8': {}
 
   '@google-cloud/text-to-speech@6.2.0':
     dependencies:
