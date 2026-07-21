@@ -3,15 +3,11 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import DataUpdate from "components/DataUpdate";
-import { Edges,Nodes } from "components/Eliminazione";
+import { Edges, Nodes } from "components/Eliminazione";
 import Title from "components/Title";
 import { CATEGORIE, REVALIDATE } from "lib/const";
-import {
-  calculateEdgeCoords,
-  calculateEdges,
-  calculateFakeData,
-  calculateNodes,
-} from "lib/eliminazione2";
+import { calculateEdges, calculateFakeData, calculateNodes } from "lib/eliminazione2";
+import { calculateEdgeCoords } from "lib/eliminazione";
 import useUpdatedData from "lib/useUpdatedData";
 import { firstLetterUp } from "lib/utils";
 
@@ -44,9 +40,7 @@ export default function Eliminazione(pageProps) {
     <>
       <Title>{firstLetterUp(query.categoria) + " - Eliminazione"}</Title>
       <DataUpdate update={update} />
-      <h3 className="text-center">
-        Categoria {firstLetterUp(query.categoria)} - Silver
-      </h3>
+      <h3 className="text-center">Categoria {firstLetterUp(query.categoria)} - Silver</h3>
       <div className="-mx-4 overflow-x-scroll px-4">
         <div id="viewport" className="relative w-min">
           <Nodes nodes={nodes} viewFase={viewFase} setNumber={setNumber} />
