@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import Referto from "components/Referto";
-import { BaseRow, getRows, transformData } from "lib/baserow";
+import { BaseRow, getRows } from "lib/baserow";
 import { CATEGORIE } from "lib/const";
 
 export default function RefertoMultiplo(props) {
@@ -14,11 +14,11 @@ export default function RefertoMultiplo(props) {
   }, []);
   if (props.fields) {
     const fields = {
-      "Squadra 1": props.fields["Squadra 1"],
-      "Squadra 2": props.fields["Squadra 2"],
-      Arbitro: props.fields["Arbitro"],
+      "Squadra 1": props.fields["Squadra 1"][0]["value"],
+      "Squadra 2": props.fields["Squadra 2"][0]["value"],
+      Arbitro: props.fields["Arbitro"][0]["value"],
       Campo: props.fields["Campo"],
-      Girone: props.fields["Girone"],
+      Girone: props.fields["Girone"]["value"],
       Orario: props.fields["Orario"],
     };
     return <Referto categoria={props.categoria} data={fields} />;
@@ -87,13 +87,6 @@ export async function getServerSideProps({ params, query }) {
     const BASEROW_TOKEN = process.env["BASEROW_TOKEN"];
     const baserow = new BaseRow(BASEROW_TOKEN);
     const response = await baserow.get_row(params.categoria, query.fase, query.id).then((v) => v.json());
-    return {
-      props: { fields: transformData([response])[0], categoria: params.categoria },
-    };
-  } else if (query.turno) {
-    parseInt(query.turno);
-    if (!["Gironi", "Eliminazione"].includes(query.fase)) throw "fase not recognized";
-    const response = await getRows(params.categoria, query.fase, undefined, query.turno);
     return {
       props: { fields: response, categoria: params.categoria },
     };
