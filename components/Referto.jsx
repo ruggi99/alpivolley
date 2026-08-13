@@ -18,7 +18,7 @@ export default function Referto(props) {
           src="/alpivolley.jpg"
         /> */}
       </div>
-      <h2 className="text-primary-green text-center">Torneo SuperVolley 2k25</h2>
+      <h2 className="text-primary-green text-center">Torneo SuperVolley 2k26</h2>
 
       <div className="mt-8 text-center">
         Categoria: <b>{props.categoria || placeHolder2}</b>, Campo: <b>{fields["Campo"] || placeHolder2}</b>, Girone:{" "}
@@ -28,7 +28,6 @@ export default function Referto(props) {
             ? new Date(fields["Orario"]).toLocaleTimeString(undefined, { timeStyle: "short" })
             : placeHolder2}
         </b>
-        , Fase2: <b>{fields.Fase2}</b>
       </div>
       <div className="text-center">
         Arbitra: <b>{fields["Arbitro"] || (fields["ID"] && "STAFF") || placeHolder}</b>
