@@ -13,7 +13,7 @@ export default function RefertoMultiplo(props) {
 
 RefertoMultiplo.noLayout = true;
 
-export async function getServerSideProps({ params }) {
+export async function getServerSideProps({ params, query }) {
   if (GIRONI_PATHS.indexOf(`/${params.categoria}/${params.girone}`) == -1) {
     return {
       redirect: {
@@ -22,7 +22,13 @@ export async function getServerSideProps({ params }) {
       },
     };
   }
-  const response = await getRows(params.categoria, "Gironi", params.girone, params.turno);
+  let response = null;
+  if (query.turno) {
+    parseInt(query.turno);
+    response = await getRows(params.categoria, "Gironi", undefined, query.turno);
+  } else {
+    response = await getRows(params.categoria, "Gironi", params.girone);
+  }
   return {
     props: { data: response, categoria: params.categoria },
   };
