@@ -70,7 +70,7 @@ function SelectWithInput({ setValue, squadre, title, value }) {
   );
 }
 
-RefertoMultiplo.noLayout = true;
+SingoloReferto.noLayout = true;
 
 export async function getServerSideProps({ params, query }) {
   if (!CATEGORIE.includes(params.categoria)) {
