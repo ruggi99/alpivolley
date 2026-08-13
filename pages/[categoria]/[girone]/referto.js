@@ -22,7 +22,7 @@ export async function getServerSideProps({ params }) {
       },
     };
   }
-  const response = await getRows(params.categoria, "Gironi", params.girone);
+  const response = await getRows(params.categoria, "Gironi", params.girone, params.turno);
   return {
     props: { data: response, categoria: params.categoria },
   };

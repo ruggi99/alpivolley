@@ -4,7 +4,7 @@ import Referto from "components/Referto";
 import { BaseRow, getRows } from "lib/baserow";
 import { CATEGORIE } from "lib/const";
 
-export default function RefertoMultiplo(props) {
+export default function SingoloReferto(props) {
   const [squadra1, setSquadra1] = useState();
   const [squadra2, setSquadra2] = useState();
   const [arbitro, setArbitro] = useState();
