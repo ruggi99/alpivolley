@@ -88,7 +88,7 @@ export async function getServerSideProps({ params, query }) {
     const baserow = new BaseRow(BASEROW_TOKEN);
     const response = await baserow.get_row(params.categoria, query.fase, query.id).then((v) => v.json());
     return {
-      props: { fields: transformData(response), categoria: params.categoria },
+      props: { fields: transformData([response])[0], categoria: params.categoria },
     };
   } else if (query.turno) {
     parseInt(query.turno);
