@@ -18,7 +18,7 @@ function Gironi(props) {
         <>
           <h3 className="text-center">Fase 1</h3>
           <Grid className="flex flex-wrap gap-4" rows={2} gap={true}>
-            {Array(4)
+            {Array(2)
               .fill(0)
               .map((_, i) => (
                 <ButtonWithLink className="whitespace-nowrap" key={i} href={GIRONI_LETTERS[i]}>
