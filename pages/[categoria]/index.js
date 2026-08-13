@@ -66,9 +66,10 @@ function Gironi(props) {
         <>
           <hr />
           <h3 className="text-center">Fase Eliminazione</h3>
-          <div>
+          <Grid className="flex flex-wrap gap-4" rows={1} gap={true}>
             <ButtonWithLink href="gold">Fase Gold</ButtonWithLink>
-          </div>
+            <ButtonWithLink href="silver">Fase Silver</ButtonWithLink>
+          </Grid>
         </>
       )}
     </div>
