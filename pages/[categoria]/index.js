@@ -94,7 +94,7 @@ export async function getStaticProps({ params }) {
       acc[v.Nome] = v.Attivo;
       return acc;
     }, {}),
-    revalidate: 60 * 5,
+    revalidate: 60, // Ogni minuto
   };
 }
 

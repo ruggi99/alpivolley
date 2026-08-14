@@ -8,7 +8,9 @@ export default function RefertoMultiplo(props) {
   useEffect(() => {
     print();
   }, []);
-  return props.data.map((v) => <Referto key={v.id} data={v} categoria={props.categoria} />);
+  return props.data
+    .toSorted((a, b) => a.Campo - b.Campo)
+    .map((v) => <Referto key={v.id} data={v} categoria={props.categoria} />);
 }
 
 RefertoMultiplo.noLayout = true;

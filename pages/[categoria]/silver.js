@@ -36,7 +36,7 @@ export default function Silver(pageProps) {
     <>
       <Title>{firstLetterUp(query.categoria) + " - Eliminazione"}</Title>
       <DataUpdate update={update} />
-      <h3 className="text-center">Categoria {firstLetterUp(query.categoria)} - Gold</h3>
+      <h3 className="text-center">Categoria {firstLetterUp(query.categoria)} - Silver</h3>
       <NodeGrid viewFase={numero_fasi}>
         <Nodes nodes={nodes} setNumber={setNumber} />
         <Edges edges={edges} />
