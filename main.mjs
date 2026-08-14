@@ -406,9 +406,9 @@ export async function loadInitialData(categoria) {
   let res = await baserow.list_rows(categoria, "Eliminazione");
   const data = transformData((await res.json())["results"]);
 
-  // res = await baserow.list_rows(categoria, "Squadre");
-  // const squadre = calcClassificaAvulsa(await getRows("MISTO", "Gironi")).slice(0, 24);
-  const squadre = calculateFakeAvulsa().map((v) => ({ Nome: v }));
+  res = await baserow.list_rows(categoria, "Squadre");
+  const squadre = calcClassificaAvulsa(await getRows("MISTO", "Gironi")).slice(0, 24);
+  // const squadre = calculateFakeAvulsa().map((v) => ({ Nome: v }));
 
   const data_grouped = Object.groupBy(data, (v) => [v.Girone, v.Fase, v["Fase 2"], v.Ordine]);
 
