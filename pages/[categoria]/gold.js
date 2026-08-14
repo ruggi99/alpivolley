@@ -4,16 +4,16 @@ import { useRouter } from "next/router";
 
 import DataUpdate from "components/DataUpdate";
 import { Edges, Nodes } from "components/Eliminazione";
-import { NodeGrid } from "components/Eliminazione2";
+import { NodeGrid } from "components/Eliminazione";
 import Title from "components/Title";
 import { getRows } from "lib/baserow";
 import { CATEGORIE, REVALIDATE } from "lib/const";
 import { calculateEdgeCoords } from "lib/eliminazione";
-import { calculateEdges, calculateNodes } from "lib/eliminazione2";
+import { calculateEdges, calculateNodes } from "lib/eliminazione";
 import useUpdatedData from "lib/useUpdatedData";
 import { calculateMaxFase, firstLetterUp } from "lib/utils";
 
-export default function Eliminazione(pageProps) {
+export default function Gold(pageProps) {
   const { data, numero_fasi, update } = useUpdatedData(pageProps);
   // const [viewFase, setViewFase] = useState(numero_fasi);
   const [number, setNumber] = useState(0); // To update the state and recalculate the edges

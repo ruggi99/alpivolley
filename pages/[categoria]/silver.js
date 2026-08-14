@@ -4,34 +4,30 @@ import { useRouter } from "next/router";
 
 import DataUpdate from "components/DataUpdate";
 import { Edges, Nodes } from "components/Eliminazione";
+import { NodeGrid } from "components/Eliminazione";
 import Title from "components/Title";
+import { getRows } from "lib/baserow";
 import { CATEGORIE, REVALIDATE } from "lib/const";
-import { calculateEdges, calculateFakeData, calculateNodes } from "lib/eliminazione2";
 import { calculateEdgeCoords } from "lib/eliminazione";
+import { calculateEdges, calculateNodes } from "lib/eliminazione";
 import useUpdatedData from "lib/useUpdatedData";
-import { firstLetterUp } from "lib/utils";
+import { calculateMaxFase, firstLetterUp } from "lib/utils";
 
-const NUMERO_FASI = 5;
-
-export default function Eliminazione(pageProps) {
+export default function Silver(pageProps) {
   const { data, numero_fasi, update } = useUpdatedData(pageProps);
-  const [viewFase, setViewFase] = useState(numero_fasi);
+  // const [viewFase, setViewFase] = useState(numero_fasi);
   const [number, setNumber] = useState(0); // To update the state and recalculate the edges
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
   const { query } = useRouter();
   useEffect(() => {
-    const _nodes = calculateNodes(data, viewFase + 1);
+    const _nodes = calculateNodes(data, numero_fasi);
     // console.log(_nodes);
     setNodes(_nodes);
-  }, [data, number, viewFase]);
+  }, [data, number, numero_fasi]);
   useEffect(() => {
-    // console.log(
-    //   nodes,
-    //   document.getElementById("viewport").children[0].children.length,
-    // );
     if (!nodes.length) return; // Da sistemare
-    const _edges = calculateEdges(viewFase + 1);
+    const _edges = calculateEdges(numero_fasi + 1);
     // console.log(_edges);
     setEdges(calculateEdgeCoords(_edges));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -40,20 +36,11 @@ export default function Eliminazione(pageProps) {
     <>
       <Title>{firstLetterUp(query.categoria) + " - Eliminazione"}</Title>
       <DataUpdate update={update} />
-      <h3 className="text-center">Categoria {firstLetterUp(query.categoria)} - Silver</h3>
-      <div className="-mx-4 overflow-x-scroll px-4">
-        <div id="viewport" className="relative w-min">
-          <Nodes nodes={nodes} viewFase={viewFase} setNumber={setNumber} />
-          <Edges edges={edges} />
-        </div>
-      </div>
-      <input
-        type="number"
-        id="view_fasi"
-        min="3"
-        value={viewFase}
-        onChange={(e) => setViewFase(parseInt(e.currentTarget.value))}
-      />
+      <h3 className="text-center">Categoria {firstLetterUp(query.categoria)} - Gold</h3>
+      <NodeGrid viewFase={numero_fasi}>
+        <Nodes nodes={nodes} setNumber={setNumber} />
+        <Edges edges={edges} />
+      </NodeGrid>
     </>
   );
 }
@@ -67,12 +54,13 @@ export async function getStaticProps({ params }) {
       },
     };
   }
-  // const response = await getRows(params.categoria, "Eliminazione");
-  // const response = [];
-  // const classifica = calcClassificaAvulsa(response.results);
+  const response = await getRows(params.categoria, "Eliminazione", "Silver");
+  // console.log(response);
+  const NUMERO_FASI = 3;
+  console.log(NUMERO_FASI);
   return {
     props: {
-      data: calculateFakeData(NUMERO_FASI),
+      data: response,
       numero_fasi: NUMERO_FASI,
       update: new Date().toJSON(),
     },
