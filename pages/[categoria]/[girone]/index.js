@@ -247,7 +247,12 @@ export async function getStaticProps({ params }) {
     };
   }
   const response = await getRows(params.categoria, "Gironi", params.girone);
-  const data = response;
+  const data = response.toSorted((a, b) => {
+    if (a.Turno - b.Turno != 0) {
+      return a.Turno - b.Turno;
+    }
+    return a.Campo - b.Campo;
+  });
   const nomi = getNomifromData(data);
   return {
     props: {
