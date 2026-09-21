@@ -17,7 +17,7 @@
     "@next/env": "^16.3.5",
     "@xyflow/react": "^12.11.6",
     "classnames": "^2.5.1",
-    "next": "16.3.4",
+    "next": "16.3.5",
     "react": "19.3.0",
     "react-dom": "19.3.0"
   },
