@@ -24,8 +24,8 @@ importers:
         specifier: ^2.2.0
         version: 2.2.0(react@19.3.1)
       '@next/env':
-        specifier: ^16.4.3
-        version: 16.4.3
+        specifier: ^16.4.4
+        version: 16.4.4
       '@xyflow/react':
         specifier: ^12.12.0
         version: 12.12.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
@@ -520,6 +520,9 @@ packages:
 
   '@next/env@16.4.3':
     resolution: {integrity: sha512-a7tz1QCcWWkwC/rPJcPMJk/UNRu9CFhDd3OHYE5hddbJrs8BqRTalxI6GlKCWEGzRLHN+S/B7a4PAHCtm25aBQ==}
+
+  '@next/env@16.4.4':
+    resolution: {integrity: sha512-6/3ZuELR0tPLgNigvv8d/LAmfLIo1IpNfvrI/AHCAl9w9D0DNVGQGvo+OLPzAWR+WMW3vVyO7HaW0kfL97huBg==}
 
   '@next/eslint-plugin-next@16.4.3':
     resolution: {integrity: sha512-oxuC06wt/71h6ACYCV9GbKOfnf5a7VlRe/p80YHTut15TNgDEmynDnaq8t/xhy5rlvk7dhItIPs6H3rvIM4kyw==}
@@ -3073,6 +3076,8 @@ snapshots:
     optional: true
 
   '@next/env@16.4.3': {}
+
+  '@next/env@16.4.4': {}
 
   '@next/eslint-plugin-next@16.4.3(eslint@9.39.1(jiti@2.7.0)(supports-color@7.2.0))':
     dependencies:
