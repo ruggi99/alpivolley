@@ -24,8 +24,8 @@ importers:
         specifier: ^2.2.0
         version: 2.2.0(react@19.3.1)
       '@next/env':
-        specifier: ^16.4.3
-        version: 16.4.3
+        specifier: ^16.4.6
+        version: 16.4.6
       '@xyflow/react':
         specifier: ^12.12.0
         version: 12.12.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
